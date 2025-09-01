@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gothic+A1&family=Noto+Sans+KR:wght@100..900&display=swap");
+
+:root {
+  font-family: "Noto Sans KR", "Gothic A1", system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  /* 색상 팔레트 var()로 사용 */
+  --main-color: #0052e9;
+  --point-color-1: #98cdff;
+  --point-color-2: #ffe17d;
+  --point-color-2-2: #e47a00;
+
+  --text-color: #2c2f33;
+
+  --black-0: #ffffff;
+  --black-1: #eff0f5;
+  --black-2: #dddfe9;
+  --black-3: #b7bbcf;
+  --black-4: #6e738c;
+  --black-5: #414456;
+  --black-6: #252732;
+  --black: #000000;
+}
+
+/* css초기화 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  vertical-align: baseline;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+  color: var(--text-color);
+  font-family: "Noto Sans KR", "Gothic A1", system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #202123;
+  text-decoration: none;
+}
+
+.flexWidthCenter {
+  display: flex;
+  justify-content: center;
+}
+
+.flexHeightCenter {
+  display: flex;
+  align-items: center;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flexBetween {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flexBetweenCol {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.flexCol {
+  display: flex;
+  flex-direction: column;
+}
