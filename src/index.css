@@ -1,14 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Gothic+A1&family=Noto+Sans+KR:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 :root {
-  font-family: "Noto Sans KR", "Gothic A1", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Noto Sans KR", "Gothic A1", system-ui, Avenir, Helvetica, Arial, sans-serif;
 
   /* 색상 팔레트 var()로 사용 */
-  --main-color: #0052e9;
-  --point-color-1: #98cdff;
-  --point-color-2: #ffe17d;
-  --point-color-2-2: #e47a00;
+  --main-color: #474a50;
+  --point-color-1: #6ba2ff;
+  --point-color-2: #fbe464;
+
+  --red: #ff9c9c;
+  --green: #77f085;
 
   --text-color: #2c2f33;
 
@@ -48,7 +51,7 @@ section {
 body {
   line-height: 1;
   color: var(--text-color);
-  font-family: "Noto Sans KR", "Gothic A1", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Noto Sans KR", "Gothic A1", system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 ol,
 ul {

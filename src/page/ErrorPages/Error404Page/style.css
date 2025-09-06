@@ -1,0 +1,26 @@
+.error404Page {
+  width: 100%;
+  height: 100%;
+  font-size: clamp(16px, 2.5vw, 24px);
+}
+
+@media screen and (max-width: 768px) {
+  .error404Page {
+    padding: 36px;
+  }
+}
+
+.error404Page .error404Page-content {
+  text-align: center;
+}
+
+.error404Page .error404Page-content > div {
+  min-width: 200px;
+  min-height: 200px;
+  margin-bottom: 2rem;
+
+  background: url("../../../assets/image/404.png") no-repeat center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
