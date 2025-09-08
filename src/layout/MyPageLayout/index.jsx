@@ -3,10 +3,9 @@ import MyPageHeader from "./Header";
 
 const MyPageLayout = ({ children }) => {
   return (
-    <section>
+    <section style={{ width: "100%", height: "100vh" }}>
       <MyPageHeader />
-      <div style={{ width: "100%", height: "100vh", paddingTop: "64px" }}>{children}</div>
-      <Footer />
+      <div style={{ width: "100%", height: "100vh" }}>{children}</div>
     </section>
   );
 };

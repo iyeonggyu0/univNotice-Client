@@ -1,3 +1,5 @@
+import "./style.css";
+
 const ErrorIosPage = () => {
   return (
     <section className="errorIosPage flexCenter">

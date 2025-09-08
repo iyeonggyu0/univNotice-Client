@@ -3,9 +3,9 @@ import Header from "./Header";
 
 const MainLayout = ({ children }) => {
   return (
-    <section>
+    <section style={{ width: "100%", height: "100vh" }}>
       <Header />
-      <div style={{ width: "100%", height: "100vh", paddingTop: "64px" }}>{children}</div>
+      <div style={{ width: "100%", height: "100vh" }}>{children}</div>
       <Footer />
     </section>
   );
