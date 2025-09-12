@@ -1,4 +1,4 @@
-import MainPageLayout from "../../../layout/MainPageLayout";
+import MainLayout from "../../../layout";
 import "./style.css";
 import { useEffect, useState } from "react";
 
@@ -22,7 +22,7 @@ const Error404Page = () => {
   }, []);
 
   return (
-    <MainPageLayout>
+    <MainLayout>
       <section className="error404Page flexCenter">
         <div className="error404Page-content">
           <div>{/* 이미지 */}</div>
@@ -32,7 +32,7 @@ const Error404Page = () => {
           </p>
         </div>
       </section>
-    </MainPageLayout>
+    </MainLayout>
   );
 };
 export default Error404Page;

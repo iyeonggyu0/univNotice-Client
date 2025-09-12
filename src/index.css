@@ -7,6 +7,7 @@
 
   /* 색상 팔레트 var()로 사용 */
   --main-color: #474a50;
+  --main-color-2: rgb(92, 93, 95);
   --point-color-1: #6ba2ff;
   --point-color-2: #fbe464;
 
@@ -111,4 +112,53 @@ a:active {
 .flexCol {
   display: flex;
   flex-direction: column;
+}
+
+/* 공통 스타일2 */
+.centerBox {
+  width: 100%;
+  min-height: 50vh;
+  max-width: 400px;
+  border: 1px solid black;
+  position: relative;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+
+  gap: 2rem;
+}
+
+.centerBox > .bottomItem {
+  margin-top: auto;
+}
+
+.centerBox > * {
+  width: 100%;
+}
+
+.titleBox {
+  margin-bottom: 2rem;
+  width: 100%;
+  border: 1px solid black;
+}
+
+.title {
+  font-size: clamp(1.625rem, 2.5vw, 2rem);
+  line-height: 1.4;
+  font-weight: 500;
+  text-align: center;
+}
+
+.title > span.bold {
+  font-weight: 700;
+}
+
+.subTitle {
+  font-size: clamp(0.75rem, 2.5vw, 1rem);
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--black-4);
+  text-align: center;
 }

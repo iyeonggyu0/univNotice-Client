@@ -21,13 +21,13 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="MainPageLayoutHeader flexBetween">
+    <header className="MainLayoutHeader flexBetween">
       <LogoCP />
-      <div className="MainPageLayoutHeader-content flexBetween">
-        <p onClick={() => nav("/")}>공지 보기</p>
-        {isApp && <p onClick={() => nav("/")}>기기 등록</p>}
-        {!isLogin && <p onClick={() => nav("/")}>로그인</p>}
-        {isLogin && <p onClick={() => nav("/")}>마이페이지</p>}
+      <div className="MainLayoutHeader-content flexBetween">
+        <p onClick={() => nav("/notice")}>공지 보기</p>
+        {isApp && <p onClick={() => nav("/append")}>기기 등록</p>}
+        {!isLogin && <p onClick={() => nav("/login")}>로그인</p>}
+        {isLogin && <p onClick={() => nav("/mypage/info")}>마이페이지</p>}
       </div>
     </header>
   );

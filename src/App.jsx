@@ -7,6 +7,8 @@ import MainPage from "./page/MainPage";
 import KakaoPage from "./page/KakaoPage";
 import HelloPage from "./page/SignUpPage/1_helloPage";
 import InfoPage from "./page/SignUpPage/2_InfoPage";
+import AdminLoginPage from "./page/AdminPages/AdminLoginPage";
+import AdminPage from "./page/AdminPages";
 
 function App() {
   const isIos = useWeb().isIos;
@@ -56,6 +58,10 @@ function App() {
         {/* 공지사항 */}
         <Route path="/notice" element={<InfoPage />} />
         <Route path="/notice/:id" element={<InfoPage />} />
+
+        {/* 어드민페이지 */}
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
 
         {/* 404에러 */}
         <Route path="*" element={<Error404Page />} />
