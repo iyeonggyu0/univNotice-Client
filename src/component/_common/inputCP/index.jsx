@@ -1,3 +1,5 @@
+import "./style.css";
+
 /**
  *
  * @param {string} value 초기 값 (기본값: "")
@@ -8,17 +10,49 @@
  * @param {string} height 세로길이 (기본값: "62px")
  * @param {boolean} essential 필수 여부 (기본값: false)
  * @param {string} placeholder 미리보기 (기본값: "")
+ * @param {boolean} pw 비밀번호 여부 (기본값: false)
+ * @param {function} onKeyDown 키다운 이벤트 함수 (기본값: undefined)
  * @returns JSX.Element
  */
 
-const InputCP = ({ value = "", onChange, title = "", activate = true, width = "100%", height = "62px", essential = false, placeholder = "" }) => {
+const InputCP = ({
+  value = "",
+  onChange,
+  title = "",
+  activate = true,
+  width = "100%",
+  height = "3.875rem",
+  essential = false,
+  placeholder = "",
+  pw = false,
+  onKeyDown = undefined,
+}) => {
+  const inputStyle = {
+    width,
+    height,
+    ...(activate
+      ? {}
+      : {
+          background: "#F2F2F2",
+          boxShadow: "inset 0px 0px 5px rgba(0, 0, 0, 0.25)",
+          color: "var(--black-5)",
+        }),
+  };
   return (
-    <div style={{ width, height }}>
+    <div className="inputCP" style={{ width }}>
       <p>
         {title}
-        {essential && <span style={{ color: "orange" }}>*</span>}
+        {essential && <span>*</span>}
       </p>
-      <input value={value} onChange={onChange} placeholder={placeholder} disabled={!activate} style={{ width: width, height: height }} />
+      <input
+        type={pw ? "password" : "text"}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        disabled={!activate}
+        style={inputStyle}
+        onKeyDown={typeof onKeyDown === "function" ? onKeyDown : undefined}
+      />
     </div>
   );
 };

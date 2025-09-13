@@ -60,8 +60,8 @@ function App() {
         <Route path="/notice/:id" element={<InfoPage />} />
 
         {/* 어드민페이지 */}
-        <Route path="/admin" element={<AdminPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin/:tab" element={<AdminPage />} />
 
         {/* 404에러 */}
         <Route path="*" element={<Error404Page />} />

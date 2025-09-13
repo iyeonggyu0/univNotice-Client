@@ -9,7 +9,7 @@ import "./style.css";
  * @param {boolean} activate 활성화 여부 (true면 활성화, false면 비활성화)
  * @returns JSX.Element
  */
-const ButtonCP = ({ children, color = "--black-0", bgColor = "--main-color", activateBgColor = "--main-color-2", activate = false }) => {
+const ButtonCP = ({ children, color = "--black-0", bgColor = "--main-color", activateBgColor = "--main-color-2", activate = true }) => {
   return (
     <div
       className="buttonCp flexCenter"

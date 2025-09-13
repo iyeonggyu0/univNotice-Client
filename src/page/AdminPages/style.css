@@ -1,0 +1,42 @@
+.adminPage {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.adminPage .adminPage-menu {
+  width: 16%;
+  height: 100%;
+  padding: 6rem;
+  border-right: 1px solid var(--black-3);
+}
+
+.adminPage .adminPage-menu > div:nth-child(1) {
+  margin-bottom: 2rem;
+}
+
+.adminPage .adminPage-menu > ul:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.adminPage .adminPage-menu > ul:nth-child(2) > li {
+  cursor: pointer;
+}
+
+.adminPage .adminPage-menu > p:last-child {
+  color: var(--red);
+  cursor: pointer;
+  position: absolute;
+  bottom: 6rem;
+}
+
+.adminPage .adminPage-content {
+  width: 84%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow-y: scroll;
+}
