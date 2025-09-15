@@ -99,6 +99,7 @@ const LogCP = () => {
               onSort={sysTable.handleSort}
               page={sysTable.page}
               rowsPerPage={sysTable.rowsPerPage}
+              totalCount={sysTable.totalCount}
               onPageChange={(e, newPage) => sysTable.setPage(newPage)}
               onRowsPerPageChange={(e) => {
                 sysTable.setRowsPerPage(parseInt(e.target.value, 10));
@@ -131,6 +132,7 @@ const LogCP = () => {
               onSort={userTable.handleSort}
               page={userTable.page}
               rowsPerPage={userTable.rowsPerPage}
+              totalCount={userTable.totalCount}
               onPageChange={(e, newPage) => userTable.setPage(newPage)}
               onRowsPerPageChange={(e) => {
                 userTable.setRowsPerPage(parseInt(e.target.value, 10));
@@ -163,6 +165,7 @@ const LogCP = () => {
               onSort={crawlingTable.handleSort}
               page={crawlingTable.page}
               rowsPerPage={crawlingTable.rowsPerPage}
+              totalCount={crawlingTable.totalCount}
               onPageChange={(e, newPage) => crawlingTable.setPage(newPage)}
               onRowsPerPageChange={(e) => {
                 crawlingTable.setRowsPerPage(parseInt(e.target.value, 10));
@@ -195,6 +198,7 @@ const LogCP = () => {
               onSort={adminTable.handleSort}
               page={adminTable.page}
               rowsPerPage={adminTable.rowsPerPage}
+              totalCount={adminTable.totalCount}
               onPageChange={(e, newPage) => adminTable.setPage(newPage)}
               onRowsPerPageChange={(e) => {
                 adminTable.setRowsPerPage(parseInt(e.target.value, 10));

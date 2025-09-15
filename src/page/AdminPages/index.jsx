@@ -7,6 +7,7 @@ import LogoCP from "../../component/_common/logoCP";
 import LogCP from "../../component/adminCP/logCP";
 import { useCallback } from "react";
 import TableCP from "../../component/adminCP/tableCP";
+import SchoolCP from "../../component/adminCP/schoolCP";
 
 const AdminPage = () => {
   const nav = useNavigate();
@@ -28,6 +29,9 @@ const AdminPage = () => {
 
   const onClickLogout = useCallback((e) => {
     e.preventDefault();
+
+    if (!window.confirm("정말 로그아웃 하시겠습니까?")) return;
+
     // 로그아웃 처리
     const res = adminLogout();
     if (res) {
@@ -55,9 +59,6 @@ const AdminPage = () => {
               <li onClick={() => nav("/admin/school")} style={{ fontWeight: page === "school" ? "700" : "400" }}>
                 학교 관리
               </li>
-              <li onClick={() => nav("/admin/user")} style={{ fontWeight: page === "user" ? "700" : "400" }}>
-                사용자 관리
-              </li>
             </ul>
             <p
               onClick={(e) => {
@@ -70,6 +71,7 @@ const AdminPage = () => {
             {/* 오른쪽 내용 */}
             {page === "log" && <LogCP />}
             {page === "data" && <TableCP />}
+            {page === "school" && <SchoolCP />}
           </div>
         </section>
       )}

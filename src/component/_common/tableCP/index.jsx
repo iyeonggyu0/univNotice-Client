@@ -17,9 +17,11 @@ const TableCP = ({
   onSort = () => {},
   page = 0,
   rowsPerPage = 10,
+  totalCount = 0, // 전체 데이터 개수 추가
   onPageChange = () => {},
   onRowsPerPageChange = () => {},
   loading = false,
+  onRowClick = () => {},
   style = {},
 }) => {
   return (
@@ -53,7 +55,7 @@ const TableCP = ({
                 </TableRow>
               ) : (
                 rows.map((row, idx) => (
-                  <TableRow key={idx}>
+                  <TableRow key={idx} onClick={() => onRowClick(row)} style={{ cursor: "pointer" }} hover>
                     {columns.map((col) => (
                       <TableCell key={col}>{typeof row[col] === "object" && row[col] !== null ? JSON.stringify(row[col]) : row[col]}</TableCell>
                     ))}
@@ -66,7 +68,7 @@ const TableCP = ({
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={totalCount}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={onPageChange}

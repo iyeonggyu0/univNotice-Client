@@ -5,8 +5,6 @@ import TableComponent from "../../_common/tableCP";
 import useTableManager from "../../../hook/useTableManager";
 import {
   adminTableUserLoad,
-  adminTableSchoolLoad,
-  adminTableDepartmentLoad,
   adminTableDeviceLoad,
   adminTableCategoryLoad,
   adminTableKeywordLoad,
@@ -16,7 +14,6 @@ import {
   adminTableQrSessionLoad,
   adminTableNoticeKeywordMatchLoad,
   adminTableNotificationQueueLoad,
-  adminTableAcademicCalendarLoad,
 } from "../../../api/admin/table";
 
 const TableCP = () => {
@@ -29,14 +26,6 @@ const TableCP = () => {
   const [isDeviceTableLoading, setIsDeviceTableLoading] = useState(false);
   const [qrSessionTable, setQrSessionTable] = useState([]);
   const [isQrSessionTableLoading, setIsQrSessionTableLoading] = useState(false);
-
-  // 학교 관련 테이블 상태
-  const [schoolTable, setSchoolTable] = useState([]);
-  const [isSchoolTableLoading, setIsSchoolTableLoading] = useState(false);
-  const [departmentTable, setDepartmentTable] = useState([]);
-  const [isDepartmentTableLoading, setIsDepartmentTableLoading] = useState(false);
-  const [academicCalendarTable, setAcademicCalendarTable] = useState([]);
-  const [isAcademicCalendarTableLoading, setIsAcademicCalendarTableLoading] = useState(false);
 
   // 콘텐츠 관련 테이블 상태
   const [noticeTable, setNoticeTable] = useState([]);
@@ -59,10 +48,6 @@ const TableCP = () => {
   const phoneVerificationTableManager = useTableManager(phoneVerificationTable);
   const deviceTableManager = useTableManager(deviceTable);
   const qrSessionTableManager = useTableManager(qrSessionTable);
-
-  const schoolTableManager = useTableManager(schoolTable);
-  const departmentTableManager = useTableManager(departmentTable);
-  const academicCalendarTableManager = useTableManager(academicCalendarTable);
 
   const noticeTableManager = useTableManager(noticeTable);
   const categoryTableManager = useTableManager(categoryTable);
@@ -119,43 +104,6 @@ const TableCP = () => {
       console.error(e);
     }
     setIsQrSessionTableLoading(false);
-  }, []);
-
-  // 학교 관련 테이블 로딩 함수
-  const loadSchoolTable = useCallback(async (e) => {
-    if (e) e.preventDefault();
-    setIsSchoolTableLoading(true);
-    try {
-      const data = await adminTableSchoolLoad();
-      setSchoolTable(Array.isArray(data) ? data : []);
-    } catch (e) {
-      console.error(e);
-    }
-    setIsSchoolTableLoading(false);
-  }, []);
-
-  const loadDepartmentTable = useCallback(async (e) => {
-    if (e) e.preventDefault();
-    setIsDepartmentTableLoading(true);
-    try {
-      const data = await adminTableDepartmentLoad();
-      setDepartmentTable(Array.isArray(data) ? data : []);
-    } catch (e) {
-      console.error(e);
-    }
-    setIsDepartmentTableLoading(false);
-  }, []);
-
-  const loadAcademicCalendarTable = useCallback(async (e) => {
-    if (e) e.preventDefault();
-    setIsAcademicCalendarTableLoading(true);
-    try {
-      const data = await adminTableAcademicCalendarLoad();
-      setAcademicCalendarTable(Array.isArray(data) ? data : []);
-    } catch (e) {
-      console.error(e);
-    }
-    setIsAcademicCalendarTableLoading(false);
   }, []);
 
   // 콘텐츠 관련 테이블 로딩 함수
@@ -262,6 +210,7 @@ const TableCP = () => {
                 onSort={userTableManager.handleSort}
                 page={userTableManager.page}
                 rowsPerPage={userTableManager.rowsPerPage}
+                totalCount={userTableManager.totalCount}
                 onPageChange={(e, newPage) => userTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   userTableManager.setRowsPerPage(parseInt(e.target.value, 10));
@@ -294,6 +243,7 @@ const TableCP = () => {
                 onSort={phoneVerificationTableManager.handleSort}
                 page={phoneVerificationTableManager.page}
                 rowsPerPage={phoneVerificationTableManager.rowsPerPage}
+                totalCount={phoneVerificationTableManager.totalCount}
                 onPageChange={(e, newPage) => phoneVerificationTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   phoneVerificationTableManager.setRowsPerPage(parseInt(e.target.value, 10));
@@ -326,6 +276,7 @@ const TableCP = () => {
                 onSort={deviceTableManager.handleSort}
                 page={deviceTableManager.page}
                 rowsPerPage={deviceTableManager.rowsPerPage}
+                totalCount={deviceTableManager.totalCount}
                 onPageChange={(e, newPage) => deviceTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   deviceTableManager.setRowsPerPage(parseInt(e.target.value, 10));
@@ -358,113 +309,13 @@ const TableCP = () => {
                 onSort={qrSessionTableManager.handleSort}
                 page={qrSessionTableManager.page}
                 rowsPerPage={qrSessionTableManager.rowsPerPage}
+                totalCount={qrSessionTableManager.totalCount}
                 onPageChange={(e, newPage) => qrSessionTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   qrSessionTableManager.setRowsPerPage(parseInt(e.target.value, 10));
                   qrSessionTableManager.setPage(0);
                 }}
                 loading={isQrSessionTableLoading}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* 학교 관련 테이블 그룹 */}
-        <div className="table-group">
-          <h3 className="group-title">학교 관련</h3>
-
-          {/* 학교 테이블 */}
-          <div>
-            <h4>
-              학교 테이블
-              <span
-                className="refreshBtn"
-                style={{ color: isSchoolTableLoading ? `var(--black-4)` : `var(--main-color)`, cursor: "pointer" }}
-                onClick={(e) => {
-                  if (!isSchoolTableLoading) loadSchoolTable(e);
-                }}>
-                <Refresh />
-              </span>
-            </h4>
-            <div style={{ maxHeight: "800px" }}>
-              <TableComponent
-                columns={schoolTableManager.columns}
-                rows={schoolTableManager.pageRows}
-                order={schoolTableManager.order}
-                orderBy={schoolTableManager.orderBy}
-                onSort={schoolTableManager.handleSort}
-                page={schoolTableManager.page}
-                rowsPerPage={schoolTableManager.rowsPerPage}
-                onPageChange={(e, newPage) => schoolTableManager.setPage(newPage)}
-                onRowsPerPageChange={(e) => {
-                  schoolTableManager.setRowsPerPage(parseInt(e.target.value, 10));
-                  schoolTableManager.setPage(0);
-                }}
-                loading={isSchoolTableLoading}
-              />
-            </div>
-          </div>
-
-          {/* 학과 테이블 */}
-          <div>
-            <h4>
-              학과 테이블
-              <span
-                className="refreshBtn"
-                style={{ color: isDepartmentTableLoading ? `var(--black-4)` : `var(--main-color)`, cursor: "pointer" }}
-                onClick={(e) => {
-                  if (!isDepartmentTableLoading) loadDepartmentTable(e);
-                }}>
-                <Refresh />
-              </span>
-            </h4>
-            <div style={{ maxHeight: "800px" }}>
-              <TableComponent
-                columns={departmentTableManager.columns}
-                rows={departmentTableManager.pageRows}
-                order={departmentTableManager.order}
-                orderBy={departmentTableManager.orderBy}
-                onSort={departmentTableManager.handleSort}
-                page={departmentTableManager.page}
-                rowsPerPage={departmentTableManager.rowsPerPage}
-                onPageChange={(e, newPage) => departmentTableManager.setPage(newPage)}
-                onRowsPerPageChange={(e) => {
-                  departmentTableManager.setRowsPerPage(parseInt(e.target.value, 10));
-                  departmentTableManager.setPage(0);
-                }}
-                loading={isDepartmentTableLoading}
-              />
-            </div>
-          </div>
-
-          {/* 학사일정 테이블 */}
-          <div>
-            <h4>
-              학사일정 테이블
-              <span
-                className="refreshBtn"
-                style={{ color: isAcademicCalendarTableLoading ? `var(--black-4)` : `var(--main-color)`, cursor: "pointer" }}
-                onClick={(e) => {
-                  if (!isAcademicCalendarTableLoading) loadAcademicCalendarTable(e);
-                }}>
-                <Refresh />
-              </span>
-            </h4>
-            <div style={{ maxHeight: "800px" }}>
-              <TableComponent
-                columns={academicCalendarTableManager.columns}
-                rows={academicCalendarTableManager.pageRows}
-                order={academicCalendarTableManager.order}
-                orderBy={academicCalendarTableManager.orderBy}
-                onSort={academicCalendarTableManager.handleSort}
-                page={academicCalendarTableManager.page}
-                rowsPerPage={academicCalendarTableManager.rowsPerPage}
-                onPageChange={(e, newPage) => academicCalendarTableManager.setPage(newPage)}
-                onRowsPerPageChange={(e) => {
-                  academicCalendarTableManager.setRowsPerPage(parseInt(e.target.value, 10));
-                  academicCalendarTableManager.setPage(0);
-                }}
-                loading={isAcademicCalendarTableLoading}
               />
             </div>
           </div>
@@ -496,6 +347,7 @@ const TableCP = () => {
                 onSort={noticeTableManager.handleSort}
                 page={noticeTableManager.page}
                 rowsPerPage={noticeTableManager.rowsPerPage}
+                totalCount={noticeTableManager.totalCount}
                 onPageChange={(e, newPage) => noticeTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   noticeTableManager.setRowsPerPage(parseInt(e.target.value, 10));
@@ -528,6 +380,7 @@ const TableCP = () => {
                 onSort={categoryTableManager.handleSort}
                 page={categoryTableManager.page}
                 rowsPerPage={categoryTableManager.rowsPerPage}
+                totalCount={categoryTableManager.totalCount}
                 onPageChange={(e, newPage) => categoryTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   categoryTableManager.setRowsPerPage(parseInt(e.target.value, 10));
@@ -560,6 +413,7 @@ const TableCP = () => {
                 onSort={keywordTableManager.handleSort}
                 page={keywordTableManager.page}
                 rowsPerPage={keywordTableManager.rowsPerPage}
+                totalCount={keywordTableManager.totalCount}
                 onPageChange={(e, newPage) => keywordTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   keywordTableManager.setRowsPerPage(parseInt(e.target.value, 10));
@@ -592,6 +446,7 @@ const TableCP = () => {
                 onSort={crawlUrlTableManager.handleSort}
                 page={crawlUrlTableManager.page}
                 rowsPerPage={crawlUrlTableManager.rowsPerPage}
+                totalCount={crawlUrlTableManager.totalCount}
                 onPageChange={(e, newPage) => crawlUrlTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   crawlUrlTableManager.setRowsPerPage(parseInt(e.target.value, 10));
@@ -629,6 +484,7 @@ const TableCP = () => {
                 onSort={noticeKeywordMatchTableManager.handleSort}
                 page={noticeKeywordMatchTableManager.page}
                 rowsPerPage={noticeKeywordMatchTableManager.rowsPerPage}
+                totalCount={noticeKeywordMatchTableManager.totalCount}
                 onPageChange={(e, newPage) => noticeKeywordMatchTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   noticeKeywordMatchTableManager.setRowsPerPage(parseInt(e.target.value, 10));
@@ -661,6 +517,7 @@ const TableCP = () => {
                 onSort={notificationQueueTableManager.handleSort}
                 page={notificationQueueTableManager.page}
                 rowsPerPage={notificationQueueTableManager.rowsPerPage}
+                totalCount={notificationQueueTableManager.totalCount}
                 onPageChange={(e, newPage) => notificationQueueTableManager.setPage(newPage)}
                 onRowsPerPageChange={(e) => {
                   notificationQueueTableManager.setRowsPerPage(parseInt(e.target.value, 10));

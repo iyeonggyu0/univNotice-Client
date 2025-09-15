@@ -1,0 +1,48 @@
+.schoolCp {
+  width: 100%;
+  padding: 6rem;
+  text-align: start;
+}
+
+.schoolCp h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.schoolCp h4 {
+  font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.schoolCp .refreshBtn {
+  position: relative;
+  top: 0.2rem;
+  left: 1rem;
+  cursor: pointer;
+}
+
+.schoolCp .deleteBtn {
+  color: var(--red);
+  position: relative;
+  top: 0.2rem;
+  left: 1rem;
+  cursor: pointer;
+}
+
+.schoolCp-content > div > div {
+  margin-bottom: 10vh;
+}
+
+.schoolCp-content table tr,
+.schoolCp-content table td,
+.schoolCp-content table th {
+  min-height: 3rem !important;
+  height: 3rem !important;
+}
+
+.schoolCp-content > div > div:nth-child(2) {
+  max-height: 870px;
+  overflow-y: auto;
+}

@@ -16,6 +16,7 @@ import { useState, useMemo } from "react";
  * @returns {string} returns.orderBy - 현재 정렬 기준 컬럼명.
  * @returns {number} returns.page - 현재 페이지 인덱스(0부터 시작).
  * @returns {number} returns.rowsPerPage - 페이지당 행 개수.
+ * @returns {number} returns.totalCount - 전체 데이터 개수.
  * @returns {Function} returns.setPage - 현재 페이지 변경 함수.
  * @returns {Function} returns.setRowsPerPage - 페이지당 행 개수 변경 함수.
  * @returns {Function} returns.handleSort - 정렬 기준 컬럼 및 순서 변경 핸들러.
@@ -57,6 +58,7 @@ const useTableManager = (data = [], options = {}) => {
     orderBy,
     page,
     rowsPerPage,
+    totalCount: data.length, // 전체 데이터 개수 추가
     setPage,
     setRowsPerPage,
     handleSort,
