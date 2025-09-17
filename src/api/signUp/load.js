@@ -27,3 +27,16 @@ export const signupDepartmentLoad = async (selectedUniv) => {
     return err;
   }
 };
+
+export const signupCategoryLoad = async (school_id, department_id) => {
+  try {
+    const res = await axios.get(`${apuUrl}/sign-up/load/category/${school_id}/${department_id}`, { withCredentials: true });
+    if (res.status === 200) {
+      return res.data.data; // 카테고리 목록 반환
+    }
+    return null;
+  } catch (err) {
+    alert(err.response?.data?.error || "카테고리 목록 불러오기 오류");
+    return err;
+  }
+};

@@ -9,6 +9,7 @@ import HelloPage from "./page/SignUpPage/1_helloPage";
 import InfoPage from "./page/SignUpPage/2_InfoPage";
 import AdminLoginPage from "./page/AdminPages/AdminLoginPage";
 import AdminPage from "./page/AdminPages";
+import CategoryPage from "./page/SignUpPage/3_CategoryPage";
 
 function App() {
   const isIos = useWeb().isIos;
@@ -35,7 +36,7 @@ function App() {
         {/* 사용자 정보 입력 */}
         <Route path="/signup/2" element={<InfoPage />} />
         {/* 카테고리 선택 */}
-        <Route path="/signup/3" element={<InfoPage />} />
+        <Route path="/signup/3" element={<CategoryPage />} />
         {/* 카테고리별 키워드 설정 */}
         <Route path="/signup/4" element={<InfoPage />} />
         {/* 번호 인증 */}

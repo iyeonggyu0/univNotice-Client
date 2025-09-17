@@ -72,7 +72,18 @@ const InfoPage = () => {
     }
   }, []);
 
-  console.log(step, selectedUniv, selectedDepartment);
+  const nextButtonClick = useCallback(() => {
+    console.log("실행:", step, selectedUniv, selectedDepartment, student_id, nextButtonActivate);
+    if (step !== 3) return;
+    if (!selectedUniv || !selectedDepartment || student_id?.length <= 4) return;
+    if (!nextButtonActivate) return;
+
+    localStorage.setItem("signupInfo", JSON.stringify({ school_id: selectedUniv, department_id: selectedDepartment, student_id: student_id }));
+
+    if (window.confirm("입력하신 정보로 회원가입을 진행할까요?\n정확하지 않은 정보는 탈퇴처리될 수 있습니다.")) {
+      window.location.href = "/signup/3";
+    }
+  }, [step, selectedUniv, selectedDepartment, student_id, nextButtonActivate]);
 
   return (
     <LogoLayout>
@@ -106,8 +117,9 @@ const InfoPage = () => {
             )}
           </div>
           {/* 다음버튼 */}
-          <div className="bottomItem">{nextButtonActivate && <ButtonCP>다음</ButtonCP>}</div>
-          {/* TODO: 여기 api 제작 */}
+          <div className="bottomItem" onClick={nextButtonClick}>
+            {nextButtonActivate && <ButtonCP>다음</ButtonCP>}
+          </div>
         </div>
       </section>
     </LogoLayout>
