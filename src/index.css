@@ -129,6 +129,13 @@ a:active {
   gap: 2rem;
 }
 
+@media screen and (max-width: 768px) {
+  .centerBox {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
 .centerBox > .bottomItem {
   margin-top: auto;
 }

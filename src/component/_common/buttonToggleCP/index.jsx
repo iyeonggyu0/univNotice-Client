@@ -1,10 +1,9 @@
 import "./style.css";
 
-const ButtonToggleCP = ({ toggleValue, onClickToggle, title }) => {
-  return (
-    <div onClick={onClickToggle} className={`buttonToggleCP ${toggleValue ? "select" : ""}`}>
-      {title}
-    </div>
-  );
-};
+const ButtonToggleCP = ({ data, isSelected, onClickToggle }) => (
+  <div onClick={() => onClickToggle(data)} className={`buttonToggleCP ${isSelected ? "select" : ""}`}>
+    {data.category}
+  </div>
+);
+
 export default ButtonToggleCP;

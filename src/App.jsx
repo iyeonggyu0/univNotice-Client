@@ -10,6 +10,7 @@ import InfoPage from "./page/SignUpPage/2_InfoPage";
 import AdminLoginPage from "./page/AdminPages/AdminLoginPage";
 import AdminPage from "./page/AdminPages";
 import CategoryPage from "./page/SignUpPage/3_CategoryPage";
+import SettingPage from "./page/SignUpPage/4_SettingPage";
 
 function App() {
   const isIos = useWeb().isIos;
@@ -38,7 +39,7 @@ function App() {
         {/* 카테고리 선택 */}
         <Route path="/signup/3" element={<CategoryPage />} />
         {/* 카테고리별 키워드 설정 */}
-        <Route path="/signup/4" element={<InfoPage />} />
+        <Route path="/signup/4/:setting_id" element={<SettingPage />} />
         {/* 번호 인증 */}
         <Route path="/signup/5" element={<InfoPage />} />
         {/* 어플 설치 안내 */}

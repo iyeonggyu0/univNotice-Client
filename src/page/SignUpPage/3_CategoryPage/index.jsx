@@ -3,6 +3,7 @@ import "./style.css";
 import { signupCategoryLoad } from "../../../api/signUp/load";
 import LogoLayout from "../../../layout/LogoLayout";
 import ButtonToggleCP from "../../../component/_common/buttonToggleCP";
+import ButtonCP from "../../../component/_common/buttonCP";
 
 const CategoryPage = () => {
   const userInfo = JSON.parse(localStorage.getItem("signupInfo"));
@@ -28,6 +29,25 @@ const CategoryPage = () => {
     loadCategoryData();
   }, []);
 
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const toggleCategory = (data) => {
+    const isSelected = selectedCategories.find((item) => item.id === data.id);
+    if (isSelected) {
+      setSelectedCategories(selectedCategories.filter((item) => item.id !== data.id));
+    } else {
+      setSelectedCategories([...selectedCategories, { id: data.id, category: data.category }]);
+    }
+  };
+
+  const nextButtonClick = () => {
+    if (selectedCategories.length === 0) {
+      alert("하나 이상의 카테고리를 선택해 주세요.");
+      return;
+    }
+    localStorage.setItem("signupCategory", JSON.stringify(selectedCategories));
+    window.location.href = "/signup/4/1";
+  };
+
   return (
     <LogoLayout>
       <section className="categoryPage flexCenter">
@@ -42,11 +62,14 @@ const CategoryPage = () => {
           </div>
           {categoryList?.length > 0 && (
             <div className="flexCol" style={{ gap: "26px", width: "100%" }}>
-              {categoryList?.map((category, idx) => (
-                <ButtonToggleCP key={idx} data={category} />
+              {categoryList?.map((data, idx) => (
+                <ButtonToggleCP key={idx} data={data} isSelected={selectedCategories.some((item) => item.id === data.id)} onClickToggle={toggleCategory} />
               ))}
             </div>
           )}
+          <div className="bottomItem" onClick={nextButtonClick}>
+            <ButtonCP>다음</ButtonCP>
+          </div>
         </div>
       </section>
     </LogoLayout>

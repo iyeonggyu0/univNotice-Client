@@ -2,24 +2,24 @@ import { useCallback, useState } from "react";
 import InputCP from "../../../component/_common/inputCP";
 import LogoLayout from "../../../layout/LogoLayout";
 import "./style.css";
-import { useInput } from "../../../hook/useInput";
 import { useEffect } from "react";
 import ButtonCP from "../../../component/_common/buttonCP";
 import { signupDepartmentLoad, signupSchoolLoad } from "../../../api/signUp/load";
 import SelectCP from "../../../component/_common/selectCP";
+import { useNavigate } from "react-router-dom";
 
 const InfoPage = () => {
+  const nav = useNavigate();
+
   // 학교목록
   const [univList, setUnivList] = useState([]);
   // 선택된 학과의 학과목록
   const [departmentList, setDepartmentList] = useState([]);
   // 학번
-  const [student_id, onChangeStudent_id, setStudent_id] = useInput("");
+  // const [student_id, onChangeStudent_id, setStudent_id] = useInput("");
 
-  // 0:로딩, 1: 학교선택, 2: 학과선택, 3: 학번입력
+  // 0:로딩, 1: 학교선택, 2: 학과선택
   const [step, setStep] = useState(0);
-
-  const [nextButtonActivate, setNextButtonActivate] = useState(false);
 
   const [selectedUniv, setSelectedUniv] = useState(null);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
@@ -33,22 +33,11 @@ const InfoPage = () => {
     setSelectedUniv(value);
     loadDepartmentData(value);
     setStep(1);
-    setNextButtonActivate(false);
   };
 
   const onChangeDepartment = (value) => {
     setSelectedDepartment(value);
     setStep(3);
-    setNextButtonActivate(false);
-  };
-
-  const onChangeStudentId = (e) => {
-    onChangeStudent_id(e);
-    if (e.target.value.length > 0) {
-      setNextButtonActivate(true);
-    } else {
-      setNextButtonActivate(false);
-    }
   };
 
   const loadSchoolData = useCallback(async () => {
@@ -73,17 +62,15 @@ const InfoPage = () => {
   }, []);
 
   const nextButtonClick = useCallback(() => {
-    console.log("실행:", step, selectedUniv, selectedDepartment, student_id, nextButtonActivate);
     if (step !== 3) return;
-    if (!selectedUniv || !selectedDepartment || student_id?.length <= 4) return;
-    if (!nextButtonActivate) return;
+    if (!selectedUniv || !selectedDepartment) return;
 
-    localStorage.setItem("signupInfo", JSON.stringify({ school_id: selectedUniv, department_id: selectedDepartment, student_id: student_id }));
+    localStorage.setItem("signupInfo", JSON.stringify({ school_id: selectedUniv, department_id: selectedDepartment }));
 
     if (window.confirm("입력하신 정보로 회원가입을 진행할까요?\n정확하지 않은 정보는 탈퇴처리될 수 있습니다.")) {
-      window.location.href = "/signup/3";
+      nav("/signup/3");
     }
-  }, [step, selectedUniv, selectedDepartment, student_id, nextButtonActivate]);
+  }, [step, selectedUniv, selectedDepartment, nav]);
 
   return (
     <LogoLayout>
@@ -109,17 +96,13 @@ const InfoPage = () => {
                 <SelectCP title="학과" dataList={departmentList} value={selectedDepartment} onChangeFunc={onChangeDepartment} />
               </div>
             )}
-
-            {step >= 3 && (
-              <div>
-                <InputCP title="학번" value={student_id} onChange={onChangeStudentId} essential={true} placeholder="학번을 입력해주세요" />
-              </div>
-            )}
           </div>
           {/* 다음버튼 */}
-          <div className="bottomItem" onClick={nextButtonClick}>
-            {nextButtonActivate && <ButtonCP>다음</ButtonCP>}
-          </div>
+          {step === 3 && (
+            <div className="bottomItem" onClick={nextButtonClick}>
+              <ButtonCP>다음</ButtonCP>
+            </div>
+          )}
         </div>
       </section>
     </LogoLayout>
