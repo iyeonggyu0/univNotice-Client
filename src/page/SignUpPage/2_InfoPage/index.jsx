@@ -67,7 +67,7 @@ const InfoPage = () => {
 
     localStorage.setItem("signupInfo", JSON.stringify({ school_id: selectedUniv, department_id: selectedDepartment }));
 
-    if (window.confirm("입력하신 정보로 회원가입을 진행할까요?\n정확하지 않은 정보는 탈퇴처리될 수 있습니다.")) {
+    if (window.confirm("학교·학과는 수정이 힘듭니다\n계속 진행하시겠습니까?")) {
       nav("/signup/3");
     }
   }, [step, selectedUniv, selectedDepartment, nav]);

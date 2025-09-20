@@ -11,6 +11,10 @@ import AdminLoginPage from "./page/AdminPages/AdminLoginPage";
 import AdminPage from "./page/AdminPages";
 import CategoryPage from "./page/SignUpPage/3_CategoryPage";
 import SettingPage from "./page/SignUpPage/4_SettingPage";
+import PhonePage from "./page/SignUpPage/5_PhonePage";
+import GooglePage from "./page/SignUpPage/6_GooglePage";
+import IssuancePage from "./page/SignUpPage/99_IssuancePage";
+import LoginPage from "./page/LoginPage";
 
 function App() {
   const isIos = useWeb().isIos;
@@ -29,7 +33,7 @@ function App() {
         <Route path="/kakao" element={<KakaoPage />} />
 
         {/* LogIn */}
-        <Route path="/login" element={<MainPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         {/* SignUp */}
         {/* 가입 인사 */}
@@ -41,9 +45,9 @@ function App() {
         {/* 카테고리별 키워드 설정 */}
         <Route path="/signup/4/:setting_id" element={<SettingPage />} />
         {/* 번호 인증 */}
-        <Route path="/signup/5" element={<InfoPage />} />
+        <Route path="/signup/5" element={<PhonePage />} />
         {/* 어플 설치 안내 */}
-        <Route path="/signup/6" element={<InfoPage />} />
+        <Route path="/signup/6" element={<GooglePage />} />
         {/* 가입 완료 */}
         <Route path="/signup/7" element={<InfoPage />} />
 
@@ -52,7 +56,9 @@ function App() {
         <Route path="/mypage/notice" element={<InfoPage />} />
 
         {/* 기기 등록 - 해당 페이지는 메인화면 연결, 추가 등록은 마이페이지에서 */}
-        <Route path="/append" element={<InfoPage />} />
+        <Route path="/login/append" element={<InfoPage />} />
+        {/* 로그인 연동 */}
+        <Route path="/login/issuance" element={<IssuancePage />} />
 
         {/* 탈퇴 */}
         <Route path="/withdraw" element={<InfoPage />} />
@@ -64,6 +70,9 @@ function App() {
         {/* 어드민페이지 */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin/:tab" element={<AdminPage />} />
+
+        {/* 개인정보, 이용약관 */}
+        <Route path="/terms" element={<AdminPage />} />
 
         {/* 404에러 */}
         <Route path="*" element={<Error404Page />} />

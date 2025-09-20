@@ -1,0 +1,25 @@
+.phonePage {
+  height: 100%;
+}
+
+.phonePage .smsButton {
+  position: absolute;
+  right: 0;
+  /* bottom: 50%; */
+  /* transform: translateY(25%); */
+  color: var(--point-color-1);
+  z-index: 999;
+  cursor: pointer;
+}
+
+.phonePage .terms {
+  font-size: 0.75rem;
+  margin-top: 1rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.phonePage .terms > span {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--main-color);
+}
