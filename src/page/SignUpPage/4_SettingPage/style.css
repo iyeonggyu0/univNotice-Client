@@ -1,3 +1,9 @@
 .settingPage {
   height: 100%;
 }
+
+@media screen and (max-width: 768px) {
+  .settingPage .centerBox {
+    min-width: 80vw;
+  }
+}

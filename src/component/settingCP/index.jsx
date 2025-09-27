@@ -51,7 +51,11 @@ const SettingCP = ({ data, setKeywordFunc, nextButtonClick }) => {
           <span className="bold">{data.category}</span>의<br />
           키워드를 설정합니다!
         </h2>
-        <h4 className="subTitle">학교 / 학과에 따라 설정 내용이 달라져요</h4>
+        <h4 className="subTitle">
+          아래 키워드가 포함된 공지가 올라오면 알람을 받아요
+          <br />
+          키워드 입력을 하지 않고 건너뛸 수 있어요!
+        </h4>
       </div>
       <div className="flexCol">
         <InputCP value={inputValue} onChange={onChangeInputValue} title="키워드" placeholder="' / '로 구분, Enter로 등록" onKeyDown={onKeyDown} />

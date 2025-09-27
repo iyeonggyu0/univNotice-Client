@@ -3,3 +3,9 @@
   height: 100%;
   padding: 0 6rem;
 }
+
+@media screen and (max-width: 768px) {
+  .infoPage .centerBox {
+    min-width: 80vw;
+  }
+}

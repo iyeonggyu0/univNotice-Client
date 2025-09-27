@@ -13,7 +13,7 @@
 }
 
 .phonePage .terms {
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   margin-top: 1rem;
   text-align: center;
   cursor: pointer;
@@ -22,4 +22,10 @@
 .phonePage .terms > span {
   padding-bottom: 4px;
   border-bottom: 1px solid var(--main-color);
+}
+
+@media screen and (max-width: 768px) {
+  .phonePage .centerBox {
+    width: 80vw;
+  }
 }

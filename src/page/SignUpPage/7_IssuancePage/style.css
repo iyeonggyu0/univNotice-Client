@@ -28,7 +28,7 @@
   width: 50vh;
   height: 50vh;
 
-  background-image: url("../../../assets/image/google.png");
+  background-image: url("../../../assets/image/save.svg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -39,7 +39,7 @@
   height: 55vw;
   margin: 0 auto;
 
-  background-image: url("../../../assets/image/google.png");
+  background-image: url("../../../assets/image/save.svg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -56,6 +56,13 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center left;
+}
+
+.issuancePage .code {
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 700;
+  margin: 2vh 0;
+  color: var(--point-color-1);
 }
 
 @media screen and (min-width: 769px) {

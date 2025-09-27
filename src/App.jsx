@@ -13,8 +13,10 @@ import CategoryPage from "./page/SignUpPage/3_CategoryPage";
 import SettingPage from "./page/SignUpPage/4_SettingPage";
 import PhonePage from "./page/SignUpPage/5_PhonePage";
 import GooglePage from "./page/SignUpPage/6_GooglePage";
-import IssuancePage from "./page/SignUpPage/99_IssuancePage";
+import IssuancePage from "./page/SignUpPage/7_IssuancePage";
 import LoginPage from "./page/LoginPage";
+import MyInfoPage from "./page/MyPage/MyInfoPage";
+import DeviceAppendPage from "./page/DeviceAppendPage";
 
 function App() {
   const isIos = useWeb().isIos;
@@ -48,17 +50,17 @@ function App() {
         <Route path="/signup/5" element={<PhonePage />} />
         {/* 어플 설치 안내 */}
         <Route path="/signup/6" element={<GooglePage />} />
-        {/* 가입 완료 */}
-        <Route path="/signup/7" element={<InfoPage />} />
+        {/* 연동 페이지 */}
+        <Route path="/signup/7" element={<IssuancePage />} />
+        {/* 완료 페이지 */}
+        <Route path="/signup/8" element={<InfoPage />} />
 
         {/* 마이페이지 */}
-        <Route path="/mypage/info" element={<InfoPage />} />
-        <Route path="/mypage/notice" element={<InfoPage />} />
+        <Route path="/mypage/info" element={<MyInfoPage />} />
+        <Route path="/mypage/setting" element={<InfoPage />} />
 
         {/* 기기 등록 - 해당 페이지는 메인화면 연결, 추가 등록은 마이페이지에서 */}
-        <Route path="/login/append" element={<InfoPage />} />
-        {/* 로그인 연동 */}
-        <Route path="/login/issuance" element={<IssuancePage />} />
+        <Route path="/login/append" element={<DeviceAppendPage />} />
 
         {/* 탈퇴 */}
         <Route path="/withdraw" element={<InfoPage />} />

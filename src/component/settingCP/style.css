@@ -1,7 +1,13 @@
-.centerBox .keywordList {
+.settingCP.centerBox .keywordList {
   display: flex;
   justify-content: flex-start;
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .settingCP.centerBox {
+    width: 80vw;
+  }
 }

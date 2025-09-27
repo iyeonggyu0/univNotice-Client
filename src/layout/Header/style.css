@@ -10,6 +10,10 @@
   .MainLayoutHeader {
     padding: 0 1rem;
   }
+
+  .MainLayoutHeader-content {
+    font-size: 0.8rem;
+  }
 }
 
 .MainLayoutHeader .MainLayoutHeader-content {

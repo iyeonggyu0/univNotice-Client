@@ -58,7 +58,7 @@ const CategoryPage = () => {
               <br />
               선택해 주세요!
             </h2>
-            <h4 className="subTitle">이후 카테고리 별 키워드를 설정합니다</h4>
+            <h4 className="subTitle">다음 단계에서 공지 유형별로 키워드를 설정합니다.</h4>
           </div>
           {categoryList?.length > 0 && (
             <div className="flexCol" style={{ gap: "26px", width: "100%" }}>

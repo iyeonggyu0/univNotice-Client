@@ -1,0 +1,17 @@
+.loginPage {
+  height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .loginPage .centerBox {
+    width: 80vw;
+  }
+}
+
+.loginPage .smsButton {
+  position: absolute;
+  right: 0;
+  color: var(--point-color-1);
+  z-index: 999;
+  cursor: pointer;
+}

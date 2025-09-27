@@ -1,10 +1,10 @@
-.infoPage {
+.deviceAppendPage {
   width: 100%;
   height: 100%;
   padding: 0 3rem;
 }
 
-.infoPage-content {
+.deviceAppendPage-content {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -12,41 +12,57 @@
 }
 
 @media screen and (max-width: 768px) {
-  .infoPage-content {
+  .deviceAppendPage-content {
     min-width: 80vw;
   }
 }
 
-.infoPage-content > div:nth-child(1) {
+.deviceAppendPage .inputBox {
+  width: 100%;
+}
+
+.deviceAppendPage-content > div:nth-child(1) {
   max-width: clamp(160px, 20vw, 200px);
   max-height: clamp(160px, 20vw, 200px);
 
   min-width: clamp(160px, 20vw, 200px);
   min-height: clamp(160px, 20vw, 200px);
 
-  background-image: url("../../../assets/image/hello.svg");
+  background-image: url("../../assets/image/phone.svg");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.infoPage-content > p:nth-child(2) {
+.deviceAppendPage-content > p:nth-child(2) {
   text-align: center;
   font-size: clamp(1.4rem, 2.5vw, 1.6rem);
   line-height: 1.4;
 }
 
-.infoPage-content > p:nth-child(2) > span {
+.deviceAppendPage-content > p:nth-child(2) > span {
   font-weight: 700;
 }
 
-.infoPage-content > div:nth-child(3) {
+.deviceAppendPage-content > div:last-child {
   width: 100%;
   height: 3rem;
 }
 
+.deviceAppendPage-content > div:last-child > p.terms {
+  font-size: 0.6rem;
+  margin-top: 1rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.deviceAppendPage-content > div:last-child > p > span {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--main-color);
+}
+
 @media screen and (max-width: 768px) {
-  .infoPage {
+  .deviceAppendPage {
     width: 90%;
     margin: 0 auto;
   }

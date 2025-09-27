@@ -1,3 +1,9 @@
 .categoryPage {
   height: 100%;
 }
+
+@media screen and (max-width: 768px) {
+  .categoryPage .centerBox {
+    width: 80vw;
+  }
+}
