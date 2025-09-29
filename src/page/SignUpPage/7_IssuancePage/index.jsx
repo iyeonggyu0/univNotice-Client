@@ -17,7 +17,11 @@ const IssuancePage = () => {
     try {
       const res = await userLoginCodeCreate();
       if (res && typeof res === "string") {
-        setCode(res);
+        if (window.confirm("코드를 타인에게 공유/노출 하지 마세요")) {
+          setCode(res);
+        } else {
+          nav("/signup/6");
+        }
       } else {
         alert("코드 생성에 실패했습니다.\n나중에 다시 시도해 주세요.");
         nav("/");
@@ -39,8 +43,7 @@ const IssuancePage = () => {
           return;
         } else if (res.status === 203) {
           // 만료O + 사용X
-          clearInterval(id);
-          await getCode();
+          await getCode(); // interval 해제하지 않음, 반복 유지
         } else if (res.status === 202) {
           // 만료O + 사용O
           clearInterval(id);

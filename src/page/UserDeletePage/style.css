@@ -1,0 +1,19 @@
+.userDeletePage {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+@media screen and (max-width: 768px) {
+  .userDeletePage .centerBox {
+    width: 80vw;
+  }
+}
+
+.userDeletePage .smsButton {
+  position: absolute;
+  right: 0;
+  color: var(--point-color-1);
+  z-index: 999;
+  cursor: pointer;
+}

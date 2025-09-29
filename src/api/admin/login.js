@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apuUrl } from "../../util/axios";
+import { apiUrl } from "../../util/axios";
 
 /**
  * 어드민 로그인 체크 API
@@ -7,7 +7,7 @@ import { apuUrl } from "../../util/axios";
  */
 export const adminLoginCheck = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/login/check`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/login/check`, { withCredentials: true });
     return res.data.isLoggedIn;
   } catch (err) {
     console.error(err);
@@ -23,7 +23,7 @@ export const adminLoginCheck = async () => {
  */
 export const adminLogin = async (id, pw) => {
   try {
-    const res = await axios.post(`${apuUrl}/admin/login`, { id, password: pw }, { withCredentials: true });
+    const res = await axios.post(`${apiUrl}/admin/login`, { id, password: pw }, { withCredentials: true });
     return res.status === 200 && res.data.success === true;
   } catch (err) {
     alert(err.response.data.error);
@@ -37,7 +37,7 @@ export const adminLogin = async (id, pw) => {
  */
 export const adminLogout = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/logout`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/logout`, { withCredentials: true });
     if (res.status === 200) {
       console.log(res.data); // "로그아웃 성공"
       return true;

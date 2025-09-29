@@ -1,0 +1,53 @@
+.endPage {
+  width: 100%;
+  height: 100%;
+  padding: 0 3rem;
+}
+
+.endPage-content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+@media screen and (max-width: 768px) {
+  .endPage-content {
+    min-width: 80vw;
+  }
+}
+
+.endPage-content > div:nth-child(1) {
+  max-width: clamp(160px, 20vw, 200px);
+  max-height: clamp(160px, 20vw, 200px);
+
+  min-width: clamp(160px, 20vw, 200px);
+  min-height: clamp(160px, 20vw, 200px);
+
+  background-image: url("../../../assets/image/end.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.endPage-content > p:nth-child(2) {
+  text-align: center;
+  font-size: clamp(1.4rem, 2.5vw, 1.6rem);
+  line-height: 1.4;
+}
+
+.endPage-content > p:nth-child(2) > span {
+  font-weight: 700;
+}
+
+.endPage-content > div:nth-child(3) {
+  width: 100%;
+  height: 3rem;
+}
+
+@media screen and (max-width: 768px) {
+  .endPage {
+    width: 90%;
+    margin: 0 auto;
+  }
+}

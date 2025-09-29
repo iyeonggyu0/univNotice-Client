@@ -17,6 +17,9 @@ import IssuancePage from "./page/SignUpPage/7_IssuancePage";
 import LoginPage from "./page/LoginPage";
 import MyInfoPage from "./page/MyPage/MyInfoPage";
 import DeviceAppendPage from "./page/DeviceAppendPage";
+import EndPage from "./page/SignUpPage/8_endPage";
+import TermsPage from "./page/TermsPage";
+import UserDeletePage from "./page/UserDeletePage";
 
 function App() {
   const isIos = useWeb().isIos;
@@ -53,7 +56,7 @@ function App() {
         {/* 연동 페이지 */}
         <Route path="/signup/7" element={<IssuancePage />} />
         {/* 완료 페이지 */}
-        <Route path="/signup/8" element={<InfoPage />} />
+        <Route path="/signup/8" element={<EndPage />} />
 
         {/* 마이페이지 */}
         <Route path="/mypage/info" element={<MyInfoPage />} />
@@ -63,7 +66,7 @@ function App() {
         <Route path="/login/append" element={<DeviceAppendPage />} />
 
         {/* 탈퇴 */}
-        <Route path="/withdraw" element={<InfoPage />} />
+        <Route path="/withdraw" element={<UserDeletePage />} />
 
         {/* 공지사항 */}
         <Route path="/notice" element={<InfoPage />} />
@@ -74,7 +77,7 @@ function App() {
         <Route path="/admin/:tab" element={<AdminPage />} />
 
         {/* 개인정보, 이용약관 */}
-        <Route path="/terms" element={<AdminPage />} />
+        <Route path="/terms" element={<TermsPage />} />
 
         {/* 404에러 */}
         <Route path="*" element={<Error404Page />} />

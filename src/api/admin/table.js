@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apuUrl } from "../../util/axios";
+import { apiUrl } from "../../util/axios";
 
 /**
  * 유저 테이블 데이터 로드
@@ -7,7 +7,7 @@ import { apuUrl } from "../../util/axios";
  */
 export const adminTableUserLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/user`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/user`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -24,7 +24,7 @@ export const adminTableUserLoad = async () => {
  */
 export const adminTableCategoryLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/category`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/category`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -41,7 +41,7 @@ export const adminTableCategoryLoad = async () => {
  */
 export const adminTableKeywordLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/keyword`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/keyword`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -58,7 +58,7 @@ export const adminTableKeywordLoad = async () => {
  */
 export const adminTableDeviceLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/device`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/device`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -75,7 +75,7 @@ export const adminTableDeviceLoad = async () => {
  */
 export const adminTableNoticeLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/notice`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/notice`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -92,7 +92,7 @@ export const adminTableNoticeLoad = async () => {
  */
 export const adminTableCrawlUrlLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/crawl-url`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/crawl-url`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -109,7 +109,7 @@ export const adminTableCrawlUrlLoad = async () => {
  */
 export const adminTablePhoneVerificationLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/phone-verification`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/phone-verification`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -126,7 +126,7 @@ export const adminTablePhoneVerificationLoad = async () => {
  */
 export const adminTableQrSessionLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/qr-session`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/qr-session`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -143,7 +143,7 @@ export const adminTableQrSessionLoad = async () => {
  */
 export const adminTableNoticeKeywordMatchLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/notice-keyword-match`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/notice-keyword-match`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -160,7 +160,7 @@ export const adminTableNoticeKeywordMatchLoad = async () => {
  */
 export const adminTableNotificationQueueLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/table/notification-queue`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/table/notification-queue`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }

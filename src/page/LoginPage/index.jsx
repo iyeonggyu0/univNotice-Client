@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ButtonCP from "../../component/_common/buttonCP";
 import { useWeb } from "../../hook/useWeb";
 import LogoLayout from "../../layout/LogoLayout";
@@ -9,9 +9,25 @@ import InputCP from "../../component/_common/inputCP";
 import "./style.css";
 import { sendToApp } from "../../api/app/webToApp";
 import { DeviceAdd, DeviceDelete } from "../../api/user/device";
+import { loginCheck } from "../../api/user/loginCheck";
 
 const LoginPage = () => {
   const isApp = useWeb().isApp;
+
+  useEffect(() => {
+    async function fetchLoginCheck() {
+      try {
+        const result = await loginCheck();
+        if (result) {
+          alert("이미 로그인된 상태입니다.");
+          return nav("/");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchLoginCheck();
+  }, []);
   const nav = useNavigate();
   const [student_id, onChangeStudent_id, setStudent_id] = useInput("");
   const [phone, onChangePhone, setPhone] = useInput("");

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apuUrl } from "../../util/axios";
+import { apiUrl } from "../../util/axios";
 
 /**
  * 학교 테이블 데이터 로드
@@ -7,7 +7,7 @@ import { apuUrl } from "../../util/axios";
  */
 export const adminSchoolLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/school`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/school`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
     }
@@ -24,7 +24,7 @@ export const adminSchoolLoad = async () => {
  */
 export const adminSchoolDepartmentLoad = async (departmentId) => {
   try {
-    const res = await axios.get(`${apuUrl}/admin/school/department/${departmentId}`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/school/department/${departmentId}`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows;
     }
@@ -42,7 +42,7 @@ export const adminSchoolDepartmentLoad = async (departmentId) => {
 export const adminSchoolAcademicCalendarLoad = async (schoolId, departmentId) => {
   try {
     // 예시: 학사일정 조회
-    const res = await axios.get(`${apuUrl}/admin/school/academic-calendar/${schoolId}/${departmentId}`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/admin/school/academic-calendar/${schoolId}/${departmentId}`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows;
     }
@@ -60,7 +60,7 @@ export const adminSchoolAcademicCalendarLoad = async (schoolId, departmentId) =>
 export const adminSchoolAdd = async (schoolName) => {
   try {
     // 예시: 학사일정 조회
-    const res = await axios.post(`${apuUrl}/admin/school/add`, { schoolName }, { withCredentials: true });
+    const res = await axios.post(`${apiUrl}/admin/school/add`, { schoolName }, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allSchools }로 반환하므로 rows 사용
     }
@@ -73,7 +73,7 @@ export const adminSchoolAdd = async (schoolName) => {
 
 export const adminSchoolDelete = async (schoolId) => {
   try {
-    const res = await axios.delete(`${apuUrl}/admin/school/delete/${schoolId}`, { withCredentials: true });
+    const res = await axios.delete(`${apiUrl}/admin/school/delete/${schoolId}`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allSchools }로 반환하므로 rows 사용
     }
@@ -86,7 +86,7 @@ export const adminSchoolDelete = async (schoolId) => {
 
 export const adminDepartmentAdd = async (data) => {
   try {
-    const res = await axios.post(`${apuUrl}/admin/school/department/add`, data, { withCredentials: true });
+    const res = await axios.post(`${apiUrl}/admin/school/department/add`, data, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allDepartments }로 반환하므로 rows 사용
     }
@@ -99,7 +99,7 @@ export const adminDepartmentAdd = async (data) => {
 
 export const adminDepartmentDelete = async (departmentId) => {
   try {
-    const res = await axios.delete(`${apuUrl}/admin/school/department/${departmentId}`, { withCredentials: true });
+    const res = await axios.delete(`${apiUrl}/admin/school/department/${departmentId}`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allDepartments }로 반환하므로 rows 사용
     }
@@ -113,7 +113,7 @@ export const adminDepartmentDelete = async (departmentId) => {
 export const adminCategoryLoad = async (schoolId, departmentId) => {
   try {
     // 학교 ID는 필수, 학과 ID는 선택적
-    const url = departmentId ? `${apuUrl}/admin/school/category/${schoolId}/${departmentId}` : `${apuUrl}/admin/school/category/${schoolId}`;
+    const url = departmentId ? `${apiUrl}/admin/school/category/${schoolId}/${departmentId}` : `${apiUrl}/admin/school/category/${schoolId}`;
 
     const res = await axios.get(url, { withCredentials: true });
     if (res.status === 200) {
@@ -128,7 +128,7 @@ export const adminCategoryLoad = async (schoolId, departmentId) => {
 
 export const adminCategoryAdd = async (data) => {
   try {
-    const res = await axios.post(`${apuUrl}/admin/school/category/add`, data, { withCredentials: true });
+    const res = await axios.post(`${apiUrl}/admin/school/category/add`, data, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allCategories }로 반환하므로 rows 사용
     }
@@ -141,7 +141,7 @@ export const adminCategoryAdd = async (data) => {
 
 export const adminCategoryDelete = async (categoryId) => {
   try {
-    const res = await axios.delete(`${apuUrl}/admin/school/category/${categoryId}`, { withCredentials: true }); // 카테고리 ID를 URL에 포함
+    const res = await axios.delete(`${apiUrl}/admin/school/category/${categoryId}`, { withCredentials: true }); // 카테고리 ID를 URL에 포함
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allCategories }로 반환하므로 rows 사용
     }
@@ -154,7 +154,7 @@ export const adminCategoryDelete = async (categoryId) => {
 
 export const adminCategoryUpdate = async (data) => {
   try {
-    const res = await axios.put(`${apuUrl}/admin/school/category`, data, { withCredentials: true });
+    const res = await axios.put(`${apiUrl}/admin/school/category`, data, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allCategories }로 반환하므로 rows 사용
     }
@@ -167,7 +167,7 @@ export const adminCategoryUpdate = async (data) => {
 
 export const adminAcademicCalendarAdd = async (data) => {
   try {
-    const res = await axios.post(`${apuUrl}/admin/school/academic-calendar/add`, data, { withCredentials: true });
+    const res = await axios.post(`${apiUrl}/admin/school/academic-calendar/add`, data, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allAcademicCalendars }로 반환하므로 rows 사용
     }
@@ -180,7 +180,7 @@ export const adminAcademicCalendarAdd = async (data) => {
 
 export const adminAcademicCalendarDelete = async (calendarId) => {
   try {
-    const res = await axios.delete(`${apuUrl}/admin/school/academic-calendar/${calendarId}`, { withCredentials: true });
+    const res = await axios.delete(`${apiUrl}/admin/school/academic-calendar/${calendarId}`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allAcademicCalendars }로 반환하므로 rows 사용
     }
@@ -193,7 +193,7 @@ export const adminAcademicCalendarDelete = async (calendarId) => {
 
 export const adminAcademicCalendarUpdate = async (data) => {
   try {
-    const res = await axios.put(`${apuUrl}/admin/school/academic-calendar`, data, { withCredentials: true });
+    const res = await axios.put(`${apiUrl}/admin/school/academic-calendar`, data, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allAcademicCalendars }로 반환하므로 rows 사용
     }
@@ -206,7 +206,7 @@ export const adminAcademicCalendarUpdate = async (data) => {
 
 export const adminUserLoad = async (school_id, department_id) => {
   try {
-    const url = department_id ? `${apuUrl}/admin/school/user/${school_id}/${department_id}` : `${apuUrl}/admin/school/user/${school_id}`;
+    const url = department_id ? `${apiUrl}/admin/school/user/${school_id}/${department_id}` : `${apiUrl}/admin/school/user/${school_id}`;
     const res = await axios.get(url, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 테이블 데이터 반환
@@ -220,7 +220,7 @@ export const adminUserLoad = async (school_id, department_id) => {
 
 export const adminUserDelete = async (student_id) => {
   try {
-    const res = await axios.delete(`${apuUrl}/admin/school/user/${student_id}`, { withCredentials: true });
+    const res = await axios.delete(`${apiUrl}/admin/school/user/${student_id}`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allUsers }로 반환하므로 rows 사용
     }
@@ -233,7 +233,7 @@ export const adminUserDelete = async (student_id) => {
 
 export const adminUserUpdate = async (data) => {
   try {
-    const res = await axios.put(`${apuUrl}/admin/school/user`, data, { withCredentials: true });
+    const res = await axios.put(`${apiUrl}/admin/school/user`, data, { withCredentials: true });
     if (res.status === 200) {
       return res.data.rows; // 서버에서 { rows: allUsers }로 반환하므로 rows 사용
     }

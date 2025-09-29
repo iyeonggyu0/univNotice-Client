@@ -1,9 +1,9 @@
 import axios from "axios";
-import { apuUrl } from "../../util/axios";
+import { apiUrl } from "../../util/axios";
 
 export const DeviceAdd = async (data) => {
   try {
-    const res = await axios.post(`${apuUrl}/user/device`, data, { withCredentials: true });
+    const res = await axios.post(`${apiUrl}/user/device`, data, { withCredentials: true });
     if (res.status === 200) {
       return res.data; // 전체 응답 데이터 반환 (success, message, refresh_token, device_id 포함)
     }
@@ -16,7 +16,7 @@ export const DeviceAdd = async (data) => {
 
 export const DeviceDelete = async (device_id) => {
   try {
-    const res = await axios.delete(`${apuUrl}/user/device/${device_id}`, { withCredentials: true });
+    const res = await axios.delete(`${apiUrl}/user/device/${device_id}`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.success; // { success: true } 반환
     }

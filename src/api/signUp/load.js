@@ -1,9 +1,9 @@
 import axios from "axios";
-import { apuUrl } from "../../util/axios";
+import { apiUrl } from "../../util/axios";
 
 export const signupSchoolLoad = async () => {
   try {
-    const res = await axios.get(`${apuUrl}/sign-up/load/school`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/sign-up/load/school`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.data; // 학교 목록 반환
     }
@@ -17,7 +17,7 @@ export const signupSchoolLoad = async () => {
 export const signupDepartmentLoad = async (selectedUniv) => {
   console.log(selectedUniv);
   try {
-    const res = await axios.get(`${apuUrl}/sign-up/load/department/${selectedUniv}`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/sign-up/load/department/${selectedUniv}`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.data; // 학과 목록 반환
     }
@@ -30,7 +30,7 @@ export const signupDepartmentLoad = async (selectedUniv) => {
 
 export const signupCategoryLoad = async (school_id, department_id) => {
   try {
-    const res = await axios.get(`${apuUrl}/sign-up/load/category/${school_id}/${department_id}`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}/sign-up/load/category/${school_id}/${department_id}`, { withCredentials: true });
     if (res.status === 200) {
       return res.data.data; // 카테고리 목록 반환
     }

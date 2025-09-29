@@ -1,9 +1,9 @@
 import axios from "axios";
-import { apuUrl } from "../../util/axios";
+import { apiUrl } from "../../util/axios";
 
 export const signupCertificationSend = async (phone) => {
   try {
-    const res = await axios.post(`${apuUrl}/sign-up/certification`, { phone }, { withCredentials: true });
+    const res = await axios.post(`${apiUrl}/sign-up/certification`, { phone }, { withCredentials: true });
     if (res.status === 200) {
       alert("인증번호가 발송되었습니다.");
       return true;

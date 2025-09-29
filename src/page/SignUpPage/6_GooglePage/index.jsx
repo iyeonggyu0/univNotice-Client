@@ -14,7 +14,7 @@ const GooglePage = () => {
   };
 
   const onNextClick = () => {
-    nav("/login/issuance");
+    nav("/signup/7");
   };
 
   return (
