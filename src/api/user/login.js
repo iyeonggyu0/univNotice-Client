@@ -109,3 +109,17 @@ export const userDelete = async (data) => {
     return false;
   }
 };
+
+export const userRefreshToken = async (data) => {
+  try {
+    const res = await axios.post(`${apiUrl}/user/refresh`, data, { withCredentials: true });
+    if (res.status === 200 && res.data.success) {
+      // 새로운 리프레시 토큰 반환
+      return res.data.refresh_token;
+    }
+    return false;
+  } catch (err) {
+    console.log(err.response?.data?.error || "토큰 갱신에 문제가 발생했습니다.");
+    return false;
+  }
+};

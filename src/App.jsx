@@ -20,9 +20,57 @@ import DeviceAppendPage from "./page/DeviceAppendPage";
 import EndPage from "./page/SignUpPage/8_endPage";
 import TermsPage from "./page/TermsPage";
 import UserDeletePage from "./page/UserDeletePage";
+import { useEffect } from "react";
+import { loginCheck } from "./api/user/loginCheck";
+import { sendToApp } from "./api/app/webToApp";
+import { userRefreshToken } from "./api/user/login";
 
 function App() {
-  const isIos = useWeb().isIos;
+  const { isIos, isApp } = useWeb();
+
+  // 로그인 상태 확인 함수
+  const checkUserLoginStatus = async () => {
+    try {
+      const loginStatus = await loginCheck();
+      if (loginStatus) {
+        return;
+      }
+      if (!isApp) {
+        return;
+      }
+
+      sendToApp("GET_REFRESH_TOKEN", null, (data) => {
+        if (data.success) {
+          if (!data.data.refresh_token || !data.data.device_id) {
+            return alert("리프레시 토큰 또는 디바이스ID가 없습니다");
+          }
+
+          const tokenData = {
+            refresh_token: data.data.refresh_token,
+            device_id: data.data.device_id,
+          };
+
+          userRefreshToken(tokenData).then((res) => {
+            if (res) {
+              sendToApp("REFRESH_TOKEN", { refresh_token: res }, (resData) => {
+                if (resData.success) {
+                  return window.location.reload();
+                }
+              });
+            }
+          });
+        } else {
+          return alert("리프레시 또큰 또는 디바이스ID가 없습니다");
+        }
+      });
+    } catch (err) {
+      console.error("로그인 상태 확인 실패:", err);
+    }
+  };
+
+  useEffect(() => {
+    checkUserLoginStatus();
+  }, []);
 
   if (isIos) {
     return <ErrorIosPage />;
@@ -60,7 +108,8 @@ function App() {
 
         {/* 마이페이지 */}
         <Route path="/mypage/info" element={<MyInfoPage />} />
-        <Route path="/mypage/setting" element={<InfoPage />} />
+        <Route path="/mypage/setting" element={<MyInfoPage />} />
+        <Route path="/mypage/device" element={<MyInfoPage />} />
 
         {/* 기기 등록 - 해당 페이지는 메인화면 연결, 추가 등록은 마이페이지에서 */}
         <Route path="/login/append" element={<DeviceAppendPage />} />

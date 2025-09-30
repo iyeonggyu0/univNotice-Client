@@ -17,7 +17,7 @@ import "./style.css";
 
 const InputCP = ({
   value = "",
-  onChange,
+  onChange = {},
   title = "",
   activate = true,
   width = "100%",
@@ -33,7 +33,7 @@ const InputCP = ({
     ...(activate
       ? {}
       : {
-          background: "#F2F2F2",
+          background: "rgb(242 242 242 / 13%)",
           boxShadow: "inset 0px 0px 5px rgba(0, 0, 0, 0.25)",
           color: "var(--black-5)",
         }),

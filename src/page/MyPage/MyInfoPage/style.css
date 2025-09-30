@@ -1,0 +1,39 @@
+.myPageInfo {
+  width: 100%;
+  height: 100%;
+}
+
+.myPageInfo .bottomItem {
+  margin-top: 2rem;
+}
+
+.myPageInfo .deleteAccount {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: clamp(0.75rem, 2.5vw, 1rem);
+  color: var(--main-color);
+}
+
+.myPageInfo .deleteAccount > span {
+  cursor: pointer;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--main-color);
+}
+
+.myPageInfo .caption {
+  position: absolute;
+  bottom: 1rem;
+  font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+  color: var(--black-4);
+  right: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .myPageInfo .centerBox {
+    width: 80vw;
+  }
+
+  .myPageInfo .bottomItem {
+    margin-top: 1rem;
+  }
+}
