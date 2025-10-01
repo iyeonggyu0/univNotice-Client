@@ -1,5 +1,5 @@
 .toggleCP {
-  min-width: 80px;
+  min-width: 60px;
 }
 
 .toggleCP p {
@@ -35,7 +35,7 @@
 }
 
 .toggleCP .toggleCp-container .toggleCp-circle {
-  width: 36px;
+  width: 24px;
   height: 24px;
   border-radius: 999px;
   background-color: white;

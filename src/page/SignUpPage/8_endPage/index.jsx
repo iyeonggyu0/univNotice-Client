@@ -2,9 +2,11 @@ import { useNavigate } from "react-router-dom";
 import ButtonCP from "../../../component/_common/buttonCP";
 import LogoLayout from "../../../layout/LogoLayout";
 import "./style.css";
+import { useWeb } from "../../../hook/useWeb";
 
 const EndPage = () => {
   const nav = useNavigate();
+  const isApp = useWeb().isApp;
   return (
     <LogoLayout>
       <section className="endPage flexCenter">
@@ -18,9 +20,16 @@ const EndPage = () => {
             </p>
             <p className="subTitle">매일 오후 6시 당일의 공지를 알려드려요</p>
           </div>
-          <div onClick={() => nav("/")}>
-            <ButtonCP>홈으로</ButtonCP>
-          </div>
+          {!isApp && (
+            <div onClick={() => nav("/")}>
+              <ButtonCP>홈으로</ButtonCP>
+            </div>
+          )}
+          {isApp && (
+            <div onClick={() => nav("/login")}>
+              <ButtonCP>로그인</ButtonCP>
+            </div>
+          )}
         </div>
       </section>
     </LogoLayout>

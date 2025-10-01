@@ -31,9 +31,13 @@ const MyPageHeader = () => {
     <header className="MyPageHeader flexBetween">
       <LogoCP />
       <div className="MyPageHeader-content flexBetween">
-        {myPageType !== "/mypage/info" && <p onClick={() => nav("/mypage/info")}>내 정보</p>}
-        {myPageType !== "/mypage/device" && <p onClick={() => nav("/mypage/device")}>기기 관리</p>}
-        {myPageType !== "/mypage/setting" && <p onClick={() => nav("/mypage/setting")}>공지 설정</p>}
+        {!isPc && myPageType !== "/mypage/info" && <p onClick={() => nav("/mypage/info")}>내 정보</p>}
+        {!isPc && myPageType !== "/mypage/device" && <p onClick={() => nav("/mypage/device")}>기기 관리</p>}
+        {!isPc && myPageType !== "/mypage/setting" && <p onClick={() => nav("/mypage/setting")}>공지 설정</p>}
+
+        {isPc && <p onClick={() => nav("/mypage/info")}>내 정보</p>}
+        {isPc && <p onClick={() => nav("/mypage/device")}>기기 관리</p>}
+        {isPc && <p onClick={() => nav("/mypage/setting")}>공지 설정</p>}
       </div>
     </header>
   );

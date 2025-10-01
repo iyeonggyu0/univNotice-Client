@@ -24,6 +24,8 @@ import { useEffect } from "react";
 import { loginCheck } from "./api/user/loginCheck";
 import { sendToApp } from "./api/app/webToApp";
 import { userRefreshToken } from "./api/user/login";
+import MySettingPage from "./page/MyPage/MySettingPage";
+import MyDevicePage from "./page/MyPage/MyDevicePage";
 
 function App() {
   const { isIos, isApp } = useWeb();
@@ -42,7 +44,7 @@ function App() {
       sendToApp("GET_REFRESH_TOKEN", null, (data) => {
         if (data.success) {
           if (!data.data.refresh_token || !data.data.device_id) {
-            return alert("리프레시 토큰 또는 디바이스ID가 없습니다");
+            return;
           }
 
           const tokenData = {
@@ -57,10 +59,12 @@ function App() {
                   return window.location.reload();
                 }
               });
+            } else {
+              sendToApp("DELETE_REFRESH_TOKEN", null, () => {});
             }
           });
         } else {
-          return alert("리프레시 또큰 또는 디바이스ID가 없습니다");
+          return console.error("앱에서 리프레시 토큰을 가져오지 못했습니다");
         }
       });
     } catch (err) {
@@ -108,8 +112,8 @@ function App() {
 
         {/* 마이페이지 */}
         <Route path="/mypage/info" element={<MyInfoPage />} />
-        <Route path="/mypage/setting" element={<MyInfoPage />} />
-        <Route path="/mypage/device" element={<MyInfoPage />} />
+        <Route path="/mypage/setting" element={<MySettingPage />} />
+        <Route path="/mypage/device" element={<MyDevicePage />} />
 
         {/* 기기 등록 - 해당 페이지는 메인화면 연결, 추가 등록은 마이페이지에서 */}
         <Route path="/login/append" element={<DeviceAppendPage />} />

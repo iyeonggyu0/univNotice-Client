@@ -45,9 +45,7 @@ const SchoolCP = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [userName, onChangeUserName, setUserName] = useInput("");
   const [userStudentId, onChangeUserStudentId, setUserStudentId] = useInput("");
-  const [userEmail, onChangeUserEmail, setUserEmail] = useInput("");
   const [userPhone, onChangeUserPhone, setUserPhone] = useInput("");
-  const [userStatus, onChangeUserStatus, setUserStatus] = useInput("");
 
   // 사용자 데이터 로드
   const loadUserData = useCallback(async () => {
@@ -68,11 +66,10 @@ const SchoolCP = () => {
       setSelectedUser(user);
       setUserName(user?.name || "");
       setUserStudentId(user?.student_id || "");
-      setUserEmail(user?.email || "");
+
       setUserPhone(user?.phone || "");
-      setUserStatus(user?.status || "");
     },
-    [setSelectedUser, setUserName, setUserStudentId, setUserEmail, setUserPhone, setUserStatus]
+    [setSelectedUser, setUserName, setUserStudentId, setUserPhone]
   );
 
   // 사용자 등록
@@ -80,7 +77,7 @@ const SchoolCP = () => {
     async (e) => {
       e.preventDefault();
       if (!selectedSchool) return alert("학교를 선택하세요.");
-      if (!userName.trim() || !userStudentId.trim() || !userEmail.trim() || !userPhone.trim() || !userStatus.trim()) {
+      if (!userName.trim() || !userStudentId.trim() || !userPhone.trim()) {
         return alert("모든 필드를 입력하세요.");
       }
       setIsUserLoading(true);
@@ -90,9 +87,7 @@ const SchoolCP = () => {
           department_id: selectedDepartment?.id || null,
           name: userName,
           student_id: userStudentId,
-          email: userEmail,
           phone: userPhone,
-          status: userStatus,
         };
         // 등록은 update로 처리 (신규 등록 API가 없으므로)
         const rows = await adminUserUpdate(data);
@@ -100,9 +95,7 @@ const SchoolCP = () => {
           setUserList(rows);
           setUserName("");
           setUserStudentId("");
-          setUserEmail("");
           setUserPhone("");
-          setUserStatus("");
           setSelectedUser(null);
           alert("사용자 등록/수정 완료");
         }
@@ -116,15 +109,11 @@ const SchoolCP = () => {
       selectedDepartment,
       userName,
       userStudentId,
-      userEmail,
       userPhone,
-      userStatus,
       setUserList,
       setUserName,
       setUserStudentId,
-      setUserEmail,
       setUserPhone,
-      setUserStatus,
       setSelectedUser,
       setIsUserLoading,
     ]
@@ -143,9 +132,7 @@ const SchoolCP = () => {
           department_id: selectedDepartment?.id || null,
           name: userName,
           student_id: userStudentId,
-          email: userEmail,
           phone: userPhone,
-          status: userStatus,
         };
         const rows = await adminUserUpdate(data);
         if (Array.isArray(rows)) {
@@ -157,7 +144,7 @@ const SchoolCP = () => {
       }
       setIsUserLoading(false);
     },
-    [selectedUser, selectedSchool, selectedDepartment, userName, userStudentId, userEmail, userPhone, userStatus, setUserList, setIsUserLoading]
+    [selectedUser, selectedSchool, selectedDepartment, userName, userStudentId, userPhone, setUserList, setIsUserLoading]
   );
 
   // 사용자 삭제
@@ -174,9 +161,7 @@ const SchoolCP = () => {
           setSelectedUser(null);
           setUserName("");
           setUserStudentId("");
-          setUserEmail("");
           setUserPhone("");
-          setUserStatus("");
           alert("사용자가 삭제되었습니다.");
         }
       } catch (err) {
@@ -184,7 +169,7 @@ const SchoolCP = () => {
       }
       setIsUserLoading(false);
     },
-    [selectedUser, setUserList, setSelectedUser, setUserName, setUserStudentId, setUserEmail, setUserPhone, setUserStatus, setIsUserLoading]
+    [selectedUser, setUserList, setSelectedUser, setUserName, setUserStudentId, setUserPhone, setIsUserLoading]
   );
 
   // 사용자 데이터 자동 로드
@@ -954,12 +939,9 @@ const SchoolCP = () => {
               <InputCP title="학과 이름" activate={false} onChange={() => {}} value={selectedDepartment?.name || ""} essential={false} placeholder="필수X" />
               <InputCP title="이름" onChange={onChangeUserName} value={userName} essential={true} />
               <InputCP title="학번" onChange={onChangeUserStudentId} value={userStudentId} essential={true} />
-              <InputCP title="이메일" onChange={onChangeUserEmail} value={userEmail} essential={true} />
-            </div>
-            <div className="flexBetween" style={{ width: "100%", gap: "1rem" }}>
               <InputCP title="전화번호" onChange={onChangeUserPhone} value={userPhone} essential={true} />
-              <InputCP title="상태" onChange={onChangeUserStatus} value={userStatus} essential={true} />
             </div>
+
             {!selectedUser && (
               <div style={{ height: "60px" }} onClick={handleUserAdd}>
                 <ButtonCP height="3.875rem">사용자 등록</ButtonCP>

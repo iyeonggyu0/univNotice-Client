@@ -4,6 +4,9 @@ import { useMedia } from "../../hook/useMedia";
 
 const Footer = () => {
   const nav = useNavigate();
+  const gotoGit = () => {
+    window.open("https://github.com/iyeonggyu0/univNotice-Client", "_blank");
+  };
   const isPc = useMedia().isPc;
   return (
     <footer className="footer flexBetween">
@@ -11,8 +14,12 @@ const Footer = () => {
       <p>
         <span onClick={() => nav("/terms")}>이용약관</span>
         <span onClick={() => nav("/kakao")}>문의하기</span>
-        <span onClick={() => nav("https://github.com/iyeonggyu0/univNotice-Client")}>Git. iyeonggyu0</span>
+        <span onClick={gotoGit}>
+          {isPc && "Git. iyeonggyu0"}
+          {!isPc && "Git"}
+        </span>
       </p>
+      {!isPc && <p className="mobile-copy">@UnivNotice. All rights reserved.</p>}
     </footer>
   );
 };

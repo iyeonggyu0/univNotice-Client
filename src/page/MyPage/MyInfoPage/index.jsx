@@ -98,11 +98,7 @@ const MyInfoPage = () => {
             </p>
           </div>
         </div>
-        <p className="caption">
-          학교 변겅은 탈퇴 후 재가입을 통해 해 주세요
-          <br />
-          핸드폰 번호
-        </p>
+        <p className="caption">핸드폰 번호 변경은 고객센터로 문의 해 주세요</p>
       </section>
     </MyPageLayout>
   );
