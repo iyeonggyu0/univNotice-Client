@@ -36,12 +36,12 @@ const PhonePage = () => {
       e.preventDefault();
 
       // 010으로 시작하는 11자리 번호인지 체크
-      if (!/^010\d{8}$/.test(phone)) {
+      if (!/^010\d{8}$/.test(phone.trim())) {
         alert("휴대폰 번호가 올바르지 않습니다.");
         return;
       }
 
-      const data = await signupCertificationSend(phone);
+      const data = await signupCertificationSend(phone.trim());
       setIsCert(data);
     },
     [phone]
@@ -61,16 +61,16 @@ const PhonePage = () => {
         return;
       }
 
-      if (student_id.length < 6) {
+      if (student_id.trim().length < 6) {
         alert("학번은 6자리 이상 입력해주세요");
         return;
       }
       // 010으로 시작하는 11자리 번호인지 체크
-      if (!/^010\d{8}$/.test(phone)) {
+      if (!/^010\d{8}$/.test(phone.trim())) {
         alert("휴대폰 번호가 올바르지 않습니다.");
         return;
       }
-      if (certification.length !== 6) {
+      if (certification.trim().length !== 6) {
         alert("인증번호는 6자리입니다.");
         return;
       }
@@ -78,9 +78,9 @@ const PhonePage = () => {
       const data = {
         signupInfo: signupInfo,
         signupKeyword: signupKeyword,
-        student_id: student_id,
-        phone: phone,
-        name: name,
+        student_id: student_id.trim(),
+        phone: phone.trim(),
+        name: name.trim(),
         certification: certification,
       };
 

@@ -72,3 +72,47 @@ export const myPageCategoryLoad = async () => {
     return false;
   }
 };
+
+export const myPageCategoryEnabled = async (id, value) => {
+  try {
+    const res = await axios.put(`${apiUrl}/user/mypage/category`, { id, value }, { withCredentials: true });
+    if (res.status === 200 && res.data.success) {
+      return res.data.categories; // 카테고리 목록 반환
+    }
+    return false;
+  } catch (err) {
+    alert(err.response?.data?.error || "마이페이지 카테고리 삭제 오류");
+    return false;
+  }
+};
+
+export const myPageKeywordDelete = async (id) => {
+  try {
+    const res = await axios.delete(`${apiUrl}/user/mypage/keyword/${id}`, { withCredentials: true });
+    if (res.status === 200 && res.data.success) {
+      return res.data.categories; // 키워드 목록 반환
+    }
+    return false;
+  } catch (err) {
+    alert(err.response?.data?.error || "마이페이지 키워드 삭제 오류");
+    return false;
+  }
+};
+
+/**
+ * 키워드 추가
+ * @param {object} data {category_id, keyword}
+ * @return {array|boolean} keywords|false
+ */
+export const myPageKeywordPost = async (data) => {
+  try {
+    const res = await axios.post(`${apiUrl}/user/mypage/keyword`, data, { withCredentials: true });
+    if (res.status === 200 && res.data.success) {
+      return res.data.categories; // 키워드 목록 반환
+    }
+    return false;
+  } catch (err) {
+    alert(err.response?.data?.error || "마이페이지 키워드 추가 오류");
+    return false;
+  }
+};

@@ -4,7 +4,8 @@ import "./style.css";
 import ButtonCP from "../../../component/_common/buttonCP";
 import { useCallback, useEffect, useState } from "react";
 import { loginCheck } from "../../../api/user/loginCheck";
-import { myPageCategoryLoad } from "../../../api/user/myPage";
+import { myPageCategoryEnabled, myPageCategoryLoad, myPageKeywordDelete, myPageKeywordPost } from "../../../api/user/myPage";
+
 import CategoryCP from "../../../component/myCp/categoryCP";
 
 const MySettingPage = () => {
@@ -39,39 +40,51 @@ const MySettingPage = () => {
     }
   }, [isLogin]);
 
-  const onChangeActive = useCallback(
-    async (id, value) => {
-      if (!value) {
-        if (!window.confirm("해당 기기에서 푸시 알람을 받지 않습니다")) {
-          return; // 취소 눌렀을 때 함수 종료
-        }
+  /**
+   * 카테고리 수정
+   * @param {number} id - 크롤링 ID
+   */
+  const onEnabledCategory = useCallback(async (id, value) => {
+    if (value === false) {
+      if (!window.confirm("해당 카테고리에 대한 알림을 받지 않습니다.")) {
+        return; // 취소 눌렀을 때 함수 종료
       }
-
-      try {
-        // const device = await myPageDeviceToggleActive(id, value);
-        // if (!device) {
-        // return alert("기기 활성화 상태 변경에 실패 했습니다\n나중에 다시 시도해주세요");
-        // }
-        // setDeviceData(device);
-      } catch (err) {
-        console.error(err);
-      }
-    },
-    [] // 의존성 배열에서 deviceData 제거
-  );
-
-  const onDeleteDevice = useCallback(async (id) => {
-    if (!window.confirm("정말로 이 기기를 삭제하시겠습니까?")) {
-      return; // 취소 눌렀을 때 함수 종료
     }
 
     try {
-      // const device = await myPageDeviceDelete(id);
-      // if (!device) {
-      //   return alert("기기삭제에 실패 했습니다\n나중에 다시 시도해주세요");
-      // }
-      // alert("기기가 삭제되었습니다,\n30 분 내외로 로그아웃이 진행됩니다.");
-      // setDeviceData(device);
+      const categoryDataRes = await myPageCategoryEnabled(id, value);
+      if (!categoryDataRes) {
+        return alert("기기삭제에 실패 했습니다\n나중에 다시 시도해주세요");
+      }
+      setCategoryData(categoryDataRes);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  /**
+   * 키워드 삭제
+   * @param {number} id - 키워드 id
+   */
+  const onDeleteKeyword = useCallback(async (id) => {
+    try {
+      const categoryDataRes = await myPageKeywordDelete(id);
+      if (!categoryDataRes) {
+        return alert("키워드 실패 했습니다\n나중에 다시 시도해주세요");
+      }
+      setCategoryData(categoryDataRes);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  const onPostKeyword = useCallback(async (category_id, keyword) => {
+    try {
+      const categoryDataRes = await myPageKeywordPost({ category_id, keyword });
+      if (!categoryDataRes) {
+        return alert("키워드 추가에 실패 했습니다\n나중에 다시 시도해주세요");
+      }
+      setCategoryData(categoryDataRes);
     } catch (err) {
       console.error(err);
     }
@@ -91,9 +104,17 @@ const MySettingPage = () => {
           </div>
           {/* 인풋요소 */}
           <div className="flexCol">
-            {categoryData?.map((category, idx) => (
-              <CategoryCP key={idx} category={category} />
-            ))}
+            {categoryData
+              ?.sort((a, b) => a.id - b.id)
+              .map((category, idx) => (
+                <CategoryCP
+                  key={idx}
+                  category={category}
+                  onEnabledCategory={onEnabledCategory}
+                  onDeleteKeyword={onDeleteKeyword}
+                  onPostKeyword={onPostKeyword}
+                />
+              ))}
           </div>
         </div>
       </section>
