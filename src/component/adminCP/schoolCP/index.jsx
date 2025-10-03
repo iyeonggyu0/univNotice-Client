@@ -22,6 +22,7 @@ import {
   adminAcademicCalendarAdd,
   adminAcademicCalendarUpdate,
   adminAcademicCalendarDelete,
+  adminCrawlingTest,
 } from "../../../api/admin/school";
 import TableCP from "../../_common/tableCP";
 import InputCP from "../../_common/inputCP";
@@ -30,6 +31,7 @@ import ButtonCP from "../../_common/buttonCP";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ToggleCP from "../../_common/toggleCP";
 import ClearIcon from "@mui/icons-material/Clear";
+import { adminCrawlingLoad } from "../../../api/admin/crawling";
 
 const SchoolCP = () => {
   // ===== 선택된 항목 상태 =====
@@ -217,7 +219,13 @@ const SchoolCP = () => {
   // ===== 카테고리 관련 입력 및 함수 =====
   const [categoryUrl, onChangeCategoryUrl, setCategoryUrl] = useInput("");
   const [categoryExplanation, onChangeCategoryExplanation, setCategoryExplanation] = useInput("");
-  const [categorySelector, onChangeCategorySelector, setCategorySelector] = useInput("");
+  const [listSelector, onChangeListSelector, setListSelector] = useInput("");
+  const [rowSelector, onChangeRowSelector, setRowSelector] = useInput("");
+  const [titleSelector, onChangeTitleSelector, setTitleSelector] = useInput("");
+  const [authorSelector, onChangeAuthorSelector, setAuthorSelector] = useInput("");
+  const [dateSelector, onChangeDateSelector, setDateSelector] = useInput("");
+  const [dateFormat, onChangeDateFormat, setDateFormat] = useInput("");
+  const [attachmentSelector, onChangeAttachmentSelector, setAttachmentSelector] = useInput("");
   const [isCategoryActive, setIsCategoryActive] = useState(true);
 
   const handleCategorySelect = useCallback(
@@ -225,11 +233,27 @@ const SchoolCP = () => {
       setSelectedCategory(category);
       setCategoryUrl(category?.url || "");
       setCategoryExplanation(category?.category || "");
-      setCategorySelector(category?.selector || "");
+      setListSelector(category?.list_selector || "");
+      setRowSelector(category?.row_selector || "");
+      setTitleSelector(category?.title_selector || "");
+      setAuthorSelector(category?.author_selector || "");
+      setDateSelector(category?.date_selector || "");
+      setDateFormat(category?.date_format || "");
+      setAttachmentSelector(category?.attachment_selector || "");
       setIsCategoryActive(category?.is_active);
       console.log(category?.is_active);
     },
-    [setCategoryUrl, setCategoryExplanation, setCategorySelector]
+    [
+      setCategoryUrl,
+      setCategoryExplanation,
+      setListSelector,
+      setRowSelector,
+      setTitleSelector,
+      setAuthorSelector,
+      setDateSelector,
+      setDateFormat,
+      setAttachmentSelector,
+    ]
   );
 
   // ===== 데이터 로드 함수 =====
@@ -457,8 +481,24 @@ const SchoolCP = () => {
         alert("학과 공지 URL을 입력해주세요.");
         return;
       }
-      if (!categorySelector || categorySelector.trim().length === 0) {
-        alert("메뉴 셀렉터를 입력해주세요.");
+      if (!listSelector || listSelector.trim().length === 0) {
+        alert("목록 셀렉터를 입력해주세요.");
+        return;
+      }
+      if (!rowSelector || rowSelector.trim().length === 0) {
+        alert("행 셀렉터를 입력해주세요.");
+        return;
+      }
+      if (!titleSelector || titleSelector.trim().length === 0) {
+        alert("제목 셀렉터를 입력해주세요.");
+        return;
+      }
+      if (!dateSelector || dateSelector.trim().length === 0) {
+        alert("작성일 셀렉터를 입력해주세요.");
+        return;
+      }
+      if (!dateFormat || dateFormat.trim().length === 0) {
+        alert("작성일 포맷을 입력해주세요.");
         return;
       }
       if (!selectedSchool) {
@@ -471,7 +511,13 @@ const SchoolCP = () => {
           school_id: selectedSchool?.id,
           department_id: selectedDepartment?.id || null,
           url: categoryUrl.trim(),
-          selector: categorySelector.trim(),
+          list_selector: listSelector.trim(),
+          row_selector: rowSelector.trim(),
+          title_selector: titleSelector.trim(),
+          author_selector: authorSelector.trim(),
+          date_selector: dateSelector.trim(),
+          date_format: dateFormat.trim(),
+          attachment_selector: attachmentSelector.trim(),
           category: categoryExplanation.trim() || "학과공지",
           is_active: isCategoryActive,
         };
@@ -480,7 +526,13 @@ const SchoolCP = () => {
           setCategoryList(result);
           setCategoryUrl("");
           setCategoryExplanation("");
-          setCategorySelector("");
+          setListSelector("");
+          setRowSelector("");
+          setTitleSelector("");
+          setAuthorSelector("");
+          setDateSelector("");
+          setDateFormat("");
+          setAttachmentSelector("");
           setIsCategoryActive(true);
           alert("카테고리가 성공적으로 추가되었습니다.");
         }
@@ -493,11 +545,23 @@ const SchoolCP = () => {
       selectedDepartment,
       categoryUrl,
       categoryExplanation,
-      categorySelector,
+      listSelector,
+      rowSelector,
+      titleSelector,
+      authorSelector,
+      dateSelector,
+      dateFormat,
+      attachmentSelector,
       isCategoryActive,
       setCategoryUrl,
       setCategoryExplanation,
-      setCategorySelector,
+      setListSelector,
+      setRowSelector,
+      setTitleSelector,
+      setAuthorSelector,
+      setDateSelector,
+      setDateFormat,
+      setAttachmentSelector,
     ]
   );
 
@@ -512,8 +576,24 @@ const SchoolCP = () => {
         alert("학과 공지 URL을 입력해주세요.");
         return;
       }
-      if (!categorySelector || categorySelector.trim().length === 0) {
-        alert("메뉴 셀렉터를 입력해주세요.");
+      if (!listSelector || listSelector.trim().length === 0) {
+        alert("목록 셀렉터를 입력해주세요.");
+        return;
+      }
+      if (!rowSelector || rowSelector.trim().length === 0) {
+        alert("행 셀렉터를 입력해주세요.");
+        return;
+      }
+      if (!titleSelector || titleSelector.trim().length === 0) {
+        alert("제목 셀렉터를 입력해주세요.");
+        return;
+      }
+      if (!dateSelector || dateSelector.trim().length === 0) {
+        alert("작성일 셀렉터를 입력해주세요.");
+        return;
+      }
+      if (!dateFormat || dateFormat.trim().length === 0) {
+        alert("작성일 포맷을 입력해주세요.");
         return;
       }
       if (!categoryExplanation || categoryExplanation.trim().length === 0) {
@@ -532,7 +612,13 @@ const SchoolCP = () => {
           department_id: selectedDepartment?.id || null,
           url: categoryUrl.trim(),
           category: categoryExplanation.trim(),
-          selector: categorySelector.trim(),
+          list_selector: listSelector.trim(),
+          row_selector: rowSelector.trim(),
+          title_selector: titleSelector.trim(),
+          author_selector: authorSelector.trim(),
+          date_selector: dateSelector.trim(),
+          date_format: dateFormat.trim(),
+          attachment_selector: attachmentSelector.trim(),
           is_active: isCategoryActive,
         };
         const result = await adminCategoryUpdate(data);
@@ -541,7 +627,13 @@ const SchoolCP = () => {
           setSelectedCategory(null);
           setCategoryUrl("");
           setCategoryExplanation("");
-          setCategorySelector("");
+          setListSelector("");
+          setRowSelector("");
+          setTitleSelector("");
+          setAuthorSelector("");
+          setDateSelector("");
+          setDateFormat("");
+          setAttachmentSelector("");
           setIsCategoryActive(true);
           alert("카테고리가 성공적으로 수정되었습니다.");
         }
@@ -555,11 +647,23 @@ const SchoolCP = () => {
       selectedDepartment,
       categoryUrl,
       categoryExplanation,
-      categorySelector,
+      listSelector,
+      rowSelector,
+      titleSelector,
+      authorSelector,
+      dateSelector,
+      dateFormat,
+      attachmentSelector,
       isCategoryActive,
       setCategoryUrl,
       setCategoryExplanation,
-      setCategorySelector,
+      setListSelector,
+      setRowSelector,
+      setTitleSelector,
+      setAuthorSelector,
+      setDateSelector,
+      setDateFormat,
+      setAttachmentSelector,
     ]
   );
 
@@ -580,7 +684,13 @@ const SchoolCP = () => {
           setSelectedCategory(null);
           setCategoryUrl("");
           setCategoryExplanation("");
-          setCategorySelector("");
+          setListSelector("");
+          setRowSelector("");
+          setTitleSelector("");
+          setAuthorSelector("");
+          setDateSelector("");
+          setDateFormat("");
+          setAttachmentSelector("");
           setIsCategoryActive(true);
           alert("카테고리가 성공적으로 삭제되었습니다.");
         }
@@ -588,7 +698,71 @@ const SchoolCP = () => {
         console.error("카테고리 삭제 중 오류:", error);
       }
     },
-    [selectedCategory, setCategoryUrl, setCategoryExplanation, setCategorySelector]
+    [
+      selectedCategory,
+      setCategoryUrl,
+      setCategoryExplanation,
+      setListSelector,
+      setRowSelector,
+      setTitleSelector,
+      setAuthorSelector,
+      setDateSelector,
+      setDateFormat,
+      setAttachmentSelector,
+    ]
+  );
+
+  // ===== 크롤링 테스트 함수 =====
+  const handleTestCrawling = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!selectedCategory) {
+        alert("테스트할 카테고리를 선택해주세요.");
+        return;
+      }
+
+      try {
+        setIsCategoryLoading(true);
+        const result = await adminCrawlingTest(selectedCategory.id);
+
+        if (result && result.success) {
+          const { data, crawlUrl, count } = result;
+
+          // 결과를 별도 창이나 모달로 표시
+          let resultMessage = `✅ 크롤링 테스트 성공!\n\n`;
+          resultMessage += `📍 대상: ${crawlUrl.school} - ${crawlUrl.category}\n`;
+          resultMessage += `🔗 URL: ${crawlUrl.list_url}\n`;
+          resultMessage += `📊 수집된 공지사항: ${count}개\n\n`;
+
+          if (count > 0) {
+            resultMessage += `📋 최근 공지사항 미리보기:\n`;
+            data.slice(0, 3).forEach((notice, index) => {
+              resultMessage += `${index + 1}. ${notice.title}\n`;
+              if (notice.author) resultMessage += `   👤 작성자: ${notice.author}\n`;
+              if (notice.dateText) resultMessage += `   📅 날짜: ${notice.dateText}\n`;
+              if (notice.hasAttachment) resultMessage += `   📎 첨부파일 있음\n`;
+              resultMessage += `\n`;
+            });
+
+            if (count > 3) {
+              resultMessage += `... 외 ${count - 3}개 더`;
+            }
+          } else {
+            resultMessage += `⚠️ 수집된 공지사항이 없습니다.\n셀렉터 설정을 확인해주세요.`;
+          }
+
+          alert(resultMessage);
+        } else {
+          alert(`❌ 크롤링 테스트 실패:\n${result.error || "알 수 없는 오류가 발생했습니다."}`);
+        }
+      } catch (error) {
+        console.error("크롤링 테스트 오류:", error);
+        alert("크롤링 테스트 중 오류가 발생했습니다.");
+      } finally {
+        setIsCategoryLoading(false);
+      }
+    },
+    [selectedCategory, setIsCategoryLoading]
   );
 
   // ===== 일정 관련 함수 =====
@@ -760,6 +934,20 @@ const SchoolCP = () => {
     [selectedAcademicCalendar]
   );
 
+  const onClickCrawling = useCallback(() => {
+    if (!selectedCategory) {
+      alert("크롤링할 카테고리를 선택해주세요.");
+      return;
+    }
+    try {
+      adminCrawlingLoad(selectedCategory.id);
+      alert("크롤링 작업이 백그라운드에서 시작되었습니다. 완료까지 다소 시간이 걸릴 수 있습니다.");
+    } catch (error) {
+      console.error("크롤링 작업 중 오류:", error);
+      alert("크롤링 작업 중 오류가 발생했습니다.");
+    }
+  }, [selectedCategory]);
+
   return (
     <div className="schoolCp">
       <h2>학교 관리</h2>
@@ -853,6 +1041,7 @@ const SchoolCP = () => {
           <h4>
             학과 카테고리
             {selectedCategory && <span style={{ color: "var(--main-color)", marginLeft: "10px" }}>(선택됨: ID {selectedCategory.id})</span>}
+            <span onClick={onClickCrawling}>크롤링</span>
             <span className="deleteBtn" onClick={handleDeleteCategory}>
               <DeleteIcon />
             </span>
@@ -881,7 +1070,6 @@ const SchoolCP = () => {
               <InputCP title="학교 이름" activate={false} onChange={() => {}} value={selectedSchool?.name || ""} essential={true} />
               <InputCP title="학과 이름" activate={false} onChange={() => {}} value={selectedDepartment?.name || ""} essential={true} />
               <InputCP title="학과공지 URL" onChange={onChangeCategoryUrl} value={categoryUrl} essential={true} />
-              <InputCP title="메뉴 셀렉터" onChange={onChangeCategorySelector} value={categorySelector} essential={true} placeholder="tbody의 셀렉터" />
               <InputCP
                 title="카테고리"
                 onChange={onChangeCategoryExplanation}
@@ -891,14 +1079,46 @@ const SchoolCP = () => {
               />
               <ToggleCP title="활성화" value={isCategoryActive} onClickFun={handleCategoryActiveToggle} />
             </div>
+            <div className="flexBetween" style={{ width: "100%", gap: "1rem" }}>
+              <InputCP
+                title="목록 셀렉터"
+                onChange={onChangeListSelector}
+                value={listSelector}
+                essential={true}
+                placeholder="#main > article > div > div.md_notice_bx > table > tbody"
+              />
+              <InputCP title="행 셀렉터" onChange={onChangeRowSelector} value={rowSelector} essential={true} placeholder="tr" />
+              <InputCP title="제목 셀렉터" onChange={onChangeTitleSelector} value={titleSelector} essential={true} placeholder="td.step2 > h3 > a > span.tit" />
+            </div>
+            <div className="flexBetween" style={{ width: "100%", gap: "1rem" }}>
+              <InputCP title="작성자 셀렉터" onChange={onChangeAuthorSelector} value={authorSelector} essential={false} placeholder="td.step3 (선택사항)" />
+              <InputCP title="작성일 셀렉터" onChange={onChangeDateSelector} value={dateSelector} essential={true} placeholder="td.step4" />
+              <InputCP title="작성일 포맷" onChange={onChangeDateFormat} value={dateFormat} essential={true} placeholder="YYYY. MM. DD" />
+            </div>
+            <div className="flexBetween" style={{ width: "100%", gap: "1rem" }}>
+              <InputCP
+                title="첨부파일 셀렉터"
+                onChange={onChangeAttachmentSelector}
+                value={attachmentSelector}
+                essential={false}
+                placeholder="td.step5 > a.file_icon (선택사항)"
+              />
+            </div>
             {!selectedCategory && (
               <div style={{ height: "60px" }} onClick={handleAddCategory}>
                 <ButtonCP height="3.875rem">학과 공지 등록</ButtonCP>
               </div>
             )}
             {selectedCategory && (
-              <div style={{ height: "60px" }} onClick={handleUpdateCategory}>
-                <ButtonCP height="3.875rem">학과 공지 수정</ButtonCP>
+              <div className="flexBetween" style={{ gap: "1rem" }}>
+                <div style={{ height: "60px", flex: 1 }} onClick={handleUpdateCategory}>
+                  <ButtonCP height="3.875rem">학과 공지 수정</ButtonCP>
+                </div>
+                <div style={{ height: "60px", flex: 1 }} onClick={handleTestCrawling}>
+                  <ButtonCP height="3.875rem" color="secondary">
+                    크롤링 테스트
+                  </ButtonCP>
+                </div>
               </div>
             )}
           </div>

@@ -243,3 +243,20 @@ export const adminUserUpdate = async (data) => {
     return err;
   }
 };
+
+/**
+ * 크롤링 테스트 API
+ * @route POST /admin/crawling/test/:crawlUrlId
+ */
+export const adminCrawlingTest = async (crawlUrlId) => {
+  try {
+    const res = await axios.post(`${apiUrl}/admin/crawling/test/${crawlUrlId}`, {}, { withCredentials: true });
+    if (res.status === 200) {
+      return res.data;
+    }
+    return null;
+  } catch (err) {
+    alert(err.response?.data?.error || "크롤링 테스트 오류");
+    return err;
+  }
+};
