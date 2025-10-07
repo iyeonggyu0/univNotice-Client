@@ -123,7 +123,6 @@ function App() {
 
         {/* 공지사항 */}
         <Route path="/notice" element={<InfoPage />} />
-        <Route path="/notice/:id" element={<InfoPage />} />
 
         {/* 어드민페이지 */}
         <Route path="/admin/login" element={<AdminLoginPage />} />

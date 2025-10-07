@@ -1115,9 +1115,7 @@ const SchoolCP = () => {
                   <ButtonCP height="3.875rem">학과 공지 수정</ButtonCP>
                 </div>
                 <div style={{ height: "60px", flex: 1 }} onClick={handleTestCrawling}>
-                  <ButtonCP height="3.875rem" color="secondary">
-                    크롤링 테스트
-                  </ButtonCP>
+                  <ButtonCP height="3.875rem">크롤링 테스트</ButtonCP>
                 </div>
               </div>
             )}

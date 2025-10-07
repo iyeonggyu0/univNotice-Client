@@ -18,7 +18,7 @@ const EndPage = () => {
               <br />
               <span>등록</span>되었어요!
             </p>
-            <p className="subTitle">매일 오후 6시 당일의 공지를 알려드려요</p>
+            <p className="subTitle">매일 오후 7시에 당일의 공지를 알려드려요</p>
           </div>
           {!isApp && (
             <div onClick={() => nav("/")}>
