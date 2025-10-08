@@ -1,31 +1,45 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// hooks
 import { useWeb } from "./hook/useWeb";
+import ScrollToTop from "./hook/useScrollTop";
+
+// api
+import { loginCheck } from "./api/user/loginCheck";
+import { sendToApp } from "./api/app/webToApp";
+import { userRefreshToken } from "./api/user/login";
+
+// Error Pages
 import ErrorIosPage from "./page/ErrorPages/ErrorIosPage";
 import Error404Page from "./page/ErrorPages/Error404Page";
-import ScrollToTop from "./hook/useScrollTop";
+
+// Main & Common Pages
 import MainPage from "./page/MainPage";
 import KakaoPage from "./page/KakaoPage";
-import HelloPage from "./page/SignUpPage/1_helloPage";
+import LoginPage from "./page/LoginPage";
+import TermsPage from "./page/TermsPage";
+import UserDeletePage from "./page/UserDeletePage";
+import DeviceAppendPage from "./page/DeviceAppendPage";
+
+// SignUp Pages
+import HelloPage from "./page/SignUpPage/1_HelloPage";
 import InfoPage from "./page/SignUpPage/2_InfoPage";
-import AdminLoginPage from "./page/AdminPages/AdminLoginPage";
-import AdminPage from "./page/AdminPages";
 import CategoryPage from "./page/SignUpPage/3_CategoryPage";
 import SettingPage from "./page/SignUpPage/4_SettingPage";
 import PhonePage from "./page/SignUpPage/5_PhonePage";
 import GooglePage from "./page/SignUpPage/6_GooglePage";
 import IssuancePage from "./page/SignUpPage/7_IssuancePage";
-import LoginPage from "./page/LoginPage";
-import MyInfoPage from "./page/MyPage/MyInfoPage";
-import DeviceAppendPage from "./page/DeviceAppendPage";
 import EndPage from "./page/SignUpPage/8_endPage";
-import TermsPage from "./page/TermsPage";
-import UserDeletePage from "./page/UserDeletePage";
-import { useEffect } from "react";
-import { loginCheck } from "./api/user/loginCheck";
-import { sendToApp } from "./api/app/webToApp";
-import { userRefreshToken } from "./api/user/login";
+
+// MyPage
+import MyInfoPage from "./page/MyPage/MyInfoPage";
 import MySettingPage from "./page/MyPage/MySettingPage";
 import MyDevicePage from "./page/MyPage/MyDevicePage";
+
+// Admin Pages
+import AdminLoginPage from "./page/AdminPages/AdminLoginPage";
+import AdminPage from "./page/AdminPages";
 
 function App() {
   const { isIos, isApp } = useWeb();

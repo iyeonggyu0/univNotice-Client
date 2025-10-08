@@ -29,7 +29,7 @@ const CategoryCP = ({ category, onEnabledCategory, onDeleteKeyword, onPostKeywor
       .filter((kw) => kw !== "");
 
     if (keywords.length === 0) {
-      alert("유효한 키워드를 입력해주세요.");
+      alert("유효한 키워드를 입력해 주세요.");
       return;
     }
 
@@ -50,7 +50,7 @@ const CategoryCP = ({ category, onEnabledCategory, onDeleteKeyword, onPostKeywor
           category?.Categories[0]?.Keywords?.map((keyword, idx) => (
             <MyPageKeywordCP key={idx} kw={keyword.keyword} keyword_id={keyword.id} onDelete={onDeleteKeyword} />
           ))}
-        {category?.Categories[0]?.Keywords?.length === 0 && <p></p>}
+        {category?.Categories[0]?.Keywords?.length === 0 && <p style={{ fontSize: "0.825rem", color: "var(--black-4)" }}>전체 공지에 대한 알림을 받습니다.</p>}
       </div>
     </div>
   );
