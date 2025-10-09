@@ -61,7 +61,7 @@ const CategoryPage = () => {
             <h4 className="subTitle">다음 단계에서 공지 유형별로 키워드를 설정합니다.</h4>
           </div>
           {categoryList?.length > 0 && (
-            <div className="flexCol" style={{ gap: "26px", width: "100%" }}>
+            <div className="flexCol buttonBox" style={{ gap: "26px", width: "100%" }}>
               {categoryList?.map((data, idx) => (
                 <ButtonToggleCP key={idx} data={data} isSelected={selectedCategories.some((item) => item.id === data.id)} onClickToggle={toggleCategory} />
               ))}
