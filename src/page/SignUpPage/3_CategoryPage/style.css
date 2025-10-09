@@ -47,9 +47,4 @@
   .categoryPage .centerBox {
     width: 80vw;
   }
-
-  .categoryPage .buttonBox {
-    max-height: 60vh;
-    overflow-y: auto;
-  }
 }

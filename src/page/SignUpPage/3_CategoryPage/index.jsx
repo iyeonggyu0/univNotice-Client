@@ -80,8 +80,11 @@ const CategoryPage = () => {
               {categoryList?.map((data, idx) => (
                 <ButtonToggleCP key={idx} data={data} isSelected={selectedCategories.some((item) => item.id === data.id)} onClickToggle={toggleCategory} />
               ))}
+              <div class="buttonToggleCP ">학과공지</div>
+              <div class="buttonToggleCP ">학과공지</div>
             </div>
           )}
+
           <div className="bottomItem" onClick={nextButtonClick}>
             <ButtonCP>다음</ButtonCP>
           </div>
