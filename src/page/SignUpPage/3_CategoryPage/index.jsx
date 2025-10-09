@@ -48,6 +48,21 @@ const CategoryPage = () => {
     window.location.href = "/signup/4/1";
   };
 
+  useEffect(() => {
+    const box = document.querySelector(".buttonBox");
+    if (!box) return;
+    const togglePadding = () => {
+      box.style.paddingRight = box.scrollHeight > box.clientHeight ? "4px" : "0";
+    };
+    togglePadding();
+    box.addEventListener("scroll", togglePadding);
+    window.addEventListener("resize", togglePadding);
+    return () => {
+      box.removeEventListener("scroll", togglePadding);
+      window.removeEventListener("resize", togglePadding);
+    };
+  }, []);
+
   return (
     <LogoLayout>
       <section className="categoryPage flexCenter">

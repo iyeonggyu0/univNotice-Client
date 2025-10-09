@@ -5,7 +5,6 @@
 .categoryPage .buttonBox {
   max-height: 40vh;
   overflow-y: auto;
-  padding-right: 4px;
 }
 
 /* Firefox 전용: 표준 속성 */
