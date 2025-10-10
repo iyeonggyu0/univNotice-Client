@@ -135,6 +135,7 @@ a:active {
   .centerBox {
     width: 90%;
     margin: 0 auto;
+    gap: 1rem;
   }
 }
 
@@ -168,4 +169,45 @@ a:active {
   margin-top: 0.75rem;
   color: var(--black-4);
   text-align: center;
+}
+
+.centerBox > .titleBox + .flexCol {
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+/* Firefox 전용: 표준 속성 */
+@supports (scrollbar-width: thin) and (not (selector(::-webkit-scrollbar))) {
+  .centerBox > .titleBox + .flexCol {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  }
+}
+
+/* Blink/WebKit 전용: 화살표 제거 */
+@supports selector(::-webkit-scrollbar) {
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar {
+    width: 4px;
+    background: transparent;
+  }
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* 화살표 버튼 숨김 */
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-button:single-button {
+    display: none;
+  }
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-button:double-button {
+    display: none;
+  }
 }
