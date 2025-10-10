@@ -1,7 +1,7 @@
 import SmsIcon from "@mui/icons-material/Sms";
 import { useNavigate } from "react-router-dom";
 
-const AlarmCP = () => {
+const AlarmCP = (onClickAlarm) => {
   const nav = useNavigate();
   return (
     <div
@@ -21,7 +21,10 @@ const AlarmCP = () => {
         cursor: "pointer",
         color: "white",
       }}
-      onClick={() => nav("/notice")}>
+      onClick={() => {
+        nav("/notice");
+        onClickAlarm();
+      }}>
       <SmsIcon />
     </div>
   );

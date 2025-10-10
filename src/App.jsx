@@ -47,6 +47,10 @@ function App() {
   const { isIos, isApp } = useWeb();
   const [alarm, setAlarm] = useState(false);
 
+  const onClickAlarm = () => {
+    setAlarm(false);
+  };
+
   // 로그인 상태 확인 함수
   const checkUserLoginStatus = async () => {
     try {
@@ -120,7 +124,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      {alarm && <AlarmCP />}
+      {alarm && <AlarmCP onClickAlarm={onClickAlarm} />}
       <Routes>
         <Route path="/" element={<MainPage />} />
 
