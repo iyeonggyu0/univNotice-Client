@@ -109,6 +109,11 @@ function App() {
         console.log("알림 수신됨:", responseData);
         setAlarm(true);
       }
+
+      // ALARM_RECEIVED 타입 처리
+      if (responseData && responseData.type === "ALARM_BLOCK") {
+        alert("알람 권한이 없습니다.\n애플리케이션 설정에서 알림을 허용해주세요.");
+      }
     };
 
     // 클린업
