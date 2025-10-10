@@ -40,9 +40,12 @@ import MyDevicePage from "./page/MyPage/MyDevicePage";
 // Admin Pages
 import AdminLoginPage from "./page/AdminPages/AdminLoginPage";
 import AdminPage from "./page/AdminPages";
+import { useState } from "react";
+import AlarmCP from "./component/_common/alarmCP";
 
 function App() {
   const { isIos, isApp } = useWeb();
+  const [alarm, setAlarm] = useState(false);
 
   // 로그인 상태 확인 함수
   const checkUserLoginStatus = async () => {
@@ -88,6 +91,26 @@ function App() {
 
   useEffect(() => {
     checkUserLoginStatus();
+
+    // 앱에서 오는 메시지 처리 (ALARM_RECEIVED)
+    const originalOnAppMessage = window.onAppMessage;
+    window.onAppMessage = (responseData) => {
+      // 기존 핸들러 실행 (webToApp.js의 콜백 처리)
+      if (originalOnAppMessage) {
+        originalOnAppMessage(responseData);
+      }
+
+      // ALARM_RECEIVED 타입 처리
+      if (responseData && responseData.type === "ALARM_RECEIVED") {
+        console.log("알림 수신됨:", responseData);
+        setAlarm(true);
+      }
+    };
+
+    // 클린업
+    return () => {
+      window.onAppMessage = originalOnAppMessage;
+    };
   }, []);
 
   if (isIos) {
@@ -97,6 +120,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      {alarm && <AlarmCP />}
       <Routes>
         <Route path="/" element={<MainPage />} />
 

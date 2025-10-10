@@ -30,7 +30,7 @@
   font-size: clamp(1.2rem, 2.5vw, 1.4rem);
   font-weight: 700;
   position: absolute;
-  bottom: 2rem;
+  bottom: 4rem;
   left: 50%;
   transform: translateX(-50%);
   cursor: pointer;
