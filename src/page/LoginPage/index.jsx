@@ -41,7 +41,7 @@ const LoginPage = () => {
     if (!student_id) return alert("학번을 입력해 주세요.");
 
     if (student_id.length < 6) return alert("학번은 6자리 이상이어야 합니다.");
-    if (!/^[\d,;$]+$/.test(student_id)) return alert("학번은 숫자만 입력해야 합니다.");
+    if (!/^[\d!;&$]+$/.test(student_id)) return alert("학번은 숫자만 입력해야 합니다.");
 
     if (!phone) return alert("전화번호를 입력해 주세요.");
 
