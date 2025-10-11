@@ -5,7 +5,7 @@ import { noticeLoad } from "../../api/notice";
 import { loginCheck } from "../../api/user/loginCheck";
 
 import "./style.css";
-import { noticeDemo } from "../../demoData/noticeDemo";
+// import { noticeDemo } from "../../demoData/noticeDemo";
 import MainLayout from "../../layout";
 
 const NoticePage = () => {
@@ -27,7 +27,7 @@ const NoticePage = () => {
         // setNoticeData(device);
         // setLogin(isLogin);
         // FIXME:
-        setNoticeData(noticeDemo);
+        // setNoticeData(noticeDemo);
         setLogin(true);
       } catch (err) {
         console.error(err);
