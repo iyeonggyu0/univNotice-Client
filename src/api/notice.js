@@ -1,7 +1,7 @@
 import axios from "axios";
 import { apiUrl } from "../util/axios";
 
-export const NoticeLoad = async () => {
+export const noticeLoad = async () => {
   try {
     const res = await axios.get(`${apiUrl}/notice/`, { withCredentials: true });
     if (res.status === 200) {

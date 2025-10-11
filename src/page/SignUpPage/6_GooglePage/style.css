@@ -18,6 +18,8 @@
     flex-direction: column;
     gap: 4vh;
     padding: 4vh 0;
+    width: 90%;
+    margin: 0 auto;
   }
 
   .googlePage * {

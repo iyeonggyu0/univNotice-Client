@@ -28,7 +28,7 @@ const Header = () => {
     <header className="MainLayoutHeader flexBetween">
       <LogoCP />
       <div className="MainLayoutHeader-content flexBetween">
-        <p onClick={() => nav("/notice")}>공지 보기</p>
+        {isLogin && <p onClick={() => nav("/notice")}>공지 보기</p>}
         {isApp && !isLogin && <p onClick={() => nav("/login/append")}>기기 등록</p>}
         {!isLogin && <p onClick={() => nav("/login")}>로그인</p>}
         {isLogin && <p onClick={() => nav("/mypage/info")}>마이페이지</p>}

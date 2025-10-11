@@ -6,6 +6,9 @@ export const userLogin = async (data) => {
     const res = await axios.post(`${apiUrl}/user/login`, data, { withCredentials: true });
     if (res.status === 200) {
       alert("로그인 성공");
+      if (res.data.tester === true) {
+        return window.location.reload();
+      }
       return res.data.success;
     }
     return false;
@@ -19,7 +22,7 @@ export const userSendCertificationCode = async (phone) => {
   try {
     const res = await axios.post(`${apiUrl}/user/certification`, { phone }, { withCredentials: true });
     if (res.status === 200) {
-      alert("인증번호가 전송되었습니다.");
+      alert(res.data.message || "인증번호가 전송되었습니다.");
       return true;
     }
     return false;

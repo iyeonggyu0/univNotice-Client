@@ -1,0 +1,27 @@
+.noticePage {
+  padding-top: 20vh;
+}
+
+.noticePage > .centerSection {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.noticePageOut footer {
+  display: none;
+}
+
+.noticePage > .centerSection > h2 {
+  font-size: clamp(1.4rem, 2.5vw, 1.6rem);
+}
+
+@media screen and (max-width: 768px) {
+  .noticePage {
+    padding-top: 10vh;
+  }
+
+  .noticePage > .centerSection {
+    width: 90%;
+  }
+}
