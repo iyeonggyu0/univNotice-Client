@@ -5,7 +5,7 @@
 
 .phonePage .smsButton {
   position: absolute;
-  right: 0;
+  right: 0px;
   /* bottom: 50%; */
   /* transform: translateY(25%); */
   color: var(--point-color-1);
@@ -23,6 +23,10 @@
 .phonePage .terms > span {
   padding-bottom: 4px;
   border-bottom: 1px solid var(--main-color);
+}
+
+.phonePage .relative {
+  position: relative;
 }
 
 @media screen and (max-width: 768px) {

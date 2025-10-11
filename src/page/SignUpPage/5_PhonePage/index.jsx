@@ -122,7 +122,7 @@ const PhonePage = () => {
           <div className="flexCol">
             <InputCP value={name} onChange={onChangeName} title="이름" />
             <InputCP value={student_id} onChange={onChangeStudent_id} title="학번" placeholder="6자리 이상 입력하세요" />
-            <div>
+            <div className="relative">
               <span className="smsButton" onClick={(e) => onCertificationClick(e)}>
                 발송
               </span>
