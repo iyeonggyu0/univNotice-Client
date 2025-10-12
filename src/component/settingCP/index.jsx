@@ -52,7 +52,7 @@ const SettingCP = ({ data, setKeywordFunc, nextButtonClick }) => {
           키워드를 설정합니다!
         </h2>
         <h4 className="subTitle">
-          아래 키워드가 포함된 공지가 올라오면 알람을 받아요
+          아래 키워드가 포함된 공지가 올라오면 을 받아요
           <br />
           키워드 입력을 하지 않고 건너뛸 수 있어요!
         </h4>

@@ -11,7 +11,6 @@ import { useCallback } from "react";
 
 const MyDevicePage = () => {
   const nav = useNavigate();
-  const isApp = useWeb().isApp;
   const [isLogin, setIsLogin] = useState(null);
   const [deviceData, setDeviceData] = useState([]);
 
@@ -44,7 +43,7 @@ const MyDevicePage = () => {
   const onChangeActive = useCallback(
     async (id, value) => {
       if (!value) {
-        if (!window.confirm("해당 기기에서 푸시 알람을 받지 않습니다")) {
+        if (!window.confirm("해당 기기에서 푸시 을 받지 않습니다")) {
           return; // 취소 눌렀을 때 함수 종료
         }
       }

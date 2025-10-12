@@ -37,6 +37,9 @@
   box-sizing: border-box;
   vertical-align: baseline;
 }
+header {
+  z-index: 9999;
+}
 article,
 aside,
 details,

@@ -992,7 +992,7 @@ const SchoolCP = () => {
           <div className="schoolCp-schoolAddForm flexBetween">
             <InputCP title="추가할 학교 이름" onChange={onChangeSchoolName} value={schoolName} onKeyDown={handleSchoolNameKeyDown} essential={true} />
             <div style={{ width: "20vw", height: "60px", marginLeft: "1rem", marginTop: "auto" }} onClick={handleAddSchool}>
-              <ButtonCP height="3.875rem">등록</ButtonCP>
+              <ButtonCP height="3.625rem">등록</ButtonCP>
             </div>
           </div>
         </div>
@@ -1032,7 +1032,7 @@ const SchoolCP = () => {
               <InputCP title="학과 이름" onChange={onChangeDepartmentName} value={departmentName} essential={true} onKeyDown={handleDepartmentNameKeyDown} />
             </div>
             <div style={{ width: "20vw", height: "60px", marginLeft: "1rem", marginTop: "auto" }} onClick={handleAddDepartment}>
-              <ButtonCP height="3.875rem">학과 등록</ButtonCP>
+              <ButtonCP height="3.625rem">학과 등록</ButtonCP>
             </div>
           </div>
         </div>
@@ -1106,16 +1106,16 @@ const SchoolCP = () => {
             </div>
             {!selectedCategory && (
               <div style={{ height: "60px" }} onClick={handleAddCategory}>
-                <ButtonCP height="3.875rem">학과 공지 등록</ButtonCP>
+                <ButtonCP height="3.625rem">학과 공지 등록</ButtonCP>
               </div>
             )}
             {selectedCategory && (
               <div className="flexBetween" style={{ gap: "1rem" }}>
                 <div style={{ height: "60px", flex: 1 }} onClick={handleUpdateCategory}>
-                  <ButtonCP height="3.875rem">학과 공지 수정</ButtonCP>
+                  <ButtonCP height="3.625rem">학과 공지 수정</ButtonCP>
                 </div>
                 <div style={{ height: "60px", flex: 1 }} onClick={handleTestCrawling}>
-                  <ButtonCP height="3.875rem">크롤링 테스트</ButtonCP>
+                  <ButtonCP height="3.625rem">크롤링 테스트</ButtonCP>
                 </div>
               </div>
             )}
@@ -1162,12 +1162,12 @@ const SchoolCP = () => {
 
             {!selectedUser && (
               <div style={{ height: "60px" }} onClick={handleUserAdd}>
-                <ButtonCP height="3.875rem">사용자 등록</ButtonCP>
+                <ButtonCP height="3.625rem">사용자 등록</ButtonCP>
               </div>
             )}
             {selectedUser && (
               <div style={{ height: "60px" }} onClick={handleUserUpdate}>
-                <ButtonCP height="3.875rem">사용자 수정</ButtonCP>
+                <ButtonCP height="3.625rem">사용자 수정</ButtonCP>
               </div>
             )}
           </div>
@@ -1205,7 +1205,7 @@ const SchoolCP = () => {
               <InputCP title="학교 이름" activate={false} onChange={() => {}} value={selectedSchool?.name || ""} essential={true} />
               <InputCP title="학과 이름" activate={false} onChange={() => {}} value={selectedDepartment?.name || ""} essential={false} placeholder="필수X" />
               <InputCP title="일정 이름" onChange={onChangeScheduleName} value={scheduleName} essential={true} />
-              <div style={{ width: "100%", height: "3.875rem", marginTop: "auto" }} className="flexBetween">
+              <div style={{ width: "100%", height: "3.625rem", marginTop: "auto" }} className="flexBetween">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker label="일정 시작" value={startDate} onChange={setStartDate} format="YYYY-MM-DD" sx={{ width: "240px" }} />
                   <DatePicker label="일정 종료" value={endDate} onChange={setEndDate} format="YYYY-MM-DD" sx={{ width: "240px", marginLeft: "1rem" }} />
@@ -1224,12 +1224,12 @@ const SchoolCP = () => {
             </div>
             {!selectedAcademicCalendar && (
               <div style={{ height: "60px" }} onClick={handleAcademicCalendarAdd}>
-                <ButtonCP height="3.875rem">일정 등록</ButtonCP>
+                <ButtonCP height="3.625rem">일정 등록</ButtonCP>
               </div>
             )}
             {selectedAcademicCalendar && (
               <div style={{ height: "60px" }} onClick={handleAcademicCalendarUpdate}>
-                <ButtonCP height="3.875rem">일정 수정</ButtonCP>
+                <ButtonCP height="3.625rem">일정 수정</ButtonCP>
               </div>
             )}
           </div>

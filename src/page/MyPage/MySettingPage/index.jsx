@@ -100,7 +100,7 @@ const MySettingPage = () => {
             <h2 className="title">
               <span className="bold">공지 설정</span>
             </h2>
-            <h4 className="subTitle">공지별 알람 On/Off 및 키워드를 설정</h4>
+            <h4 className="subTitle">공지별 On/Off 및 키워드를 설정</h4>
           </div>
           {/* 인풋요소 */}
           <div className="flexCol">

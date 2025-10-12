@@ -1,11 +1,24 @@
+.noticePageOut header {
+  background-color: white !important;
+  z-index: 9999;
+}
+
 .noticePage {
-  padding-top: 20vh;
+  padding: 20vh 0;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: white;
+}
+
+.noticePageOut {
+  overflow: hidden;
 }
 
 .noticePage > .centerSection {
   width: 100%;
-  max-width: 1080px;
+  max-width: 920px;
   margin: 0 auto;
+  position: relative;
 }
 
 .noticePageOut footer {
@@ -14,11 +27,110 @@
 
 .noticePage > .centerSection > h2 {
   font-size: clamp(1.4rem, 2.5vw, 1.6rem);
+  margin-bottom: clamp(1.4rem, 2.5vw, 4rem);
+}
+
+.noticePage .noticeNav {
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
+  background-color: var(--black-1);
+  color: var(--black-4);
+  margin-bottom: clamp(1.4rem, 2.5vw, 3rem);
+}
+
+.noticePage .noticeNav > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-shrink: 0; /* 한 줄로 쭉 나열 */
+}
+
+.noticePage .noticeNav .navBtn .text {
+  padding: 18px 24px;
+  white-space: nowrap; /* 제목 줄바꿈 방지 */
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.noticePage .noticeNav .navBtn .text:hover {
+  background-color: var(--black-2);
+  color: var(--black-5);
+}
+
+.noticePage .point {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--point-color-1);
+  position: absolute;
+  top: 14px;
+  right: 16px;
+}
+
+.noticePage .noticeNav .line {
+  width: 1px;
+  height: 16px;
+  background-color: var(--black-2);
+}
+
+.noticePage .noticeNav .navBtn:last-child .line {
+  display: none;
+}
+
+/*  체크 */
+.noticePage .alarmCheck {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+  margin-bottom: 1rem;
+}
+
+/* 공지 리스트 */
+.noticePage .noticeList {
+  border-top: 2px solid var(--black-4);
+}
+
+.noticePage .noticeListLiCP,
+.noticePage .noticeListLiCPTitle {
+  display: flex;
+  justify-items: space-between;
+  height: 3.625rem;
+  align-items: center;
+  border-bottom: 1px solid var(--black-2);
+}
+
+.noticePage .noticeListLiCPTitle > div,
+.noticePage .noticeListLiCP > div:not(:first-child) {
+  text-align: center;
+}
+
+.noticePage .noticeListLiCP {
+  font-size: 0.875rem;
+}
+
+.noticePage .noticeListLiCP .noticeListLiCP-title,
+.noticePage .noticeListLiCPTitle .noticeListLiCP-title {
+  flex: 0.6;
+}
+.noticePage .noticeListLiCP .noticeListLiCP-author,
+.noticePage .noticeListLiCPTitle .noticeListLiCP-author {
+  flex: 0.13;
+}
+.noticePage .noticeListLiCP .noticeListLiCP-attachments,
+.noticePage .noticeListLiCPTitle .noticeListLiCP-attachments {
+  flex: 0.13;
+}
+.noticePage .noticeListLiCP .noticeListLiCP-published_at,
+.noticePage .noticeListLiCPTitle .noticeListLiCP-published_at {
+  flex: 0.13;
 }
 
 @media screen and (max-width: 768px) {
   .noticePage {
-    padding-top: 10vh;
+    padding-top: 15vh;
   }
 
   .noticePage > .centerSection {
