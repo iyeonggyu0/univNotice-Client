@@ -29,7 +29,7 @@ const NoticeListLiCP = ({ data, url }) => {
       </div>
       <div className="noticeListLiCP-author">{data.author}</div>
       <div className="noticeListLiCP-attachments">
-        <DownloadIcon fontSize="small" style={{ color: data.attachments ? "var(--black-4)" : "var(--black-2)" }} />
+        <DownloadIcon style={{ fontSize: "14px", color: data.attachments ? "var(--black-4)" : "var(--black-2)" }} />
       </div>
       <div className="noticeListLiCP-published_at">{formattedDate}</div>
     </div>
