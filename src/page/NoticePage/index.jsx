@@ -37,6 +37,7 @@ const NoticePage = () => {
         setNoticeData(notice);
         setTitle(notice[0].category);
         setPagingData(notice[0]?.Notices || []);
+        pagingFunc();
       } catch (err) {
         console.error(err);
       }
@@ -49,7 +50,7 @@ const NoticePage = () => {
     console.log("paging: ", paging);
   }, [pagingData]);
 
-  useEffect(() => {
+  const pagingFunc = () => {
     if (!alarmOnly) {
       setPagingData(noticeData[paging]?.Notices || []);
       return;
@@ -57,6 +58,10 @@ const NoticePage = () => {
       const alarmData = noticeData[paging]?.Notices.filter((data) => data.NoticeKeywordMatches.length > 0) || [];
       setPagingData(alarmData);
     }
+  };
+
+  useEffect(() => {
+    pagingFunc();
   }, [paging, alarmOnly]);
 
   return (

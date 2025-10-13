@@ -17,7 +17,6 @@ const DeviceAppendPage = () => {
   const onClickRegister = useCallback(
     async (e) => {
       e.preventDefault();
-      alert("실행");
       try {
         if (code.trim() === "") {
           alert("코드를 입력해 주세요");
