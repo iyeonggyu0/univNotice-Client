@@ -51,12 +51,12 @@ function App() {
   const onClickAlarm = () => {
     setAlarm(false);
   };
-
+  let login = false;
   // 로그인 상태 확인 함수
   const checkUserLoginStatus = async () => {
     try {
-      const loginStatus = await loginCheck();
-      if (loginStatus) {
+      login = await loginCheck();
+      if (login) {
         return;
       }
       if (!isApp) {
@@ -127,7 +127,7 @@ function App() {
       <ScrollToTop />
       {alarm && <AlarmCP onClickAlarm={onClickAlarm} />}
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<MainPage login={login} />} />
 
         {/* 문의하기 */}
         <Route path="/kakao" element={<KakaoPage />} />

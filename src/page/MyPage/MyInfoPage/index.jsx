@@ -84,7 +84,7 @@ const MyInfoPage = () => {
           {/* 인풋요소 */}
           <div className="flexCol">
             <InputCP title="이름" activate={false} value={userData.name} />
-            <InputCP title="학번" activate={false} value={`*${userData.student_id}`} />
+            <InputCP title="학번" activate={false} value={`****${userData.student_id}`} />
             <InputCP title="학교/학과" activate={false} value={`${userData.school.name} / ${userData.department.name}`} />
             <InputCP title="핸드폰 번호" activate={false} value={`010 - **** - ${userData.phone}`} />
           </div>

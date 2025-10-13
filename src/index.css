@@ -140,6 +140,10 @@ a:active {
     margin: 0 auto;
     gap: 1rem;
   }
+
+  .centerBox > .bottomItem {
+    margin-top: 2rem;
+  }
 }
 
 .centerBox > .bottomItem {
