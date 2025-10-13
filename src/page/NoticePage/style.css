@@ -25,6 +25,12 @@
   display: none;
 }
 
+.noticePage .notdefine-deivce {
+  width: 100%;
+  height: 20vh;
+  background-color: var(--black-1);
+}
+
 .noticePage > .centerSection > h2 {
   font-size: clamp(1.4rem, 2.5vw, 1.6rem);
   margin-bottom: clamp(1.4rem, 2.5vw, 4rem);

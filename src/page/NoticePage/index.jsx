@@ -37,7 +37,7 @@ const NoticePage = () => {
         setNoticeData(notice);
         setTitle(notice[0].category);
         setPagingData(notice[0]?.Notices || []);
-        pagingFunc();
+        pagingFunc(0);
       } catch (err) {
         console.error(err);
       }
@@ -50,19 +50,15 @@ const NoticePage = () => {
     console.log("paging: ", paging);
   }, [pagingData]);
 
-  const pagingFunc = () => {
+  const pagingFunc = (idx) => {
     if (!alarmOnly) {
-      setPagingData(noticeData[paging]?.Notices || []);
+      setPagingData(noticeData[idx]?.Notices || []);
       return;
     } else {
-      const alarmData = noticeData[paging]?.Notices.filter((data) => data.NoticeKeywordMatches.length > 0) || [];
+      const alarmData = noticeData[idx]?.Notices.filter((data) => data.NoticeKeywordMatches.length > 0) || [];
       setPagingData(alarmData);
     }
   };
-
-  useEffect(() => {
-    pagingFunc();
-  }, [paging, alarmOnly]);
 
   return (
     <div className="noticePageOut" style={{ width: "100%", height: "100vh", paddingTop: !isApp ? 0 : "18px", backgroundColor: "#fff" }}>
@@ -78,7 +74,10 @@ const NoticePage = () => {
                   type="checkbox"
                   id="alarmOnly"
                   checked={alarmOnly}
-                  onChange={(e) => setAlarmOnly(e.target.checked)}
+                  onChange={(e) => {
+                    setAlarmOnly(e.target.checked);
+                    pagingFunc(paging);
+                  }}
                   style={{ accentColor: "var(--main-color)", width: 18, height: 18, cursor: "pointer" }}
                 />
                 <label htmlFor="alarmOnly" style={{ cursor: "pointer", userSelect: "none" }}>
@@ -92,6 +91,7 @@ const NoticePage = () => {
                   onClick={() => {
                     setTitle(data.category);
                     setPaging(index);
+                    pagingFunc(index);
                   }}
                   key={index}
                   className="navBtn"
@@ -119,8 +119,8 @@ const NoticePage = () => {
               {isPc && pagingData.length > 0 && pagingData.map((data, idx) => <NoticeListLiCP url={noticeData[paging].url} key={idx} data={data} />)}
               {!isPc && pagingData.length > 0 && pagingData.map((data, idx) => <NoticeListLiMobileCP url={noticeData[paging].url} key={idx} data={data} />)}
 
-              {pagingData.length === 0 && !alarmOnly && <div className="notdefine-deivce">등록된 공지가 없습니다</div>}
-              {pagingData.length === 0 && alarmOnly && <div className="notdefine-deivce">알람 설정에 부합하는 공지가 없습니다.</div>}
+              {pagingData.length === 0 && !alarmOnly && <div className="notdefine-deivce flexCenter">등록된 공지가 없습니다</div>}
+              {pagingData.length === 0 && alarmOnly && <div className="notdefine-deivce flexCenter">알람 설정에 부합하는 공지가 없습니다.</div>}
             </div>
           </div>
         </div>
