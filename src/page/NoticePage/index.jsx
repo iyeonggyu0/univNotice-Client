@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { noticeLoad } from "../../api/notice";
 import { loginCheck } from "../../api/user/loginCheck";
 import "./style.css";
@@ -22,6 +21,7 @@ const NoticePage = () => {
   const isPc = useMedia().isPc;
   const isApp = useWeb().isApp;
 
+  // 초기 데이터 로드
   useEffect(() => {
     async function fetchLoginCheck() {
       try {
@@ -34,10 +34,9 @@ const NoticePage = () => {
         }
 
         setLogin(isLogin);
-        setNoticeData(notice);
-        setTitle(notice[0].category);
-        setPagingData(notice[0]?.Notices || []);
-        pagingFunc(0);
+        setNoticeData(notice || []);
+        setTitle(notice?.[0]?.category || "");
+        setPaging(0);
       } catch (err) {
         console.error(err);
       }
@@ -45,20 +44,15 @@ const NoticePage = () => {
     fetchLoginCheck();
   }, []);
 
+  // alarmOnly/paging/noticeData 변경 시 목록 재계산
   useEffect(() => {
-    console.log("pagingData:", pagingData);
-    console.log("paging: ", paging);
-  }, [pagingData]);
-
-  const pagingFunc = (idx) => {
-    if (!alarmOnly) {
-      setPagingData(noticeData[idx]?.Notices || []);
-      return;
+    const base = noticeData[paging]?.Notices || [];
+    if (alarmOnly) {
+      setPagingData(base.filter((d) => (d.NoticeKeywordMatches?.length || 0) > 0));
     } else {
-      const alarmData = noticeData[idx]?.Notices.filter((data) => data.NoticeKeywordMatches.length > 0) || [];
-      setPagingData(alarmData);
+      setPagingData(base);
     }
-  };
+  }, [noticeData, paging, alarmOnly]);
 
   return (
     <div className="noticePageOut" style={{ width: "100%", height: "100vh", paddingTop: !isApp ? 0 : "18px", backgroundColor: "#fff" }}>
@@ -75,8 +69,7 @@ const NoticePage = () => {
                   id="alarmOnly"
                   checked={alarmOnly}
                   onChange={(e) => {
-                    setAlarmOnly(e.target.checked);
-                    pagingFunc(paging);
+                    setAlarmOnly(e.target.checked); // 계산은 useEffect에서 처리
                   }}
                   style={{ accentColor: "var(--main-color)", width: 18, height: 18, cursor: "pointer" }}
                 />
@@ -90,8 +83,7 @@ const NoticePage = () => {
                 <div
                   onClick={() => {
                     setTitle(data.category);
-                    setPaging(index);
-                    pagingFunc(index);
+                    setPaging(index); // 계산은 useEffect에서 처리
                   }}
                   key={index}
                   className="navBtn"
