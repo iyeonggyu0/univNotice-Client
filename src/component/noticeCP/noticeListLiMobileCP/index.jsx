@@ -23,6 +23,14 @@ const NoticeListLiMobileCP = ({ data, url }) => {
         <div className="line"></div>
         <div className="noticeListLiMobileCP-published_at">{formattedDate}</div>
         <div className="line"></div>
+        {data.other_info && (
+          <span
+            style={{
+              color: "var(--black-2)",
+            }}>
+            {data.other_info}
+          </span>
+        )}
         <div className="noticeListLiMobileCP-attachments">
           <DownloadIcon
             fontSize="small"

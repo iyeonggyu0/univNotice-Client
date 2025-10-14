@@ -18,6 +18,14 @@ const NoticeListLiCP = ({ data, url }) => {
     <div className="noticeListLiCP" style={{ cursor: "pointer" }} onClick={onClickDiv}>
       <div className="noticeListLiCP-title flexHeightCenter" style={{ gap: "6px" }}>
         {data.title}
+        {data.other_info && (
+          <span
+            style={{
+              color: "var(--black-2)",
+            }}>
+            {data.other_info}
+          </span>
+        )}
         {data.NoticeKeywordMatches.length !== 0 && (
           <NotificationsNoneIcon
             // fontSize="xSmall"
