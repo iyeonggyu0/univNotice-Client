@@ -4,6 +4,7 @@ import "./style.css";
 
 const MainPage = (login) => {
   const nav = useNavigate();
+
   return (
     <MainLayout>
       <section className="mainPage">

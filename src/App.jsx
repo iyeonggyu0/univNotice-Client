@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // hooks
@@ -47,15 +48,15 @@ import NoticePage from "./page/NoticePage";
 function App() {
   const { isIos, isApp } = useWeb();
   const [alarm, setAlarm] = useState(false);
+  const location = useLocation();
 
   const onClickAlarm = () => {
     setAlarm(false);
   };
-  let login = false;
   // 로그인 상태 확인 함수
   const checkUserLoginStatus = async () => {
     try {
-      login = await loginCheck();
+      const login = await loginCheck();
       if (login) {
         return;
       }
@@ -100,23 +101,18 @@ function App() {
     // 앱에서 오는 메시지 처리 (ALARM_RECEIVED)
     const originalOnAppMessage = window.onAppMessage;
     window.onAppMessage = (responseData) => {
-      // 기존 핸들러 실행 (webToApp.js의 콜백 처리)
       if (originalOnAppMessage) {
         originalOnAppMessage(responseData);
       }
-
-      // ALARM_RECEIVED 타입 처리
       if (responseData && responseData.type === "ALARM_RECEIVED") {
         console.log("알림 수신됨:", responseData);
         setAlarm(true);
       }
     };
-
-    // 클린업
     return () => {
       window.onAppMessage = originalOnAppMessage;
     };
-  }, []);
+  }, [location]);
 
   if (isIos) {
     return <ErrorIosPage />;
@@ -127,7 +123,7 @@ function App() {
       <ScrollToTop />
       {alarm && <AlarmCP onClickAlarm={onClickAlarm} />}
       <Routes>
-        <Route path="/" element={<MainPage login={login} />} />
+        <Route path="/" element={<MainPage />} />
 
         {/* 문의하기 */}
         <Route path="/kakao" element={<KakaoPage />} />
