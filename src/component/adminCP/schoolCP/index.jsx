@@ -226,6 +226,7 @@ const SchoolCP = () => {
   const [dateSelector, onChangeDateSelector, setDateSelector] = useInput("");
   const [dateFormat, onChangeDateFormat, setDateFormat] = useInput("");
   const [attachmentSelector, onChangeAttachmentSelector, setAttachmentSelector] = useInput("");
+  const [otherSelector, onChangeOtherSelector, setOtherSelector] = useInput("");
   const [isCategoryActive, setIsCategoryActive] = useState(true);
 
   const handleCategorySelect = useCallback(
@@ -240,6 +241,7 @@ const SchoolCP = () => {
       setDateSelector(category?.date_selector || "");
       setDateFormat(category?.date_format || "");
       setAttachmentSelector(category?.attachment_selector || "");
+      setOtherSelector(category?.other_selector || "");
       setIsCategoryActive(category?.is_active);
       console.log(category?.is_active);
     },
@@ -253,6 +255,7 @@ const SchoolCP = () => {
       setDateSelector,
       setDateFormat,
       setAttachmentSelector,
+      setOtherSelector,
     ]
   );
 
@@ -518,6 +521,7 @@ const SchoolCP = () => {
           date_selector: dateSelector.trim(),
           date_format: dateFormat.trim(),
           attachment_selector: attachmentSelector.trim(),
+          other_selector: otherSelector.trim(),
           category: categoryExplanation.trim() || "학과공지",
           is_active: isCategoryActive,
         };
@@ -533,6 +537,7 @@ const SchoolCP = () => {
           setDateSelector("");
           setDateFormat("");
           setAttachmentSelector("");
+          setOtherSelector("");
           setIsCategoryActive(true);
           alert("카테고리가 성공적으로 추가되었습니다.");
         }
@@ -552,6 +557,7 @@ const SchoolCP = () => {
       dateSelector,
       dateFormat,
       attachmentSelector,
+      otherSelector,
       isCategoryActive,
       setCategoryUrl,
       setCategoryExplanation,
@@ -562,6 +568,7 @@ const SchoolCP = () => {
       setDateSelector,
       setDateFormat,
       setAttachmentSelector,
+      setOtherSelector,
     ]
   );
 
@@ -619,6 +626,7 @@ const SchoolCP = () => {
           date_selector: dateSelector.trim(),
           date_format: dateFormat.trim(),
           attachment_selector: attachmentSelector.trim(),
+          other_selector: otherSelector.trim(),
           is_active: isCategoryActive,
         };
         const result = await adminCategoryUpdate(data);
@@ -634,6 +642,7 @@ const SchoolCP = () => {
           setDateSelector("");
           setDateFormat("");
           setAttachmentSelector("");
+          setOtherSelector("");
           setIsCategoryActive(true);
           alert("카테고리가 성공적으로 수정되었습니다.");
         }
@@ -654,6 +663,7 @@ const SchoolCP = () => {
       dateSelector,
       dateFormat,
       attachmentSelector,
+      otherSelector,
       isCategoryActive,
       setCategoryUrl,
       setCategoryExplanation,
@@ -664,6 +674,7 @@ const SchoolCP = () => {
       setDateSelector,
       setDateFormat,
       setAttachmentSelector,
+      setOtherSelector,
     ]
   );
 
@@ -691,6 +702,7 @@ const SchoolCP = () => {
           setDateSelector("");
           setDateFormat("");
           setAttachmentSelector("");
+          setOtherSelector("");
           setIsCategoryActive(true);
           alert("카테고리가 성공적으로 삭제되었습니다.");
         }
@@ -709,6 +721,7 @@ const SchoolCP = () => {
       setDateSelector,
       setDateFormat,
       setAttachmentSelector,
+      setOtherSelector,
     ]
   );
 
@@ -773,14 +786,17 @@ const SchoolCP = () => {
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
 
-  const handleAcademicCalendarSelect = useCallback((calendar) => {
-    setSelectedAcademicCalendar(calendar);
-    setScheduleName(calendar?.title || "");
-    setScheduleContent(calendar?.content || "");
-    setScheduleType(calendar?.type || "");
-    setStartDate(calendar?.start_date ? dayjs(calendar.start_date) : dayjs());
-    setEndDate(calendar?.end_date ? dayjs(calendar.end_date) : dayjs());
-  }, []);
+  const handleAcademicCalendarSelect = useCallback(
+    (calendar) => {
+      setSelectedAcademicCalendar(calendar);
+      setScheduleName(calendar?.title || "");
+      setScheduleContent(calendar?.content || "");
+      setScheduleType(calendar?.type || "");
+      setStartDate(calendar?.start_date ? dayjs(calendar.start_date) : dayjs());
+      setEndDate(calendar?.end_date ? dayjs(calendar.end_date) : dayjs());
+    },
+    [setSelectedAcademicCalendar, setScheduleName, setScheduleContent, setScheduleType, setStartDate, setEndDate]
+  );
 
   const handleAcademicCalendarAdd = useCallback(
     async (e) => {
@@ -836,7 +852,22 @@ const SchoolCP = () => {
         setIsAcademicCalendarLoading(false);
       }
     },
-    [selectedSchool, selectedDepartment, scheduleName, scheduleContent, scheduleType, startDate, endDate]
+    [
+      selectedSchool,
+      selectedDepartment,
+      scheduleName,
+      scheduleContent,
+      scheduleType,
+      startDate,
+      endDate,
+      setAcademicCalendarList,
+      setScheduleName,
+      setScheduleContent,
+      setScheduleType,
+      setStartDate,
+      setEndDate,
+      setIsAcademicCalendarLoading,
+    ]
   );
 
   const handleAcademicCalendarUpdate = useCallback(
@@ -899,7 +930,24 @@ const SchoolCP = () => {
         setIsAcademicCalendarLoading(false);
       }
     },
-    [selectedAcademicCalendar, selectedSchool, selectedDepartment, scheduleName, scheduleContent, scheduleType, startDate, endDate]
+    [
+      selectedAcademicCalendar,
+      selectedSchool,
+      selectedDepartment,
+      scheduleName,
+      scheduleContent,
+      scheduleType,
+      startDate,
+      endDate,
+      setAcademicCalendarList,
+      setSelectedAcademicCalendar,
+      setScheduleName,
+      setScheduleContent,
+      setScheduleType,
+      setStartDate,
+      setEndDate,
+      setIsAcademicCalendarLoading,
+    ]
   );
 
   const handleAcademicCalendarDelete = useCallback(
@@ -931,7 +979,17 @@ const SchoolCP = () => {
         setIsAcademicCalendarLoading(false);
       }
     },
-    [selectedAcademicCalendar]
+    [
+      selectedAcademicCalendar,
+      setAcademicCalendarList,
+      setSelectedAcademicCalendar,
+      setScheduleName,
+      setScheduleContent,
+      setScheduleType,
+      setStartDate,
+      setEndDate,
+      setIsAcademicCalendarLoading,
+    ]
   );
 
   const onClickCrawling = useCallback(() => {
@@ -1103,6 +1161,7 @@ const SchoolCP = () => {
                 essential={false}
                 placeholder="td.step5 > a.file_icon (선택사항)"
               />
+              <InputCP title="기타사항 셀렉터" onChange={onChangeOtherSelector} value={otherSelector} essential={false} placeholder=".etc-info (선택사항)" />
             </div>
             {!selectedCategory && (
               <div style={{ height: "60px" }} onClick={handleAddCategory}>
