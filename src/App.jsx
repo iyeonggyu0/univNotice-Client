@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // hooks
 import { useWeb } from "./hook/useWeb";
@@ -119,7 +119,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
       {alarm && <AlarmCP onClickAlarm={onClickAlarm} />}
       <Routes>
@@ -173,7 +173,7 @@ function App() {
         {/* 404에러 */}
         <Route path="*" element={<Error404Page />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 
