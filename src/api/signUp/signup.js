@@ -1,9 +1,7 @@
 import axios from "axios";
 import { apiUrl } from "../../util/axios";
-import { useNavigate } from "react-router-dom";
 
 export const signupPost = async (data) => {
-  const nav = useNavigate();
   try {
     const res = await axios.post(`${apiUrl}/sign-up`, data, { withCredentials: true });
     if (res.status === 200 || res.status === 201) {
