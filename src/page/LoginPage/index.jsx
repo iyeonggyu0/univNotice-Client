@@ -38,25 +38,25 @@ const LoginPage = () => {
   const onClickLogin = useCallback(async () => {
     if (!isCertification) return alert("핸드폰 인증을 진행해 주세요.");
 
-    if (!student_id) return alert("학번을 입력해 주세요.");
+    const trimmed_student_id = student_id ? student_id.trim() : "";
+    const trimmed_phone = phone ? phone.trim() : "";
+    const trimmed_certification_code = certification_code ? certification_code.trim() : "";
 
-    if (student_id.length < 6) return alert("학번은 6자리 이상이어야 합니다.");
-    if (!/^[\d!;&$]+$/.test(student_id)) return alert("학번은 숫자만 입력해야 합니다.");
+    if (!trimmed_student_id) return alert("학번을 입력해 주세요.");
+    if (trimmed_student_id.length < 6) return alert("학번은 6자리 이상이어야 합니다.");
+    if (!/^[\d!;&$]+$/.test(trimmed_student_id)) return alert("학번은 숫자만 입력해야 합니다.");
 
-    if (!phone) return alert("전화번호를 입력해 주세요.");
+    if (!trimmed_phone) return alert("전화번호를 입력해 주세요.");
+    if (!/^010\d{8}$/.test(trimmed_phone)) return alert("전화번호는 010으로 시작하는 11자리 숫자여야 합니다.");
 
-    if (!/^010\d{8}$/.test(phone)) return alert("전화번호는 010으로 시작하는 11자리 숫자여야 합니다.");
-
-    if (!certification_code) return alert("인증번호를 입력해 주세요.");
-
-    if (!/^.{6,}$/.test(certification_code)) return alert("인증번호는 6자리 입니다.");
+    if (!trimmed_certification_code) return alert("인증번호를 입력해 주세요.");
+    if (!/^.{6,}$/.test(trimmed_certification_code)) return alert("인증번호는 6자리 입니다.");
 
     const data = {
-      student_id: student_id,
-      phone: phone,
-      certification_code: certification_code,
+      student_id: trimmed_student_id,
+      phone: trimmed_phone,
+      certification_code: trimmed_certification_code,
     };
-
     try {
       const isLogin = await userLogin(data);
       // 로그인 실패
