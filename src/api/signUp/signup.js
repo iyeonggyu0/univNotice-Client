@@ -1,15 +1,15 @@
 import axios from "axios";
 import { apiUrl } from "../../util/axios";
+import { useNavigate } from "react-router-dom";
 
 export const signupPost = async (data) => {
+  const nav = useNavigate();
   try {
     const res = await axios.post(`${apiUrl}/sign-up`, data, { withCredentials: true });
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       alert(res.data.message || "회원가입이 완료되었습니다.");
       return true;
-    } else if (res.status === 201) {
-      alert(res.data || "회원가입이 완료되었습니다.");
-      window.location.href = "/signin/8";
+    }
     }
     return null;
   } catch (err) {
