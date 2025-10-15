@@ -90,7 +90,8 @@ const PhonePage = () => {
         const res = await signupPost(data);
 
         if(res && isApp){
-          return nav("/signup/8");
+          nav("/signup/8");
+          return;
         }
         
         if (res) {
