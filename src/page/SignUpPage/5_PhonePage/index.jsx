@@ -7,11 +7,13 @@ import InputCP from "../../../component/_common/inputCP";
 import { signupCertificationSend } from "../../../api/signUp/certification";
 import ButtonCP from "../../../component/_common/buttonCP";
 import { signupPost } from "../../../api/signUp/signup";
+import { useWeb } from "../../../hook/useWeb";
 
 const PhonePage = () => {
   const signupInfo = JSON.parse(localStorage.getItem("signupInfo"));
   const signupKeyword = JSON.parse(localStorage.getItem("signupKeyword"));
   const nav = useNavigate();
+  const isApp = useWeb().isApp;
 
   useEffect(() => {
     if (!signupInfo || !signupKeyword) {
@@ -86,6 +88,11 @@ const PhonePage = () => {
 
       try {
         const res = await signupPost(data);
+
+        if(res && isApp){
+          return nav("/signup/8");
+        }
+        
         if (res) {
           localStorage.removeItem("signupInfo");
           localStorage.removeItem("signupKeyword");
