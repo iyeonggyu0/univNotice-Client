@@ -8,7 +8,6 @@ export const signupPost = async (data) => {
       alert(res.data.message || "회원가입이 완료되었습니다.");
       return true;
     }
-    }
     return null;
   } catch (err) {
     alert(err.response?.data?.error || "회원가입 오류");
