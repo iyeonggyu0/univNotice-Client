@@ -6,7 +6,7 @@ import KeywordCP from "./keywordCP";
 import "./style.css";
 import ButtonCP from "../_common/buttonCP";
 
-const SettingCP = ({ data, setKeywordFunc, nextButtonClick }) => {
+const SettingCP = ({ key, data, setKeywordFunc, nextButtonClick, skipAll }) => {
   const [keywords, setKeywords] = useState(data.keywords || []);
   const [inputValue, onChangeInputValue, setInputValue] = useInput("");
 
@@ -66,7 +66,14 @@ const SettingCP = ({ data, setKeywordFunc, nextButtonClick }) => {
         </div>
       </div>
       <div className="bottomItem" onClick={nextButtonClick}>
-        <ButtonCP>다음</ButtonCP>
+        <div onClick={nextButtonClick}>
+          <ButtonCP>다음</ButtonCP>
+        </div>
+        {key === 1 && (
+          <p className="deleteAccount">
+            <span onClick={() => skipAll()}>전체 스킵</span>
+          </p>
+        )}
       </div>
     </div>
   );

@@ -56,11 +56,24 @@ const SettingPage = () => {
   };
 
   console.log(settingCategory);
+  // 전체 건너뛰기 버튼 클릭 시 모든 카테고리의 keywords를 빈 배열로 저장하고 다음 단계로 이동
+  const skipAll = () => {
+    const skipped = settingCategory.map((item) => ({ ...item, keywords: [] }));
+    localStorage.setItem("signupKeyword", JSON.stringify(skipped));
+    nav("/signup/5");
+  };
+
   return (
     <LogoLayout>
       <section className="settingPage flexCenter">
         {settingCategory?.length >= 1 && (
-          <SettingCP data={settingCategory[Number(setting_id) - 1]} key={setting_id} setKeywordFunc={setKeywordFunc} nextButtonClick={nextButtonClick} />
+          <SettingCP
+            skipAll={skipAll}
+            data={settingCategory[Number(setting_id) - 1]}
+            key={setting_id}
+            setKeywordFunc={setKeywordFunc}
+            nextButtonClick={nextButtonClick}
+          />
         )}
       </section>
     </LogoLayout>
