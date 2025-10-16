@@ -49,6 +49,7 @@ function App() {
   const { isIos, isApp } = useWeb();
   const [alarm, setAlarm] = useState(false);
   const location = useLocation();
+  const [mainPageLayout, setMainPageLayout] = useState(false);
 
   const onClickAlarm = () => {
     setAlarm(false);
@@ -58,7 +59,7 @@ function App() {
     try {
       const login = await loginCheck();
       if (login) {
-        return;
+        return setMainPageLayout(true);
       }
       if (!isApp) {
         return;
@@ -123,7 +124,7 @@ function App() {
       <ScrollToTop />
       {alarm && <AlarmCP onClickAlarm={onClickAlarm} />}
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<MainPage mainPageLayout={mainPageLayout} />} />
 
         {/* 문의하기 */}
         <Route path="/kakao" element={<KakaoPage />} />

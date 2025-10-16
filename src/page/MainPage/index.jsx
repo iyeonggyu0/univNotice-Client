@@ -2,11 +2,11 @@ import { useNavigate } from "react-router-dom";
 import MainLayout from "../../layout";
 import "./style.css";
 
-const MainPage = () => {
+const MainPage = ({ mainPageLayout }) => {
   const nav = useNavigate();
 
   return (
-    <MainLayout>
+    <MainLayout mainPageLayout={mainPageLayout}>
       <section className="mainPage">
         <div>{/* 이미지 */}</div>
         <p onClick={() => nav("/signup/1")}>회원가입</p>

@@ -6,7 +6,7 @@ import "./style.css";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ mainPageLayout }) => {
   const [isLogin, setIsLogin] = useState(null);
   const isApp = useWeb().isApp;
 
@@ -27,7 +27,7 @@ const Header = () => {
   return (
     <header className="MainLayoutHeader flexBetween">
       <LogoCP />
-      {isLogin !== null && (
+      {mainPageLayout && (
         <div className="MainLayoutHeader-content flexBetween">
           {isLogin && <p onClick={() => nav("/notice")}>공지 보기</p>}
           {isApp && !isLogin && <p onClick={() => nav("/login/append")}>기기 등록</p>}
