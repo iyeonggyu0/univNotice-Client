@@ -62,7 +62,7 @@ function App() {
         return setMainPageLayout(true);
       }
       if (!isApp) {
-        return;
+        return setMainPageLayout(true);
       }
 
       sendToApp("GET_REFRESH_TOKEN", null, (data) => {

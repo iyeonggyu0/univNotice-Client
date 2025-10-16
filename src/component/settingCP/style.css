@@ -6,6 +6,19 @@
   margin-top: 2rem;
 }
 
+.settingCP .deleteAccount {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: clamp(0.75rem, 2.5vw, 1rem);
+  color: var(--main-color);
+}
+
+.settingCP .deleteAccount > span {
+  cursor: pointer;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--main-color);
+}
+
 @media screen and (max-width: 768px) {
   .settingCP.centerBox {
     width: 80vw;
