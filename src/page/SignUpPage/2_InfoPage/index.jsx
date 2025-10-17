@@ -7,9 +7,15 @@ import ButtonCP from "../../../component/_common/buttonCP";
 import { signupDepartmentLoad, signupSchoolLoad } from "../../../api/signUp/load";
 import SelectCP from "../../../component/_common/selectCP";
 import { useNavigate } from "react-router-dom";
+import { useWeb } from "../../../hook/useWeb";
 
 const InfoPage = () => {
   const nav = useNavigate();
+  const { isIos, isHomeApp } = useWeb();
+  useEffect(() => {
+    if (isIos && isHomeApp) return;
+    if (isIos && !isHomeApp) return nav("/home-app");
+  }, [isIos, isHomeApp, nav]);
 
   // 학교목록
   const [univList, setUnivList] = useState([]);

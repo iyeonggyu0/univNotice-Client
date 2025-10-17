@@ -12,7 +12,6 @@ import { sendToApp } from "./api/app/webToApp";
 import { userRefreshToken } from "./api/user/login";
 
 // Error Pages
-import ErrorIosPage from "./page/ErrorPages/ErrorIosPage";
 import Error404Page from "./page/ErrorPages/Error404Page";
 
 // Main & Common Pages
@@ -44,9 +43,11 @@ import AdminPage from "./page/AdminPages";
 import { useState } from "react";
 import AlarmCP from "./component/_common/alarmCP";
 import NoticePage from "./page/NoticePage";
+import { iphoneRefreshToken } from "./api/iphone";
+import HomeAppPage from "./page/ErrorPages/HomeAppPage";
 
 function App() {
-  const { isIos, isApp } = useWeb();
+  const { isApp, isIos, isHomeApp } = useWeb();
   const [alarm, setAlarm] = useState(false);
   const location = useLocation();
   const [mainPageLayout, setMainPageLayout] = useState(false);
@@ -54,13 +55,21 @@ function App() {
   const onClickAlarm = () => {
     setAlarm(false);
   };
+
   // 로그인 상태 확인 함수
   const checkUserLoginStatus = async () => {
     try {
       const login = await loginCheck();
       if (login) {
         return setMainPageLayout(true);
+      } else {
+        // 로그인 상태가 아닐때,
+        if (isIos && isHomeApp) {
+          const isIphoneLogin = await iphoneRefreshToken();
+          return setMainPageLayout(isIphoneLogin);
+        }
       }
+
       if (!isApp) {
         return setMainPageLayout(true);
       }
@@ -115,10 +124,6 @@ function App() {
     };
   }, [location]);
 
-  if (isIos) {
-    return <ErrorIosPage />;
-  }
-
   return (
     <>
       <ScrollToTop />
@@ -170,6 +175,9 @@ function App() {
 
         {/* 개인정보, 이용약관 */}
         <Route path="/terms" element={<TermsPage />} />
+
+        {/* 아이폰 홈 앱 안내 */}
+        <Route path="/home-app" element={<HomeAppPage />} />
 
         {/* 404에러 */}
         <Route path="*" element={<Error404Page />} />

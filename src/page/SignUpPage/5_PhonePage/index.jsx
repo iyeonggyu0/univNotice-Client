@@ -8,8 +8,15 @@ import { signupCertificationSend } from "../../../api/signUp/certification";
 import ButtonCP from "../../../component/_common/buttonCP";
 import { signupPost } from "../../../api/signUp/signup";
 import { useWeb } from "../../../hook/useWeb";
+import { iphoneDevicePost } from "../../../api/iphone";
 
 const PhonePage = () => {
+  const { isIos, isHomeApp } = useWeb();
+  useEffect(() => {
+    if (isIos && isHomeApp) return;
+    if (isIos && !isHomeApp) return nav("/home-app");
+  }, [isIos, isHomeApp, nav]);
+
   const signupInfo = JSON.parse(localStorage.getItem("signupInfo"));
   const signupKeyword = JSON.parse(localStorage.getItem("signupKeyword"));
   const nav = useNavigate();
@@ -84,16 +91,32 @@ const PhonePage = () => {
         phone: phone.trim(),
         name: name.trim(),
         certification: certification,
+        is_android: !isHomeApp,
       };
 
       try {
         const res = await signupPost(data);
-
-        if(res && isApp){
+        if (res && isIos && isHomeApp) {
+          if (isHomeApp) {
+            if ("serviceWorker" in navigator) {
+              await navigator.serviceWorker.register("/service-worker.js");
+            }
+            // 푸시 구독 요청
+            const registration = await navigator.serviceWorker.ready;
+            const subscription = await registration.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: "VAPID_PUBLIC_KEY_BASE64", // 서버의 APPLE_WEB_PUSH_VAPID_PUBLIC_KEY (base64로 변환)
+            });
+            await iphoneDevicePost(subscription);
+            return nav("/signup/8");
+          }
+          return nav("/signup/8");
+        }
+        if (res && isApp) {
           nav("/signup/8");
           return;
         }
-        
+
         if (res) {
           localStorage.removeItem("signupInfo");
           localStorage.removeItem("signupKeyword");
@@ -110,7 +133,7 @@ const PhonePage = () => {
         alert("회원가입에 실패했습니다.\n잠시 후 다시 시도해주세요.");
       }
     },
-    [name, student_id, phone, certification, signupInfo, signupKeyword, nav, setName, setStudent_id, setPhone, setCertification]
+    [name, student_id, phone, certification, signupInfo, isIos, isHomeApp, signupKeyword, nav, setName, setStudent_id, setPhone, setCertification]
   );
 
   return (

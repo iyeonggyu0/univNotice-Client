@@ -10,9 +10,15 @@ import "./style.css";
 import { sendToApp } from "../../api/app/webToApp";
 import { DeviceAdd, DeviceDelete } from "../../api/user/device";
 import { loginCheck } from "../../api/user/loginCheck";
+import { iphoneDevicePost } from "../../api/iphone";
 
 const LoginPage = () => {
   const isApp = useWeb().isApp;
+  const { isIos, isHomeApp } = useWeb();
+  useEffect(() => {
+    if (isIos && isHomeApp) return;
+    if (isIos && !isHomeApp) return nav("/home-app");
+  }, [isIos, isHomeApp, nav]);
 
   useEffect(() => {
     async function fetchLoginCheck() {
@@ -56,6 +62,7 @@ const LoginPage = () => {
       student_id: trimmed_student_id,
       phone: trimmed_phone,
       certification_code: trimmed_certification_code,
+      is_android: !isHomeApp,
     };
     try {
       const isLogin = await userLogin(data);
@@ -67,6 +74,20 @@ const LoginPage = () => {
 
       // 웹은 성공 시 메인으로
       if (!isApp) {
+        return nav("/");
+      }
+
+      if (isHomeApp) {
+        if ("serviceWorker" in navigator) {
+          await navigator.serviceWorker.register("/service-worker.js");
+        }
+        // 푸시 구독 요청
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: "VAPID_PUBLIC_KEY_BASE64", // 서버의 APPLE_WEB_PUSH_VAPID_PUBLIC_KEY (base64로 변환)
+        });
+        await iphoneDevicePost(subscription);
         return nav("/");
       }
 

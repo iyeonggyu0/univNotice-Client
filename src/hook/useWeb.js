@@ -12,9 +12,24 @@ export const useWeb = () => {
   const isIos = ua.includes("iphone") || ua.includes("macintosh");
   const isWeb = !isApp && !isIos && (ua.includes("android") || ua.includes("windows"));
 
+  // iOS 홈화면 앱(PWA) 감지: iOS + (standalone || display-mode: standalone)
+  let isHomeApp = false;
+  if (isIos) {
+    // 1. window.navigator.standalone (iOS Safari PWA)
+    if (window.navigator.standalone) {
+      isHomeApp = true;
+    } else {
+      // 2. display-mode: standalone (일부 브라우저 지원)
+      if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) {
+        isHomeApp = true;
+      }
+    }
+  }
+
   return {
     isApp,
     isWeb,
     isIos,
+    isHomeApp,
   };
 };

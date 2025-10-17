@@ -5,10 +5,17 @@ import ButtonCP from "../../../component/_common/buttonCP";
 import "./style.css";
 import { useState, useEffect } from "react";
 import { userLoginCodeCheck, userLoginCodeCreate } from "../../../api/user/login";
+import { useWeb } from "../../../hook/useWeb";
 
 const IssuancePage = () => {
   const isPc = useMedia().isPc;
   const nav = useNavigate();
+
+  const { isIos, isHomeApp } = useWeb();
+  useEffect(() => {
+    if (isIos && isHomeApp) return nav("/");
+    if (isIos && !isHomeApp) return nav("/home-app");
+  }, [isIos, isHomeApp, nav]);
 
   const [code, setCode] = useState("");
   const [intervalId, setIntervalId] = useState(null);

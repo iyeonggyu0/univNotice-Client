@@ -1,5 +1,6 @@
 import axios from "axios";
 import { apiUrl } from "../../util/axios";
+import { sendToApp } from "../app/webToApp";
 
 export const userLogin = async (data) => {
   try {
@@ -33,10 +34,27 @@ export const userSendCertificationCode = async (phone) => {
 };
 
 export const userLogout = async () => {
+  const ua = navigator.userAgent.toLowerCase();
+  const isApp = ua.includes("univnotice-app");
   try {
-    const res = await axios.post(`${apiUrl}/user/logout`, {}, { withCredentials: true });
+    let device_id;
+    if (isApp) {
+      // sendToApp을 Promise로 래핑
+      device_id = await new Promise((resolve) => {
+        sendToApp("GET_REFRESH_TOKEN", null, (data) => {
+          if (data.success && data.data.device_id) {
+            resolve(data.data.device_id);
+          } else {
+            resolve(undefined);
+          }
+        });
+      });
+    }
+
+    const res = await axios.post(`${apiUrl}/user/logout`, { device_id }, { withCredentials: true });
     if (res.status === 200) {
       alert("로그아웃 되었습니다.");
+      if (isApp) sendToApp("DELETE_REFRESH_TOKEN", null, () => {});
       return true;
     }
     return false;

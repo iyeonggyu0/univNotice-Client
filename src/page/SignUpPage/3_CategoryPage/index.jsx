@@ -4,10 +4,18 @@ import { signupCategoryLoad } from "../../../api/signUp/load";
 import LogoLayout from "../../../layout/LogoLayout";
 import ButtonToggleCP from "../../../component/_common/buttonToggleCP";
 import ButtonCP from "../../../component/_common/buttonCP";
+import { useNavigate } from "react-router-dom";
+import { useWeb } from "../../../hook/useWeb";
 
 const CategoryPage = () => {
   const userInfo = JSON.parse(localStorage.getItem("signupInfo"));
   const [categoryList, setCategoryList] = useState([]);
+  const nav = useNavigate();
+  const { isIos, isHomeApp } = useWeb();
+  useEffect(() => {
+    if (isIos && isHomeApp) return;
+    if (isIos && !isHomeApp) return nav("/home-app");
+  }, [isIos, isHomeApp, nav]);
 
   const loadCategoryData = useCallback(async () => {
     if (!userInfo) return;

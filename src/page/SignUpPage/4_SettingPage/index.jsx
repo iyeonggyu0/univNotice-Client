@@ -3,10 +3,17 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LogoLayout from "../../../layout/LogoLayout";
 import SettingCP from "../../../component/settingCP";
+import { useWeb } from "../../../hook/useWeb";
 
 const SettingPage = () => {
   const nav = useNavigate();
   const setting_id = useParams().setting_id;
+
+  const { isIos, isHomeApp } = useWeb();
+  useEffect(() => {
+    if (isIos && isHomeApp) return;
+    if (isIos && !isHomeApp) return nav("/home-app");
+  }, [isIos, isHomeApp, nav]);
 
   const category = JSON.parse(localStorage.getItem("signupCategory"));
 

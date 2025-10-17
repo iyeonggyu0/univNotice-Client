@@ -3,10 +3,18 @@ import ButtonCP from "../../../component/_common/buttonCP";
 import LogoLayout from "../../../layout/LogoLayout";
 import "./style.css";
 import { useWeb } from "../../../hook/useWeb";
+import { useEffect } from "react";
 
 const EndPage = () => {
   const nav = useNavigate();
   const isApp = useWeb().isApp;
+
+  const { isIos, isHomeApp } = useWeb();
+  useEffect(() => {
+    if (isIos && isHomeApp) return;
+    if (isIos && !isHomeApp) return nav("/home-app");
+  }, [isIos, isHomeApp, nav]);
+
   return (
     <LogoLayout>
       <section className="endPage flexCenter">

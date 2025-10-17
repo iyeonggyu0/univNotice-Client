@@ -3,8 +3,16 @@ import ButtonCP from "../../../component/_common/buttonCP";
 import { useMedia } from "../../../hook/useMedia";
 import LogoLayout from "../../../layout/LogoLayout";
 import "./style.css";
+import { useEffect } from "react";
+import { useWeb } from "../../../hook/useWeb";
 
 const GooglePage = () => {
+  const { isIos, isHomeApp } = useWeb();
+  useEffect(() => {
+    if (isIos && isHomeApp) return nav("/");
+    if (isIos && !isHomeApp) return nav("/home-app");
+  }, [isIos, isHomeApp, nav]);
+
   const isPc = useMedia().isPc;
   const nav = useNavigate();
 
