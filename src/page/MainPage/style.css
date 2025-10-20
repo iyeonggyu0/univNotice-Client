@@ -25,6 +25,13 @@
   position: fixed;
 }
 
+.mainPage .loading {
+  position: absolute;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .mainPage > p {
   color: var(--main-color);
   font-size: clamp(1.2rem, 2.5vw, 1.4rem);
