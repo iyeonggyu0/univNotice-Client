@@ -13,6 +13,7 @@ import { loginCheck } from "../../api/user/loginCheck";
 import { iphoneDevicePost } from "../../api/iphone";
 
 const LoginPage = () => {
+  const nav = useNavigate();
   const isApp = useWeb().isApp;
   const { isIos, isHomeApp } = useWeb();
   useEffect(() => {
@@ -34,7 +35,7 @@ const LoginPage = () => {
     }
     fetchLoginCheck();
   }, []);
-  const nav = useNavigate();
+
   const [student_id, onChangeStudent_id, setStudent_id] = useInput("");
   const [phone, onChangePhone, setPhone] = useInput("");
   const [certification_code, onChangeCertification_code, setCertification_code] = useInput("");
