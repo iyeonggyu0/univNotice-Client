@@ -89,6 +89,7 @@ function App() {
             if (res) {
               sendToApp("REFRESH_TOKEN", { refresh_token: res }, (resData) => {
                 if (resData.success) {
+                  setMainPageLayout(true);
                   return window.location.reload();
                 }
               });
