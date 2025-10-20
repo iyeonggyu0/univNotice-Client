@@ -58,49 +58,26 @@ function App() {
 
   // 로그인 상태 확인 함수
   const checkUserLoginStatus = async () => {
-    let timeoutId;
-    let finished = false;
     try {
-      // 8초 후 강제 fallback
-      timeoutId = setTimeout(() => {
-        if (!finished) {
-          setMainPageLayout(true);
-          finished = true;
-          console.warn("로그인 체크 8초 초과, fallback 적용");
-        }
-      }, 8000);
-
       const login = await loginCheck();
       if (login) {
-        if (!finished) setMainPageLayout(true);
-        finished = true;
-        clearTimeout(timeoutId);
-        return;
+        return setMainPageLayout(true);
       } else {
         // 로그인 상태가 아닐때,
         if (isIos && isHomeApp) {
           const isIphoneLogin = await iphoneRefreshToken();
-          if (!finished) setMainPageLayout(isIphoneLogin);
-          finished = true;
-          clearTimeout(timeoutId);
-          return;
+          return setMainPageLayout(isIphoneLogin);
         }
       }
 
       if (!isApp) {
-        if (!finished) setMainPageLayout(true);
-        finished = true;
-        clearTimeout(timeoutId);
-        return;
+        return setMainPageLayout(true);
       }
 
       sendToApp("GET_REFRESH_TOKEN", null, (data) => {
-        if (finished) return;
         if (data.success) {
           if (!data.data.refresh_token || !data.data.device_id) {
-            clearTimeout(timeoutId);
-            finished = true;
-            return;
+            return setMainPageLayout(true);
           }
 
           const tokenData = {
@@ -109,32 +86,22 @@ function App() {
           };
 
           userRefreshToken(tokenData).then((res) => {
-            if (finished) return;
             if (res) {
               sendToApp("REFRESH_TOKEN", { refresh_token: res }, (resData) => {
-                if (finished) return;
                 if (resData.success) {
                   setMainPageLayout(true);
-                  finished = true;
-                  clearTimeout(timeoutId);
                   return window.location.reload();
                 }
               });
             } else {
               sendToApp("DELETE_REFRESH_TOKEN", null, () => {});
-              clearTimeout(timeoutId);
-              finished = true;
             }
           });
         } else {
-          clearTimeout(timeoutId);
-          finished = true;
           return console.error("앱에서 리프레시 토큰을 가져오지 못했습니다");
         }
       });
     } catch (err) {
-      clearTimeout(timeoutId);
-      finished = true;
       console.error("로그인 상태 확인 실패:", err);
     }
   };
