@@ -11,7 +11,7 @@ const MainPage = ({ mainPageLayout }) => {
       <section className="mainPage">
         <div>{/* 이미지 */}</div>
         {mainPageLayout && <p onClick={() => nav("/signup/1")}>회원가입</p>}
-        {!mainPageLayout && <CircularProgress size="24px" />}
+        {!mainPageLayout && <CircularProgress size="22px" />}
       </section>
     </MainLayout>
   );

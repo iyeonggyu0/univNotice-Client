@@ -11,7 +11,9 @@ import { useWeb } from "../../../hook/useWeb";
 import { iphoneDevicePost } from "../../../api/iphone";
 
 const PhonePage = () => {
-  const { isIos, isHomeApp } = useWeb();
+  const { isIos, isHomeApp, isApp } = useWeb();
+  const nav = useNavigate();
+
   useEffect(() => {
     if (isIos && isHomeApp) return;
     if (isIos && !isHomeApp) return nav("/home-app");
@@ -19,8 +21,6 @@ const PhonePage = () => {
 
   const signupInfo = JSON.parse(localStorage.getItem("signupInfo"));
   const signupKeyword = JSON.parse(localStorage.getItem("signupKeyword"));
-  const nav = useNavigate();
-  const isApp = useWeb().isApp;
 
   useEffect(() => {
     if (!signupInfo || !signupKeyword) {
