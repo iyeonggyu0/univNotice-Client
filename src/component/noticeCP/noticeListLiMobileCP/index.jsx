@@ -15,9 +15,27 @@ const NoticeListLiMobileCP = ({ data, url }) => {
   const onClickDiv = () => {
     window.open(data.original_url || url, "_blank", "noopener,noreferrer");
   };
+  // NEW 뱃지 표시 여부 계산
+  let showNew = false;
+  if (data.published_at) {
+    const now = new Date();
+    const pubDate = new Date(data.published_at);
+    if (pubDate.getDate() === now.getDate() && pubDate.getMonth() === now.getMonth() && pubDate.getFullYear() === now.getFullYear()) {
+      showNew = true;
+    } else {
+      const yesterday = new Date(now);
+      yesterday.setDate(now.getDate() - 1);
+      if (pubDate.getDate() === yesterday.getDate() && pubDate.getMonth() === yesterday.getMonth() && pubDate.getFullYear() === yesterday.getFullYear()) {
+        showNew = true;
+      }
+    }
+  }
   return (
     <div className="noticeListLiMobileCP" onClick={onClickDiv}>
-      <div className="noticeListLiMobileCP-title">{data.title}</div>
+      <div className="noticeListLiMobileCP-title">
+        {data.title}
+        {showNew && <span style={{ color: "var(--orange)", fontWeight: 600, fontSize: "12px", marginLeft: "4px" }}>NEW</span>}
+      </div>
       <div className="flexHeightCenter">
         <div className="noticeListLiMobileCP-author">{data.author}</div>
         <div className="line"></div>
@@ -36,7 +54,6 @@ const NoticeListLiMobileCP = ({ data, url }) => {
             fontSize="small"
             style={{
               color: data.attachments ? "var(--black-4)" : "var(--black-2)",
-
               fontSize: "18px",
             }}
           />

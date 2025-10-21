@@ -14,10 +14,28 @@ const NoticeListLiCP = ({ data, url }) => {
   const onClickDiv = () => {
     window.open(data.original_url || url, "_blank", "noopener,noreferrer");
   };
+  // NEW 뱃지 표시 여부 계산
+  let showNew = false;
+  if (data.published_at) {
+    const now = new Date();
+    const pubDate = new Date(data.published_at);
+    const diff = now - pubDate;
+    // 오늘 또는 어제
+    if (pubDate.getDate() === now.getDate() && pubDate.getMonth() === now.getMonth() && pubDate.getFullYear() === now.getFullYear()) {
+      showNew = true;
+    } else {
+      const yesterday = new Date(now);
+      yesterday.setDate(now.getDate() - 1);
+      if (pubDate.getDate() === yesterday.getDate() && pubDate.getMonth() === yesterday.getMonth() && pubDate.getFullYear() === yesterday.getFullYear()) {
+        showNew = true;
+      }
+    }
+  }
   return (
     <div className="noticeListLiCP" style={{ cursor: "pointer" }} onClick={onClickDiv}>
       <div className="noticeListLiCP-title flexHeightCenter" style={{ gap: "6px" }}>
         {data.title}
+        {showNew && <span style={{ color: "var(--orange)", fontWeight: 600, fontSize: "12px", marginLeft: "4px" }}>NEW</span>}
         {data.other_info && (
           <span
             style={{
