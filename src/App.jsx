@@ -95,13 +95,16 @@ function App() {
               });
             } else {
               sendToApp("DELETE_REFRESH_TOKEN", null, () => {});
+              setMainPageLayout(true);
             }
           });
         } else {
+          setMainPageLayout(true);
           return console.error("앱에서 리프레시 토큰을 가져오지 못했습니다");
         }
       });
     } catch (err) {
+      setMainPageLayout(true);
       console.error("로그인 상태 확인 실패:", err);
     }
   };
