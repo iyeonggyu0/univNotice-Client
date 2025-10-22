@@ -102,8 +102,8 @@ const MyDevicePage = () => {
           {/* 인풋요소 */}
           <div className="flexCol">
             {isLoding && (
-              <div style={{ width: "100%", padding: "100px 0" }}>
-                <CircularProgress />
+              <div className="flexCenter" style={{ width: "100%", padding: "100px 0" }}>
+                <CircularProgress color="inherit" size="22px" />
               </div>
             )}
             {deviceData.length === 0 && !isLoding && (
