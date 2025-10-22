@@ -44,7 +44,7 @@ const NoticeListLiMobileCP = ({ data, url }) => {
         {data.other_info && (
           <span
             style={{
-              color: "var(--black-2)",
+              color: "var(--black-3)",
             }}>
             {data.other_info}
           </span>
