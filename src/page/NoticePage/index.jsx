@@ -79,25 +79,44 @@ const NoticePage = () => {
               </div>
             </div>
             <div className="noticeNav">
-              {noticeData.map((data, index) => (
-                <div
-                  onClick={() => {
-                    setTitle(data.category);
-                    setPaging(index); // 계산은 useEffect에서 처리
-                  }}
-                  key={index}
-                  className="navBtn"
-                  style={{
-                    color: index === paging ? "var(--black-5)" : "var(--black-4)",
-                    fontWeight: index === paging ? "600" : "400",
-                  }}>
-                  <div className="text">
-                    {data.category}
-                    {index === paging && <div className="point"></div>}
+              {noticeData.map((data, index) => {
+                // 어제~오늘 공지 포함 여부 계산
+                let hasRecent = false;
+                if (Array.isArray(data.Notices)) {
+                  const now = new Date();
+                  const yesterday = new Date(now);
+                  yesterday.setDate(now.getDate() - 1);
+                  hasRecent = data.Notices.some((notice) => {
+                    if (!notice.published_at) return false;
+                    const pubDate = new Date(notice.published_at);
+                    const isToday = pubDate.getDate() === now.getDate() && pubDate.getMonth() === now.getMonth() && pubDate.getFullYear() === now.getFullYear();
+                    const isYesterday =
+                      pubDate.getDate() === yesterday.getDate() &&
+                      pubDate.getMonth() === yesterday.getMonth() &&
+                      pubDate.getFullYear() === yesterday.getFullYear();
+                    return isToday || isYesterday;
+                  });
+                }
+                return (
+                  <div
+                    onClick={() => {
+                      setTitle(data.category);
+                      setPaging(index); // 계산은 useEffect에서 처리
+                    }}
+                    key={index}
+                    className="navBtn"
+                    style={{
+                      color: index === paging ? "var(--black-5)" : "var(--black-4)",
+                      fontWeight: index === paging ? "600" : "400",
+                    }}>
+                    <div className="text">
+                      {data.category}
+                      {(index !== paging || hasRecent) && <div className="point" style={{ backgroundColor: "var(--orange)" }}></div>}
+                    </div>
+                    <div className="line"></div>
                   </div>
-                  <div className="line"></div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="noticeList">
               {isPc && (
