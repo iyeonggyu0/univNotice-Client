@@ -35,7 +35,6 @@ const NoticeListLiCP = ({ data, url }) => {
     <div className="noticeListLiCP" style={{ cursor: "pointer" }} onClick={onClickDiv}>
       <div className="noticeListLiCP-title flexHeightCenter" style={{ gap: "6px" }}>
         {data.title}
-        {showNew && <span style={{ color: "var(--orange)", fontWeight: 600, fontSize: "12px", marginLeft: "4px" }}>NEW</span>}
         {data.other_info && (
           <span
             style={{
@@ -44,6 +43,7 @@ const NoticeListLiCP = ({ data, url }) => {
             {data.other_info}
           </span>
         )}
+        {showNew && <span style={{ color: "var(--orange)", fontWeight: 600, fontSize: "8px", marginLeft: "4px" }}>NEW</span>}
         {data.NoticeKeywordMatches.length !== 0 && (
           <NotificationsNoneIcon
             // fontSize="xSmall"

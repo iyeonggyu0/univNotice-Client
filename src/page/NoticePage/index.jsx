@@ -111,7 +111,8 @@ const NoticePage = () => {
                     }}>
                     <div className="text">
                       {data.category}
-                      {(index !== paging || hasRecent) && <div className="point" style={{ backgroundColor: "var(--orange)" }}></div>}
+                      {index === paging && <div className="point"></div>}
+                      {index !== paging && hasRecent && <div className="point" style={{ backgroundColor: "var(--orange)" }}></div>}
                     </div>
                     <div className="line"></div>
                   </div>

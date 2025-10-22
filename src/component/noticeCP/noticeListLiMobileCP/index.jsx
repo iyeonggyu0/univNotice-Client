@@ -34,7 +34,7 @@ const NoticeListLiMobileCP = ({ data, url }) => {
     <div className="noticeListLiMobileCP" onClick={onClickDiv}>
       <div className="noticeListLiMobileCP-title">
         {data.title}
-        {showNew && <span style={{ color: "var(--orange)", fontWeight: 600, fontSize: "12px", marginLeft: "4px" }}>NEW</span>}
+        {showNew && <span style={{ color: "var(--orange)", fontWeight: 600, fontSize: "8px", marginLeft: "4px" }}>NEW</span>}
       </div>
       <div className="flexHeightCenter">
         <div className="noticeListLiMobileCP-author">{data.author}</div>
