@@ -56,7 +56,7 @@ const NoticePage = () => {
 
   return (
     <div className="noticePageOut" style={{ width: "100%", height: "100vh", paddingTop: !isApp ? 0 : "18px", backgroundColor: "#fff" }}>
-      <Header />
+      <Header mainPageLayout={true} />
       {login && (
         <div style={{ width: "100%", height: isPc ? "100vh" : "96vh" }} className="noticePage">
           <div className="centerSection">

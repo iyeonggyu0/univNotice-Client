@@ -8,11 +8,16 @@ import { loginCheck } from "../../../api/user/loginCheck";
 import { myPageDeviceDelete, myPageDeviceLoad, myPageDeviceToggleActive } from "../../../api/user/myPage";
 import DeviceCP from "../../../component/myCp/deviceCp";
 import { useCallback } from "react";
+import ErrorIosPage from "../../ErrorPages/ErrorIosPage/indes";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const MyDevicePage = () => {
   const nav = useNavigate();
   const [isLogin, setIsLogin] = useState(null);
   const [deviceData, setDeviceData] = useState([]);
+  const [isLoding, setIsLoading] = useState(true);
+
+  const { isIos } = useWeb();
 
   useEffect(() => {
     async function fetchLoginCheck() {
@@ -23,7 +28,7 @@ const MyDevicePage = () => {
         if (!result) {
           nav("/");
         }
-
+        setIsLoading(false);
         setIsLogin(result);
         setDeviceData(device);
       } catch (err) {
@@ -78,6 +83,10 @@ const MyDevicePage = () => {
     }
   }, []);
 
+  if (isIos) {
+    return <ErrorIosPage />;
+  }
+
   return (
     <MyPageLayout>
       <section className="myDevicePage flexCenter">
@@ -92,7 +101,12 @@ const MyDevicePage = () => {
           </div>
           {/* 인풋요소 */}
           <div className="flexCol">
-            {deviceData.length === 0 && (
+            {isLoding && (
+              <div style={{ width: "100%", padding: "100px 0" }}>
+                <CircularProgress />
+              </div>
+            )}
+            {deviceData.length === 0 && !isLoding && (
               <div className="notdefine-deivce">
                 등록된 기기가 없습니다
                 <br />
