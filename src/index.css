@@ -180,7 +180,7 @@ a:active {
 }
 
 .centerBox > .titleBox + .flexCol {
-  max-height: 53vh;
+  max-height: 48vh;
   overflow-y: auto;
   padding-right: 4px; /* 스크롤바 공간 확보 */
 }

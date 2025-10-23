@@ -51,6 +51,7 @@ function App() {
   const [alarm, setAlarm] = useState(false);
   const location = useLocation();
   const [mainPageLayout, setMainPageLayout] = useState(false);
+  let login = false;
 
   const onClickAlarm = () => {
     setAlarm(false);
@@ -59,7 +60,7 @@ function App() {
   // 로그인 상태 확인 함수
   const checkUserLoginStatus = async () => {
     try {
-      const login = await loginCheck();
+      login = await loginCheck();
       if (login) {
         return setMainPageLayout(true);
       } else {
@@ -89,7 +90,7 @@ function App() {
             if (res) {
               sendToApp("REFRESH_TOKEN", { refresh_token: res }, (resData) => {
                 if (resData.success) {
-                  setMainPageLayout(true);
+                  // setMainPageLayout(true);
                   return window.location.reload();
                 }
               });
@@ -133,7 +134,7 @@ function App() {
       <ScrollToTop />
       {alarm && <AlarmCP onClickAlarm={onClickAlarm} />}
       <Routes>
-        <Route path="/" element={<MainPage mainPageLayout={mainPageLayout} />} />
+        <Route path="/" element={<MainPage mainPageLayout={mainPageLayout} login={login} />} />
 
         {/* 문의하기 */}
         <Route path="/kakao" element={<KakaoPage />} />

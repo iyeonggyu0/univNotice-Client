@@ -8,26 +8,29 @@ import { useNavigate } from "react-router-dom";
 
 const Header = ({ mainPageLayout }) => {
   const [isLogin, setIsLogin] = useState(null);
+  const [loading, setLoading] = useState(true);
   const isApp = useWeb().isApp;
 
   const nav = useNavigate();
 
   useEffect(() => {
     async function fetchLoginCheck() {
+      setLoading(true);
       try {
         const result = await loginCheck();
         setIsLogin(result);
       } catch (err) {
         console.error(err);
       }
+      setLoading(false);
     }
     fetchLoginCheck();
-  }, []);
+  }, [mainPageLayout]);
 
   return (
     <header className="MainLayoutHeader flexBetween">
       <LogoCP />
-      {mainPageLayout && isLogin !== null && (
+      {mainPageLayout && !loading && isLogin !== null && (
         <div className="MainLayoutHeader-content flexBetween">
           {isLogin && <p onClick={() => nav("/notice")}>공지 보기</p>}
           {isApp && !isLogin && <p onClick={() => nav("/login/append")}>기기 등록</p>}
