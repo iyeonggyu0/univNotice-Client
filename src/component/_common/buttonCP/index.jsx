@@ -18,7 +18,7 @@ const ButtonCP = ({ children, color = "--black-0", bgColor = "--main-color", act
         color: `var(${color})`,
         backgroundColor: activate ? `var(${bgColor})` : `var(${activateBgColor})`,
         cursor: activate ? "pointer" : "not-allowed",
-        minHeight: "3.625rem",
+        minHeight: "3rem",
       }}>
       {children}
     </div>

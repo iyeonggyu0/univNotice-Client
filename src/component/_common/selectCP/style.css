@@ -14,9 +14,9 @@
 
 .selectCP .css-18jp67o-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 0 1.5rem !important;
-  height: 3.625rem !important;
+  height: 3rem !important;
   display: flex;
   align-items: center;
   border: 1px solid var(--black-3) !important;
-  border-radius: 1rem !important;
+  border-radius: 0.75rem !important;
 }

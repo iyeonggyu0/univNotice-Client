@@ -17,7 +17,7 @@
   width: 100%;
   /* box-shadow: inset 0px 0px 5px #6ba2ff; */
   border: 1px solid var(--black-3);
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   padding: 0 1.5rem;
   transition: all 0.2s;
 }
