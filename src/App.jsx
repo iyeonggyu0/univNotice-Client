@@ -51,7 +51,7 @@ function App() {
   const [alarm, setAlarm] = useState(false);
   const location = useLocation();
   const [mainPageLayout, setMainPageLayout] = useState(false);
-  let login = false;
+  const [login, setLogin] = useState(false);
 
   const onClickAlarm = () => {
     setAlarm(false);
@@ -60,13 +60,15 @@ function App() {
   // 로그인 상태 확인 함수
   const checkUserLoginStatus = async () => {
     try {
-      login = await loginCheck();
-      if (login) {
+      const loginResult = await loginCheck();
+      setLogin(!!loginResult);
+      if (loginResult) {
         return setMainPageLayout(true);
       } else {
         // 로그인 상태가 아닐때,
         if (isIos && isHomeApp) {
           const isIphoneLogin = await iphoneRefreshToken();
+          setLogin(!!isIphoneLogin);
           return setMainPageLayout(isIphoneLogin);
         }
       }
@@ -88,6 +90,7 @@ function App() {
 
           userRefreshToken(tokenData).then((res) => {
             if (res) {
+              setLogin(true);
               sendToApp("REFRESH_TOKEN", { refresh_token: res }, (resData) => {
                 if (resData.success) {
                   // setMainPageLayout(true);
@@ -95,16 +98,19 @@ function App() {
                 }
               });
             } else {
+              setLogin(false);
               sendToApp("DELETE_REFRESH_TOKEN", null, () => {});
               setMainPageLayout(true);
             }
           });
         } else {
+          setLogin(false);
           setMainPageLayout(true);
           return console.error("앱에서 리프레시 토큰을 가져오지 못했습니다");
         }
       });
     } catch (err) {
+      setLogin(false);
       setMainPageLayout(true);
       console.error("로그인 상태 확인 실패:", err);
     }
