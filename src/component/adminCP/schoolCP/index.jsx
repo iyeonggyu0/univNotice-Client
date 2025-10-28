@@ -213,6 +213,54 @@ const SchoolCP = () => {
       payload.userIds = [selectedUser.id];
     }
 
+    const targetLabelMap = {
+      all: "전체 사용자",
+      school: selectedSchool ? `${selectedSchool?.name ?? "학교 미선택"} 전체` : "(학교 미선택)",
+      department: selectedDepartment ? `${selectedSchool?.name ?? "학교 미선택"} / ${selectedDepartment?.name ?? "학과 미선택"}` : "(학과 미선택)",
+      user: selectedUser ? `${selectedUser.name} (${selectedUser.student_id || "학번 미상"})` : "(사용자 미선택)",
+    };
+
+    let estimatedCountLabel = "-";
+    if (pushTarget === "all") {
+      estimatedCountLabel = userList.length > 0 ? `${userList.length}명 (현재 로드된 표 기준)` : "전체 사용자 (인원 수 미집계)";
+    } else if (pushTarget === "school") {
+      estimatedCountLabel = userList.length > 0 ? `${userList.length}명` : "0명 (목록 갱신 필요)";
+    } else if (pushTarget === "department") {
+      estimatedCountLabel = userList.length > 0 ? `${userList.length}명` : "0명 (목록 갱신 필요)";
+    } else if (pushTarget === "user") {
+      estimatedCountLabel = selectedUser ? "1명" : "0명";
+    }
+
+    const confirmationPayload = {
+      대상: targetLabelMap[pushTarget] ?? "알 수 없음",
+      예상인원: estimatedCountLabel,
+      제목: titleValue,
+      내용: bodyValue,
+      링크: linkValue || "(없음)",
+    };
+
+    console.group("[Push] 발송 전 최종 확인");
+    console.table([confirmationPayload]);
+    console.groupEnd();
+
+    const confirmMessageLines = [
+      "다음 내용으로 푸시 알림을 발송할까요?",
+      "",
+      `대상: ${confirmationPayload["대상"]}`,
+      `예상 인원: ${confirmationPayload["예상인원"]}`,
+      "",
+      `제목: ${confirmationPayload["제목"]}`,
+      `내용: ${confirmationPayload["내용"]}`,
+    ];
+    if (linkValue) {
+      confirmMessageLines.push(`링크: ${confirmationPayload["링크"]}`);
+    }
+
+    if (!window.confirm(confirmMessageLines.join("\n"))) {
+      console.info("[Push] 발송이 사용자에 의해 취소되었습니다.");
+      return;
+    }
+
     setIsNotificationSending(true);
     try {
       const result = await adminNotificationSend(payload);
@@ -261,6 +309,7 @@ const SchoolCP = () => {
     selectedDepartment,
     selectedSchool,
     selectedUser,
+    userList,
     setPushBody,
     setPushLink,
     setPushTitle,
@@ -1273,54 +1322,6 @@ const SchoolCP = () => {
           </div>
         </div>
 
-        {/* 푸시 알림 발송 */}
-        <div>
-          <h4>푸시 알림 발송</h4>
-          <div className="schoolCp-notificationForm">
-            <div className="schoolCp-notificationRow">
-              <div className="schoolCp-selectGroup">
-                <label htmlFor="schoolCpTarget">발송 대상</label>
-                <select id="schoolCpTarget" value={pushTarget} onChange={(e) => setPushTarget(e.target.value)}>
-                  <option value="all">전체 사용자</option>
-                  <option value="school" disabled={!selectedSchool}>
-                    선택 학교 전체
-                  </option>
-                  <option value="department" disabled={!selectedSchool || !selectedDepartment}>
-                    선택 학교-학과
-                  </option>
-                  <option value="user" disabled={!selectedUser}>
-                    선택 사용자
-                  </option>
-                </select>
-              </div>
-              <InputCP title="푸시 제목" onChange={onChangePushTitle} value={pushTitle} essential={true} placeholder="푸시 알림 제목" />
-            </div>
-            <div className="schoolCp-textareaGroup">
-              <label htmlFor="schoolCpPushBody">푸시 내용</label>
-              <textarea id="schoolCpPushBody" value={pushBody} onChange={onChangePushBody} placeholder="푸시 알림 본문을 입력하세요." />
-            </div>
-            <InputCP title="연결 링크 (선택)" onChange={onChangePushLink} value={pushLink} essential={false} placeholder="/notice 등 앱 내 경로" />
-            <div className="schoolCp-notificationActions">
-              <span className="schoolCp-targetInfo">
-                {pushTarget === "all" && "전체 사용자에게 발송합니다."}
-                {pushTarget === "school" && (selectedSchool ? `${selectedSchool.name} 전체 사용자에게 발송합니다.` : "학교를 먼저 선택하세요.")}
-                {pushTarget === "department" &&
-                  (selectedSchool && selectedDepartment
-                    ? `${selectedSchool.name} - ${selectedDepartment.name} 사용자에게 발송합니다.`
-                    : "학교와 학과를 먼저 선택하세요.")}
-                {pushTarget === "user" &&
-                  (selectedUser ? `${selectedUser.name || "ID " + selectedUser.id} 사용자에게 발송합니다.` : "사용자를 먼저 선택하세요.")}
-              </span>
-              <div
-                className="schoolCp-notificationButton"
-                style={{ opacity: isNotificationSending ? 0.6 : 1, pointerEvents: isNotificationSending ? "none" : "auto" }}
-                onClick={handleSendNotification}>
-                <ButtonCP height="3.625rem">{isNotificationSending ? "발송 중..." : "푸시 발송"}</ButtonCP>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* 사용자 */}
         {/* 사용자 관리 테이블 */}
         <div>
@@ -1369,6 +1370,54 @@ const SchoolCP = () => {
                 <ButtonCP height="3.625rem">사용자 수정</ButtonCP>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* 푸시 알림 발송 */}
+        <div>
+          <h4>푸시 알림 발송</h4>
+          <div className="schoolCp-notificationForm">
+            <div className="schoolCp-notificationRow">
+              <div className="schoolCp-selectGroup">
+                <label htmlFor="schoolCpTarget">발송 대상</label>
+                <select id="schoolCpTarget" value={pushTarget} onChange={(e) => setPushTarget(e.target.value)}>
+                  <option value="all">전체 사용자</option>
+                  <option value="school" disabled={!selectedSchool}>
+                    선택 학교 전체
+                  </option>
+                  <option value="department" disabled={!selectedSchool || !selectedDepartment}>
+                    선택 학교-학과
+                  </option>
+                  <option value="user" disabled={!selectedUser}>
+                    선택 사용자
+                  </option>
+                </select>
+              </div>
+              <InputCP title="푸시 제목" onChange={onChangePushTitle} value={pushTitle} essential={true} placeholder="푸시 알림 제목" />
+            </div>
+            <div className="schoolCp-textareaGroup">
+              <label htmlFor="schoolCpPushBody">푸시 내용</label>
+              <textarea id="schoolCpPushBody" value={pushBody} onChange={onChangePushBody} placeholder="푸시 알림 본문을 입력하세요." />
+            </div>
+            <InputCP title="연결 링크 (선택)" onChange={onChangePushLink} value={pushLink} essential={false} placeholder="/notice 등 앱 내 경로" />
+            <div className="schoolCp-notificationActions">
+              <span className="schoolCp-targetInfo">
+                {pushTarget === "all" && "전체 사용자에게 발송합니다."}
+                {pushTarget === "school" && (selectedSchool ? `${selectedSchool.name} 전체 사용자에게 발송합니다.` : "학교를 먼저 선택하세요.")}
+                {pushTarget === "department" &&
+                  (selectedSchool && selectedDepartment
+                    ? `${selectedSchool.name} - ${selectedDepartment.name} 사용자에게 발송합니다.`
+                    : "학교와 학과를 먼저 선택하세요.")}
+                {pushTarget === "user" &&
+                  (selectedUser ? `${selectedUser.name || "ID " + selectedUser.id} 사용자에게 발송합니다.` : "사용자를 먼저 선택하세요.")}
+              </span>
+              <div
+                className="schoolCp-notificationButton"
+                style={{ opacity: isNotificationSending ? 0.6 : 1, pointerEvents: isNotificationSending ? "none" : "auto" }}
+                onClick={handleSendNotification}>
+                <ButtonCP height="3.625rem">{isNotificationSending ? "발송 중..." : "푸시 발송"}</ButtonCP>
+              </div>
+            </div>
           </div>
         </div>
 
