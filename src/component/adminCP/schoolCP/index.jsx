@@ -23,6 +23,7 @@ import {
   adminAcademicCalendarUpdate,
   adminAcademicCalendarDelete,
   adminCrawlingTest,
+  adminNotificationSend,
 } from "../../../api/admin/school";
 import TableCP from "../../_common/tableCP";
 import InputCP from "../../_common/inputCP";
@@ -48,6 +49,12 @@ const SchoolCP = () => {
   const [userName, onChangeUserName, setUserName] = useInput("");
   const [userStudentId, onChangeUserStudentId, setUserStudentId] = useInput("");
   const [userPhone, onChangeUserPhone, setUserPhone] = useInput("");
+
+  const [pushTitle, onChangePushTitle, setPushTitle] = useInput("");
+  const [pushBody, onChangePushBody, setPushBody] = useInput("");
+  const [pushLink, onChangePushLink, setPushLink] = useInput("");
+  const [pushTarget, setPushTarget] = useState("all");
+  const [isNotificationSending, setIsNotificationSending] = useState(false);
 
   // 사용자 데이터 로드
   const loadUserData = useCallback(async () => {
@@ -173,6 +180,91 @@ const SchoolCP = () => {
     },
     [selectedUser, setUserList, setSelectedUser, setUserName, setUserStudentId, setUserPhone, setIsUserLoading]
   );
+
+  const handleSendNotification = useCallback(async () => {
+    if (isNotificationSending) return;
+
+    const titleValue = pushTitle.trim();
+    const bodyValue = pushBody.trim();
+    const linkValue = pushLink.trim();
+
+    if (!titleValue) return alert("푸시 제목을 입력해주세요.");
+    if (!bodyValue) return alert("푸시 내용을 입력해주세요.");
+
+    const payload = {
+      targetType: pushTarget,
+      title: titleValue,
+      body: bodyValue,
+    };
+
+    if (linkValue) {
+      payload.link = linkValue;
+    }
+
+    if (pushTarget === "school") {
+      if (!selectedSchool) return alert("먼저 학교를 선택해주세요.");
+      payload.schoolId = selectedSchool.id;
+    } else if (pushTarget === "department") {
+      if (!selectedSchool || !selectedDepartment) return alert("학교와 학과를 모두 선택해주세요.");
+      payload.schoolId = selectedSchool.id;
+      payload.departmentId = selectedDepartment.id;
+    } else if (pushTarget === "user") {
+      if (!selectedUser) return alert("발송할 사용자를 선택해주세요.");
+      payload.userIds = [selectedUser.id];
+    }
+
+    setIsNotificationSending(true);
+    try {
+      const result = await adminNotificationSend(payload);
+      if (!result || result.isAxiosError || result instanceof Error) {
+        return;
+      }
+
+      if (result.success) {
+        const summary = result.summary || {};
+        const counts = summary.counts || {};
+        const androidInfo = counts.android || {};
+        const iosInfo = counts.ios || {};
+        const notes = Array.isArray(summary.notes) ? summary.notes : [];
+
+        let message = "푸시 알림 발송이 완료되었습니다.";
+        message += `\n- Android: ${androidInfo.success || 0} / ${androidInfo.targeted || 0}`;
+        message += `\n- iOS: ${iosInfo.success || 0} / ${iosInfo.targeted || 0}`;
+        if (counts.decryptFail) {
+          message += `\n- 복호화 실패: ${counts.decryptFail}`;
+        }
+        if (notes.length > 0) {
+          message += `\n\n참고 사항:\n${notes.join("\n")}`;
+        }
+
+        alert(message);
+        setPushTitle("");
+        setPushBody("");
+        setPushLink("");
+      } else if (result.error) {
+        alert(result.error);
+      } else {
+        alert("푸시 알림 발송 결과를 확인할 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("푸시 알림 발송 오류", error);
+      alert("푸시 알림 발송 중 오류가 발생했습니다.");
+    } finally {
+      setIsNotificationSending(false);
+    }
+  }, [
+    isNotificationSending,
+    pushBody,
+    pushLink,
+    pushTarget,
+    pushTitle,
+    selectedDepartment,
+    selectedSchool,
+    selectedUser,
+    setPushBody,
+    setPushLink,
+    setPushTitle,
+  ]);
 
   // 사용자 데이터 자동 로드
   useEffect(() => {
@@ -1178,6 +1270,54 @@ const SchoolCP = () => {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* 푸시 알림 발송 */}
+        <div>
+          <h4>푸시 알림 발송</h4>
+          <div className="schoolCp-notificationForm">
+            <div className="schoolCp-notificationRow">
+              <div className="schoolCp-selectGroup">
+                <label htmlFor="schoolCpTarget">발송 대상</label>
+                <select id="schoolCpTarget" value={pushTarget} onChange={(e) => setPushTarget(e.target.value)}>
+                  <option value="all">전체 사용자</option>
+                  <option value="school" disabled={!selectedSchool}>
+                    선택 학교 전체
+                  </option>
+                  <option value="department" disabled={!selectedSchool || !selectedDepartment}>
+                    선택 학교-학과
+                  </option>
+                  <option value="user" disabled={!selectedUser}>
+                    선택 사용자
+                  </option>
+                </select>
+              </div>
+              <InputCP title="푸시 제목" onChange={onChangePushTitle} value={pushTitle} essential={true} placeholder="푸시 알림 제목" />
+            </div>
+            <div className="schoolCp-textareaGroup">
+              <label htmlFor="schoolCpPushBody">푸시 내용</label>
+              <textarea id="schoolCpPushBody" value={pushBody} onChange={onChangePushBody} placeholder="푸시 알림 본문을 입력하세요." />
+            </div>
+            <InputCP title="연결 링크 (선택)" onChange={onChangePushLink} value={pushLink} essential={false} placeholder="/notice 등 앱 내 경로" />
+            <div className="schoolCp-notificationActions">
+              <span className="schoolCp-targetInfo">
+                {pushTarget === "all" && "전체 사용자에게 발송합니다."}
+                {pushTarget === "school" && (selectedSchool ? `${selectedSchool.name} 전체 사용자에게 발송합니다.` : "학교를 먼저 선택하세요.")}
+                {pushTarget === "department" &&
+                  (selectedSchool && selectedDepartment
+                    ? `${selectedSchool.name} - ${selectedDepartment.name} 사용자에게 발송합니다.`
+                    : "학교와 학과를 먼저 선택하세요.")}
+                {pushTarget === "user" &&
+                  (selectedUser ? `${selectedUser.name || "ID " + selectedUser.id} 사용자에게 발송합니다.` : "사용자를 먼저 선택하세요.")}
+              </span>
+              <div
+                className="schoolCp-notificationButton"
+                style={{ opacity: isNotificationSending ? 0.6 : 1, pointerEvents: isNotificationSending ? "none" : "auto" }}
+                onClick={handleSendNotification}>
+                <ButtonCP height="3.625rem">{isNotificationSending ? "발송 중..." : "푸시 발송"}</ButtonCP>
+              </div>
+            </div>
           </div>
         </div>
 

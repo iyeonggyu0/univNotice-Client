@@ -244,6 +244,19 @@ export const adminUserUpdate = async (data) => {
   }
 };
 
+export const adminNotificationSend = async (data) => {
+  try {
+    const res = await axios.post(`${apiUrl}/admin/notification/send`, data, { withCredentials: true });
+    if (res.status === 200) {
+      return res.data;
+    }
+    return null;
+  } catch (err) {
+    alert(err.response?.data?.error || "푸시 알림 전송 오류");
+    return err;
+  }
+};
+
 /**
  * 크롤링 테스트 API
  * @route POST /admin/crawling/test/:crawlUrlId
