@@ -108,7 +108,7 @@
 }
 
 .busCp-formButtons button[disabled] {
-  background-color: var(--black-3);
+  background-color: var(--black-2);
   cursor: not-allowed;
   box-shadow: none;
 }
@@ -119,7 +119,16 @@
 }
 
 .busCp-formButtons .busCp-secondary:hover {
-  background-color: var(--black-3);
+  background-color: var(--black-2);
+}
+
+.busCp-formButtons .busCp-danger {
+  background-color: #e74c3c;
+  color: var(--white);
+}
+
+.busCp-formButtons .busCp-danger:hover:not([disabled]) {
+  background-color: #c0392b;
 }
 
 @media (max-width: 768px) {

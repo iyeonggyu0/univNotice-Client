@@ -10,6 +10,8 @@ import {
   adminBusStopUpdate,
   adminBusTimetableCreate,
   adminBusTimetableUpdate,
+  adminBusStopDelete,
+  adminBusTimetableDelete,
 } from "../../../api/admin/bus";
 import "./style.css";
 
@@ -209,6 +211,30 @@ const BusCP = () => {
     }
   };
 
+  const handleDeleteBusStop = async () => {
+    if (!selectedBusStop) {
+      alert("삭제할 정류장을 선택하세요.");
+      return;
+    }
+    if (!window.confirm(`정말로 "${selectedBusStop.name}" 정류장을 삭제하시겠습니까?\n연결된 시간표도 함께 삭제됩니다.`)) {
+      return;
+    }
+    setIsBusStopSaving(true);
+    try {
+      const rows = await adminBusStopDelete(selectedBusStop.id);
+      if (Array.isArray(rows)) {
+        setBusStopList(rows);
+        setSelectedBusStop(null);
+        setSelectedTimetable(null);
+        setTimetableList([]);
+        setBusStopName("");
+        setArrivalTime("");
+      }
+    } finally {
+      setIsBusStopSaving(false);
+    }
+  };
+
   const handleResetTimetableForm = () => {
     setSelectedTimetable(null);
     setArrivalTime("");
@@ -269,6 +295,26 @@ const BusCP = () => {
     }
   };
 
+  const handleDeleteTimetable = async () => {
+    if (!selectedTimetable) {
+      alert("삭제할 시간표를 선택하세요.");
+      return;
+    }
+    if (!window.confirm(`정말로 ${normalizeTimeInput(selectedTimetable.arrival_time)} 시간을 삭제하시겠습니까?`)) {
+      return;
+    }
+    setIsTimetableSaving(true);
+    try {
+      const rows = await adminBusTimetableDelete(selectedTimetable.id);
+      if (Array.isArray(rows)) {
+        setTimetableList(rows);
+        setSelectedTimetable(null);
+        setArrivalTime("");
+      }
+    } finally {
+      setIsTimetableSaving(false);
+    }
+  };
   return (
     <section className="busCp">
       <h2>셔틀버스 관리</h2>
@@ -337,6 +383,9 @@ const BusCP = () => {
               <button type="button" onClick={handleUpdateBusStop} disabled={!selectedBusStop || isBusStopSaving}>
                 정류장 수정
               </button>
+              <button type="button" className="busCp-danger" onClick={handleDeleteBusStop} disabled={!selectedBusStop || isBusStopSaving}>
+                정류장 삭제
+              </button>
               <button type="button" className="busCp-secondary" onClick={handleResetBusStopForm}>
                 초기화
               </button>
@@ -384,6 +433,9 @@ const BusCP = () => {
               </button>
               <button type="button" onClick={handleUpdateTimetable} disabled={!selectedTimetable || isTimetableSaving}>
                 시간 수정
+              </button>
+              <button type="button" className="busCp-danger" onClick={handleDeleteTimetable} disabled={!selectedTimetable || isTimetableSaving}>
+                시간 삭제
               </button>
               <button type="button" className="busCp-secondary" onClick={handleResetTimetableForm}>
                 초기화

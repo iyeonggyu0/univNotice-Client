@@ -88,3 +88,29 @@ export const adminBusTimetableUpdate = async (id, data) => {
     return null;
   }
 };
+
+export const adminBusStopDelete = async (id) => {
+  try {
+    const res = await axios.delete(`${apiUrl}/admin/bus/stop/${id}`, { withCredentials: true });
+    if (res.status === 200) {
+      return res.data.rows ?? [];
+    }
+    return null;
+  } catch (err) {
+    alert(err.response?.data?.error || "셔틀 정류장 삭제에 실패했습니다.");
+    return null;
+  }
+};
+
+export const adminBusTimetableDelete = async (id) => {
+  try {
+    const res = await axios.delete(`${apiUrl}/admin/bus/timetable/${id}`, { withCredentials: true });
+    if (res.status === 200) {
+      return res.data.rows ?? [];
+    }
+    return null;
+  } catch (err) {
+    alert(err.response?.data?.error || "셔틀 시간표 삭제에 실패했습니다.");
+    return null;
+  }
+};
