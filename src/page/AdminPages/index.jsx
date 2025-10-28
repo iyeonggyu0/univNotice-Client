@@ -63,9 +63,6 @@ const AdminPage = () => {
               <li onClick={() => nav("/admin/school")} style={{ fontWeight: page === "school" ? "700" : "400" }}>
                 학교 관리
               </li>
-              <li onClick={() => nav("/admin/bus")} style={{ fontWeight: page === "bus" ? "700" : "400" }}>
-                버스 관리
-              </li>
             </ul>
             <p
               onClick={(e) => {
@@ -79,7 +76,6 @@ const AdminPage = () => {
             {page === "log" && <LogCP />}
             {page === "data" && <TableCP />}
             {page === "school" && <SchoolCP />}
-            {page === "bus" && <BusCP />}
           </div>
         </section>
       )}
