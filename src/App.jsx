@@ -45,6 +45,7 @@ import AlarmCP from "./component/_common/alarmCP";
 import NoticePage from "./page/NoticePage";
 import { iphoneRefreshToken } from "./api/iphone";
 import HomeAppPage from "./page/ErrorPages/HomeAppPage";
+import BusPage from "./page/BusPage";
 
 function App() {
   const { isApp, isIos, isHomeApp } = useWeb();
@@ -144,6 +145,9 @@ function App() {
 
         {/* 문의하기 */}
         <Route path="/kakao" element={<KakaoPage />} />
+
+        {/* 버스 알림 */}
+        <Route path="/bus" element={<BusPage />} />
 
         {/* LogIn */}
         <Route path="/login" element={<LoginPage />} />

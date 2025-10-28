@@ -8,6 +8,7 @@ import LogCP from "../../component/adminCP/logCP";
 import { useCallback } from "react";
 import TableCP from "../../component/adminCP/tableCP";
 import SchoolCP from "../../component/adminCP/schoolCP";
+import BusCP from "../../component/adminCP/busCP";
 
 const AdminPage = () => {
   const nav = useNavigate();
@@ -27,21 +28,24 @@ const AdminPage = () => {
     });
   }, [nav]);
 
-  const onClickLogout = useCallback((e) => {
-    e.preventDefault();
+  const onClickLogout = useCallback(
+    (e) => {
+      e.preventDefault();
 
-    if (!window.confirm("정말 로그아웃 하시겠습니까?")) return;
+      if (!window.confirm("정말 로그아웃 하시겠습니까?")) return;
 
-    // 로그아웃 처리
-    const res = adminLogout();
-    if (res) {
-      setIsAdminLoggedIn(false);
-      nav("/");
-    } else {
-      alert(res?.response?.data?.error);
-      setIsAdminLoggedIn(true);
-    }
-  }, []);
+      // 로그아웃 처리
+      const res = adminLogout();
+      if (res) {
+        setIsAdminLoggedIn(false);
+        nav("/");
+      } else {
+        alert(res?.response?.data?.error);
+        setIsAdminLoggedIn(true);
+      }
+    },
+    [nav]
+  );
   return (
     <div>
       {isAdminLoggedIn && (
@@ -59,6 +63,9 @@ const AdminPage = () => {
               <li onClick={() => nav("/admin/school")} style={{ fontWeight: page === "school" ? "700" : "400" }}>
                 학교 관리
               </li>
+              <li onClick={() => nav("/admin/bus")} style={{ fontWeight: page === "bus" ? "700" : "400" }}>
+                버스 관리
+              </li>
             </ul>
             <p
               onClick={(e) => {
@@ -72,6 +79,7 @@ const AdminPage = () => {
             {page === "log" && <LogCP />}
             {page === "data" && <TableCP />}
             {page === "school" && <SchoolCP />}
+            {page === "bus" && <BusCP />}
           </div>
         </section>
       )}
