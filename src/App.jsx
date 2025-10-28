@@ -45,7 +45,6 @@ import AlarmCP from "./component/_common/alarmCP";
 import NoticePage from "./page/NoticePage";
 import { iphoneRefreshToken } from "./api/iphone";
 import HomeAppPage from "./page/ErrorPages/HomeAppPage";
-import BusPage from "./page/BusPage";
 
 function App() {
   const { isApp, isIos, isHomeApp } = useWeb();

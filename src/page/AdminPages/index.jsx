@@ -8,7 +8,6 @@ import LogCP from "../../component/adminCP/logCP";
 import { useCallback } from "react";
 import TableCP from "../../component/adminCP/tableCP";
 import SchoolCP from "../../component/adminCP/schoolCP";
-import BusCP from "../../component/adminCP/busCP";
 
 const AdminPage = () => {
   const nav = useNavigate();
