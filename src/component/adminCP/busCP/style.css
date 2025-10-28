@@ -131,7 +131,7 @@
   padding: 8px 12px;
   border: none;
   border-radius: 6px;
-  background-color: var(--main-color);
+  background-color: var(--black-3);
   color: var(--white);
   cursor: pointer;
   transition: all 0.2s ease;
