@@ -15,6 +15,8 @@ import {
 } from "../../../api/admin/bus";
 import "./style.css";
 
+const DAY_OPTIONS = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"];
+
 const BusCP = () => {
   const [schoolList, setSchoolList] = useState([]);
   const [busStopList, setBusStopList] = useState([]);
@@ -26,6 +28,7 @@ const BusCP = () => {
 
   const [busStopName, setBusStopName] = useState("");
   const [arrivalTime, setArrivalTime] = useState("");
+  const [selectedDays, setSelectedDays] = useState([]);
 
   const [isBusStopSaving, setIsBusStopSaving] = useState(false);
   const [isTimetableSaving, setIsTimetableSaving] = useState(false);
@@ -99,6 +102,7 @@ const BusCP = () => {
       setSelectedTimetable(null);
       setBusStopName("");
       setArrivalTime("");
+      setSelectedDays([]);
       return;
     }
     setSelectedBusStop(null);
@@ -106,6 +110,7 @@ const BusCP = () => {
     setSelectedTimetable(null);
     setBusStopName("");
     setArrivalTime("");
+    setSelectedDays([]);
     loadBusStopList(selectedSchool.id);
   }, [selectedSchool, loadBusStopList]);
 
@@ -114,10 +119,12 @@ const BusCP = () => {
       setTimetableList([]);
       setSelectedTimetable(null);
       setArrivalTime("");
+      setSelectedDays([]);
       return;
     }
     setSelectedTimetable(null);
     setArrivalTime("");
+    setSelectedDays([]);
     loadTimetableList(selectedBusStop.id);
   }, [selectedBusStop, loadTimetableList]);
 
@@ -132,8 +139,10 @@ const BusCP = () => {
   useEffect(() => {
     if (selectedTimetable) {
       setArrivalTime(normalizeTimeInput(selectedTimetable.arrival_time));
+      setSelectedDays(selectedTimetable.day_of_week ? [selectedTimetable.day_of_week] : []);
     } else {
       setArrivalTime("");
+      setSelectedDays([]);
     }
   }, [selectedTimetable]);
 
@@ -158,6 +167,7 @@ const BusCP = () => {
     setTimetableList([]);
     setSelectedTimetable(null);
     setArrivalTime("");
+    setSelectedDays([]);
   };
 
   const handleCreateBusStop = async (e) => {
@@ -238,6 +248,16 @@ const BusCP = () => {
   const handleResetTimetableForm = () => {
     setSelectedTimetable(null);
     setArrivalTime("");
+    setSelectedDays([]);
+  };
+
+  const handleToggleDay = (day) => {
+    setSelectedDays((prev) => {
+      if (prev.includes(day)) {
+        return prev.filter((item) => item !== day);
+      }
+      return [...prev, day];
+    });
   };
 
   const handleCreateTimetable = async (e) => {
@@ -250,12 +270,17 @@ const BusCP = () => {
       alert("도착 시간을 입력하세요.");
       return;
     }
+    if (selectedDays.length === 0) {
+      alert("적용할 요일을 한 개 이상 선택하세요.");
+      return;
+    }
     setIsTimetableSaving(true);
     try {
       const rows = await adminBusTimetableCreate({
         school_id: selectedSchool.id,
         bus_stop_id: selectedBusStop.id,
         arrival_time: arrivalTime,
+        days: selectedDays,
       });
       if (Array.isArray(rows)) {
         setTimetableList(rows);
@@ -278,9 +303,16 @@ const BusCP = () => {
       alert("도착 시간을 입력하세요.");
       return;
     }
+    if (selectedDays.length !== 1) {
+      alert("시간표 수정 시에는 하나의 요일만 선택할 수 있습니다.");
+      return;
+    }
     setIsTimetableSaving(true);
     try {
-      const rows = await adminBusTimetableUpdate(selectedTimetable.id, { arrival_time: arrivalTime });
+      const rows = await adminBusTimetableUpdate(selectedTimetable.id, {
+        arrival_time: arrivalTime,
+        day_of_week: selectedDays[0],
+      });
       if (Array.isArray(rows)) {
         setTimetableList(rows);
         const updated = rows.find((item) => item.id === selectedTimetable.id);
@@ -310,6 +342,7 @@ const BusCP = () => {
         setTimetableList(rows);
         setSelectedTimetable(null);
         setArrivalTime("");
+        setSelectedDays([]);
       }
     } finally {
       setIsTimetableSaving(false);
@@ -427,6 +460,15 @@ const BusCP = () => {
           <form className="busCp-form" onSubmit={handleCreateTimetable}>
             <label htmlFor="bus-arrival-time">도착 시간</label>
             <input id="bus-arrival-time" type="time" value={arrivalTime} onChange={(e) => setArrivalTime(e.target.value)} disabled={!selectedBusStop} />
+            <span className="busCp-dayLabel">적용 요일</span>
+            <div className="busCp-daySelector">
+              {DAY_OPTIONS.map((day) => (
+                <label key={day} className={`busCp-dayOption ${!selectedBusStop ? "busCp-dayOption--disabled" : ""}`}>
+                  <input type="checkbox" value={day} checked={selectedDays.includes(day)} onChange={() => handleToggleDay(day)} disabled={!selectedBusStop} />
+                  <span>{day}</span>
+                </label>
+              ))}
+            </div>
             <div className="busCp-formButtons">
               <button type="submit" disabled={!selectedBusStop || isTimetableSaving}>
                 시간 등록

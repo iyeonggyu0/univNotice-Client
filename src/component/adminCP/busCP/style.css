@@ -85,6 +85,42 @@
   cursor: not-allowed;
 }
 
+.busCp-dayLabel {
+  font-weight: 600;
+  color: var(--black-5);
+}
+
+.busCp-daySelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.busCp-dayOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--black-3);
+  border-radius: 999px;
+  background-color: var(--white);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.busCp-dayOption input {
+  accent-color: var(--main-color);
+}
+
+.busCp-dayOption:hover {
+  background-color: var(--black-1);
+}
+
+.busCp-dayOption--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .busCp-formButtons {
   display: flex;
   flex-wrap: wrap;
