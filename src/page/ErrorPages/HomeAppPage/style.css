@@ -1,0 +1,48 @@
+.homeAppPage {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.homeAppPage .homeAppPage-content {
+  width: 100%;
+  height: 70vh;
+  padding: 0 10vh;
+  display: flex;
+  /* justify-content: space-around; */
+  /* align-items: center; */
+  flex-direction: column;
+  gap: 24px;
+}
+
+.homeAppPage .homeAppPage-content .title {
+  font-size: clamp(1.2rem, 4vw, 1.4rem);
+  font-weight: 600;
+  text-align: start;
+  margin-bottom: 12px;
+}
+
+.homeAppPage .homeAppPage-content .title + a {
+  font-size: clamp(0.8rem, 4vw, 1rem);
+  color: var(--point-color-1);
+}
+
+.homeAppPage .homeAppPage-images {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 24px;
+}
+
+@media screen and (max-width: 768px) {
+  .homeAppPage .homeAppPage-content {
+    height: 100%;
+    padding: 82px 48px;
+  }
+
+  .homeAppPage .homeAppPage-images {
+    flex-direction: column;
+    align-items: center;
+  }
+}

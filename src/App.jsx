@@ -23,7 +23,8 @@ import UserDeletePage from "./page/UserDeletePage";
 import DeviceAppendPage from "./page/DeviceAppendPage";
 
 // SignUp Pages
-import HelloPage from "./page/SignUpPage/1_HelloPage";
+import HelloPage from "./page/SignUpPage/0_HelloPage";
+import PhoneSelectPage from "./page/SignUpPage/1_PhoneSelectPage";
 import InfoPage from "./page/SignUpPage/2_InfoPage";
 import CategoryPage from "./page/SignUpPage/3_CategoryPage";
 import SettingPage from "./page/SignUpPage/4_SettingPage";
@@ -150,7 +151,8 @@ function App() {
 
         {/* SignUp */}
         {/* 가입 인사 */}
-        <Route path="/signup/1" element={<HelloPage />} />
+        <Route path="/signup/0" element={<HelloPage />} />
+        <Route path="/signup/1" element={<PhoneSelectPage />} />
         {/* 사용자 정보 입력 */}
         <Route path="/signup/2" element={<InfoPage />} />
         {/* 카테고리 선택 */}
