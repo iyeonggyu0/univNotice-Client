@@ -9,8 +9,8 @@ export const useWeb = () => {
   const ua = navigator.userAgent.toLowerCase();
 
   const isApp = ua.includes("univnotice-app");
-  const isIos = ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod");
-  const isWeb = !isApp && !isIos && (ua.includes("android") || ua.includes("windows"));
+  const isIos = /iphone|ipad|ipod/.test(ua);
+  const isWeb = !isApp && !isIos && /android|windows/.test(ua);
 
   // iOS 홈화면 앱(PWA) 감지: iOS + (standalone || display-mode: standalone)
   let isHomeApp = false;
