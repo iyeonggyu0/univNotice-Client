@@ -29,6 +29,15 @@
   position: relative;
 }
 
+.phonePage .phonePage-button {
+  border: 1px solid var(--main-color);
+  border-radius: 0.75rem;
+}
+
+.phonePage .centerBox {
+  min-height: unset;
+}
+
 @media screen and (max-width: 768px) {
   .phonePage .centerBox {
     width: 80vw;

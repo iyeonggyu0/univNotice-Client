@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 
@@ -41,11 +41,81 @@ import MyDevicePage from "./page/MyPage/MyDevicePage";
 // Admin Pages
 import AdminLoginPage from "./page/AdminPages/AdminLoginPage";
 import AdminPage from "./page/AdminPages";
-import { useState } from "react";
 import AlarmCP from "./component/_common/alarmCP";
 import NoticePage from "./page/NoticePage";
 import { iphoneRefreshToken } from "./api/iphone";
 import HomeAppPage from "./page/ErrorPages/HomeAppPage";
+
+// 네트워크/앱 브릿지 처리 시 허용할 최대 대기 시간(ms)
+const NETWORK_TIMEOUT = 8000;
+const APP_BRIDGE_TIMEOUT = 6000;
+
+// Promise가 일정 시간 내 resolve/reject되지 않으면 강제로 타임아웃 시키는 유틸
+const withTimeout = (promise, timeout, label) => {
+  let timer;
+  return Promise.race([
+    promise.finally(() => clearTimeout(timer)),
+    new Promise((_, reject) => {
+      timer = setTimeout(() => {
+        reject(new Error(`${label} timed out after ${timeout}ms`));
+      }, timeout);
+    }),
+  ]);
+};
+
+// 복수의 Promise 중 가장 먼저 성공하는 결과를 채택하고, 모두 실패하면 오류 전달
+const waitForFirstSuccess = (promises) => {
+  if (!promises.length) {
+    return Promise.resolve(false);
+  }
+  return new Promise((resolve, reject) => {
+    let rejectedCount = 0;
+    const errors = [];
+    promises.forEach((promise, index) => {
+      promise
+        .then((value) => resolve(value))
+        .catch((error) => {
+          rejectedCount += 1;
+          errors[index] = error;
+          if (rejectedCount === promises.length) {
+            reject(errors);
+          }
+        });
+    });
+  });
+};
+
+// 웹뷰(App)로부터 리프레시 토큰을 요청
+const requestAppRefreshToken = () =>
+  new Promise((resolve, reject) => {
+    try {
+      sendToApp("GET_REFRESH_TOKEN", null, (data) => {
+        if (data?.success) {
+          resolve(data.data);
+        } else {
+          reject(new Error(data?.message || "앱에서 리프레시 토큰을 가져오지 못했습니다."));
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+// 새로 발급 받은 리프레시 토큰을 앱(WebView)에 되돌려줌
+const sendAppRefreshToken = (refreshToken) =>
+  new Promise((resolve, reject) => {
+    try {
+      sendToApp("REFRESH_TOKEN", { refresh_token: refreshToken }, (data) => {
+        if (data?.success) {
+          resolve(true);
+        } else {
+          reject(new Error(data?.message || "앱에 리프레시 토큰 전달 실패"));
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
 
 function App() {
   const { isApp, isIos, isHomeApp } = useWeb();
@@ -59,65 +129,90 @@ function App() {
   };
 
   // 로그인 상태 확인 함수
-  const checkUserLoginStatus = async () => {
+  // 초기 진입 시 로그인/토큰 상태 점검 프로세스
+  const checkUserLoginStatus = useCallback(async () => {
     try {
-      const loginResult = await loginCheck();
+      let loginResult = false;
+      try {
+        // 1차: 일반 웹 로그인 세션 확인
+        loginResult = await withTimeout(loginCheck(), NETWORK_TIMEOUT, "loginCheck");
+      } catch (loginError) {
+        console.warn("loginCheck 실패:", loginError.message || loginError);
+      }
+
       setLogin(!!loginResult);
       if (loginResult) {
-        return setMainPageLayout(true);
-      } else {
-        // 로그인 상태가 아닐때,
-        if (isIos && isHomeApp) {
-          const isIphoneLogin = await iphoneRefreshToken();
-          setLogin(!!isIphoneLogin);
-          return setMainPageLayout(isIphoneLogin);
-        }
+        setMainPageLayout(true);
+        return;
       }
 
-      if (!isApp) {
-        return setMainPageLayout(true);
-      }
+      const loginAttempts = [];
 
-      sendToApp("GET_REFRESH_TOKEN", null, (data) => {
-        if (data.success) {
-          if (!data.data.refresh_token || !data.data.device_id) {
-            return setMainPageLayout(true);
-          }
-
-          const tokenData = {
-            refresh_token: data.data.refresh_token,
-            device_id: data.data.device_id,
-          };
-
-          userRefreshToken(tokenData).then((res) => {
-            if (res) {
+      if (isIos && isHomeApp) {
+        // iOS 홈 앱 사용자는 PWA 토큰 발급 API를 바로 호출
+        loginAttempts.push(
+          withTimeout(iphoneRefreshToken(), NETWORK_TIMEOUT, "iphoneRefreshToken").then((result) => {
+            if (result) {
               setLogin(true);
-              sendToApp("REFRESH_TOKEN", { refresh_token: res }, (resData) => {
-                if (resData.success) {
-                  // setMainPageLayout(true);
-                  return window.location.reload();
-                }
-              });
-            } else {
-              setLogin(false);
-              sendToApp("DELETE_REFRESH_TOKEN", null, () => {});
               setMainPageLayout(true);
+              return true;
             }
+            throw new Error("아이폰 홈 앱 토큰이 없습니다.");
+          })
+        );
+      }
+
+      if (isApp) {
+        // 네이티브 앱(WebView) 사용자는 앱 브릿지를 통해 리프레시 토큰을 병렬 시도
+        const appLoginAttempt = withTimeout(requestAppRefreshToken(), APP_BRIDGE_TIMEOUT, "GET_REFRESH_TOKEN")
+          .then(async (tokenData) => {
+            if (!tokenData?.refresh_token || !tokenData?.device_id) {
+              throw new Error("앱 토큰 데이터가 유효하지 않습니다.");
+            }
+
+            // 앱이 준 토큰으로 서버 토큰 갱신
+            const refreshed = await withTimeout(userRefreshToken(tokenData), NETWORK_TIMEOUT, "userRefreshToken");
+            if (!refreshed) {
+              throw new Error("refreshToken 갱신 실패");
+            }
+
+            // 갱신된 토큰을 다시 앱에 전달한 뒤 새로고침
+            await withTimeout(sendAppRefreshToken(refreshed), APP_BRIDGE_TIMEOUT, "REFRESH_TOKEN");
+            setLogin(true);
+            return window.location.reload();
+          })
+          .catch((error) => {
+            // 앱 토큰 동기화 실패 시 기존 토큰 제거
+            sendToApp("DELETE_REFRESH_TOKEN", null, () => {});
+            throw error;
           });
-        } else {
-          setLogin(false);
-          setMainPageLayout(true);
-          return console.error("앱에서 리프레시 토큰을 가져오지 못했습니다");
-        }
-      });
+
+        loginAttempts.push(appLoginAttempt);
+      }
+
+      if (!loginAttempts.length) {
+        // 추가 시도 가능한 경로가 없다면 즉시 메인 화면 렌더
+        setMainPageLayout(true);
+        return;
+      }
+
+      try {
+        await waitForFirstSuccess(loginAttempts);
+      } catch (errors) {
+        // 모든 보조 로그인 시도가 실패한 경우
+        console.warn("보조 로그인 시도 실패:", errors);
+        setLogin(false);
+        setMainPageLayout(true);
+      }
     } catch (err) {
       setLogin(false);
       setMainPageLayout(true);
       console.error("로그인 상태 확인 실패:", err);
     }
-  };
+  }, [isApp, isHomeApp, isIos]);
 
   useEffect(() => {
+    // 라우팅 변경 시마다 로그인 상태를 재점검
     checkUserLoginStatus();
 
     // 앱에서 오는 메시지 처리 (ALARM_RECEIVED)
@@ -134,7 +229,7 @@ function App() {
     return () => {
       window.onAppMessage = originalOnAppMessage;
     };
-  }, [location]);
+  }, [location, checkUserLoginStatus]);
 
   return (
     <>
