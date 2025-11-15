@@ -10,7 +10,7 @@ const MainPage = ({ mainPageLayout, login }) => {
     <MainLayout mainPageLayout={mainPageLayout}>
       <section className="mainPage">
         <div>{/* 이미지 */}</div>
-        {mainPageLayout && !login && <p onClick={() => nav("/signup/1")}>회원가입</p>}
+        {mainPageLayout && !login && <p onClick={() => nav("/signup/0")}>회원가입</p>}
         {mainPageLayout && login && <p onClick={() => nav("/notice")}>공지 보기</p>}
         {!mainPageLayout && <CircularProgress color="inherit" className="loading" size="22px" />}
       </section>

@@ -23,7 +23,7 @@ const HelloPage = () => {
             <br />
             오신 것을 환영합니다!
           </p>
-          <div onClick={() => nav("/signup/2")}>
+          <div onClick={() => nav("/signup/1")}>
             <ButtonCP>다음</ButtonCP>
           </div>
         </div>
