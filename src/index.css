@@ -58,6 +58,8 @@ body {
   line-height: 1;
   color: var(--text-color);
   font-family: "Inter", "Noto Sans KR", "Gothic A1", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 ol,
 ul {

@@ -18,7 +18,7 @@ const HomeAppPage = () => {
               <div className="homeAppPage-image-div1">{/* 이미지 */}</div>
               <div className="flexHeightCenter">
                 <span>1</span>
-                <span>사파리에서 하단 공유 버튼을 클릭</span>
+                <span>모바일 사파리에서 하단 공유 버튼을 클릭</span>
               </div>
             </div>
             <div className="homeAppPage-imgage-div">
