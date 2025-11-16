@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import LogoLayout from "../../../layout/LogoLayout";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { useWeb } from "../../../hook/useWeb";
 import ButtonCP from "../../../component/_common/buttonCP";
 
 const PhoneSelectPage = () => {
-  const { isIos, isHomeApp, isApp } = useWeb();
+  const { isIos, isHomeApp } = useWeb();
   const nav = useNavigate();
 
   useEffect(() => {
@@ -29,12 +29,23 @@ const PhoneSelectPage = () => {
             </h4>
           </div>
           <div className="flexCol">
-            <div className="phonePage-button" onClick={() => nav("/signup/2")}>
+            <div
+              className="phonePage-button"
+              onClick={() => {
+                localStorage.setItem("phoneType", "android");
+                return nav("/signup/2");
+              }}>
               <ButtonCP color="--main-color" bgColor="--black-0">
                 Android
               </ButtonCP>
             </div>
-            <div className="phonePage-button" onClick={() => nav("/home-app")}>
+            <div
+              className="phonePage-button"
+              onClick={() => {
+                if (isIos && isHomeApp) return;
+                if (isIos && !isHomeApp) return nav("/home-app");
+                localStorage.setItem("phoneType", "iphone");
+              }}>
               <ButtonCP color="--main-color" bgColor="--black-0">
                 iPhone
               </ButtonCP>

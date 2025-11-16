@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import LogoLayout from "../../../layout/LogoLayout";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +18,14 @@ const PhonePage = () => {
     if (isIos && isHomeApp) return;
     if (isIos && !isHomeApp) return nav("/home-app");
   }, [isIos, isHomeApp, nav]);
+
+  const isPhone = localStorage.getItem("phoneType");
+  useEffect(() => {
+    if (!isPhone) {
+      alert("잘못된 접근입니다.\n회원가입 첫 페이지로 이동합니다.");
+      nav("/signup/1");
+    }
+  }, [isPhone, nav]);
 
   const signupInfo = JSON.parse(localStorage.getItem("signupInfo"));
   const signupKeyword = JSON.parse(localStorage.getItem("signupKeyword"));
@@ -91,7 +99,7 @@ const PhonePage = () => {
         phone: phone.trim(),
         name: name.trim(),
         certification: certification,
-        is_android: !isHomeApp,
+        is_android: !isHomeApp && isPhone === "android" ? true : false,
       };
 
       try {

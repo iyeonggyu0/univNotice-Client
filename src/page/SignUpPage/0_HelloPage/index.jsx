@@ -2,16 +2,9 @@ import { useNavigate } from "react-router-dom";
 import ButtonCP from "../../../component/_common/buttonCP";
 import LogoLayout from "../../../layout/LogoLayout";
 import "./style.css";
-import { useWeb } from "../../../hook/useWeb";
-import { useEffect } from "react";
 
 const HelloPage = () => {
   const nav = useNavigate();
-  const { isIos, isHomeApp } = useWeb();
-  useEffect(() => {
-    if (isIos && isHomeApp) return;
-    if (isIos && !isHomeApp) return nav("/home-app");
-  }, [isIos, isHomeApp, nav]);
 
   return (
     <LogoLayout>
