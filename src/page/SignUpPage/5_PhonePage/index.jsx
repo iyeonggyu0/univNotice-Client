@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LogoLayout from "../../../layout/LogoLayout";
 import "./style.css";
 import { useNavigate } from "react-router-dom";

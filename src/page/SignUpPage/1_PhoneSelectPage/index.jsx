@@ -42,9 +42,9 @@ const PhoneSelectPage = () => {
             <div
               className="phonePage-button"
               onClick={() => {
-                if (isIos && isHomeApp) return;
                 if (isIos && !isHomeApp) return nav("/home-app");
                 localStorage.setItem("phoneType", "iphone");
+                return nav("/signup/2");
               }}>
               <ButtonCP color="--main-color" bgColor="--black-0">
                 iPhone
