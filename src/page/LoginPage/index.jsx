@@ -11,6 +11,7 @@ import { sendToApp } from "../../api/app/webToApp";
 import { DeviceAdd, DeviceDelete } from "../../api/user/device";
 import { loginCheck } from "../../api/user/loginCheck";
 import { iphoneDevicePost } from "../../api/iphone";
+import { iphonePublicKeyGetApi } from "../../api/user/iphone";
 
 const LoginPage = () => {
   const nav = useNavigate();
@@ -79,17 +80,32 @@ const LoginPage = () => {
       }
 
       if (isHomeApp) {
-        if ("serviceWorker" in navigator) {
-          await navigator.serviceWorker.register("/service-worker.js");
+        try {
+          // 이미 등록된 서비스워커가 있으면 재등록하지 않음
+          let registration = null;
+          if ("serviceWorker" in navigator) {
+            registration = await navigator.serviceWorker.getRegistration("/service-worker.js");
+            if (!registration) {
+              registration = await navigator.serviceWorker.register("/service-worker.js");
+            }
+            const publicKeyRes = await iphonePublicKeyGetApi();
+            if (!publicKeyRes) {
+              throw new Error("VAPID 공개키를 받아오지 못했습니다.");
+            }
+            // 푸시 구독 요청
+            const readyReg = await navigator.serviceWorker.ready;
+            const subscription = await readyReg.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: publicKeyRes, // 서버의 APPLE_WEB_PUSH_VAPID_PUBLIC_KEY (base64로 변환)
+            });
+            await iphoneDevicePost(subscription);
+          }
+          return nav("/");
+        } catch (err) {
+          alert("푸시 구독 또는 서비스워커 등록에 실패했습니다.\n잠시 후 다시 시도해 주세요.");
+          console.error("ServiceWorker or PushManager error:", err);
+          return nav("/");
         }
-        // 푸시 구독 요청
-        const registration = await navigator.serviceWorker.ready;
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: "VAPID_PUBLIC_KEY_BASE64", // 서버의 APPLE_WEB_PUSH_VAPID_PUBLIC_KEY (base64로 변환)
-        });
-        await iphoneDevicePost(subscription);
-        return nav("/");
       }
 
       sendToApp("FCM_TOKEN", null, (data) => {

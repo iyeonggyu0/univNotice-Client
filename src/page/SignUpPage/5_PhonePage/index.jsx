@@ -13,6 +13,7 @@ import { iphoneDevicePost } from "../../../api/iphone";
 const PhonePage = () => {
   const { isIos, isHomeApp, isApp } = useWeb();
   const nav = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isIos && isHomeApp) return;
@@ -51,6 +52,9 @@ const PhonePage = () => {
   const onCertificationClick = useCallback(
     async (e) => {
       e.preventDefault();
+      if (isLoading) return;
+
+      setIsLoading(true);
 
       // 010으로 시작하는 11자리 번호인지 체크
       if (!/^010\d{8}$/.test(phone.trim())) {
@@ -60,6 +64,7 @@ const PhonePage = () => {
 
       const data = await signupCertificationSend(phone.trim());
       setIsCert(data);
+      setIsLoading(false);
     },
     [phone]
   );
@@ -68,10 +73,14 @@ const PhonePage = () => {
   const onSignUpClick = useCallback(
     async (e) => {
       e.preventDefault();
+
       if (!signupInfo || !signupKeyword) {
         alert("잘못된 접근입니다.\n회원가입 첫 페이지로 이동합니다.");
         nav("/signup/1");
         return;
+      }
+      if (!setIsCert) {
+        return alert("휴대폰 인증을 진행해 주세요.");
       }
       if (name.trim().length < 2) {
         alert("이름을 올바르게 입력해주세요");
@@ -106,17 +115,33 @@ const PhonePage = () => {
         const res = await signupPost(data);
         if (res && isIos && isHomeApp) {
           if (isHomeApp) {
-            if ("serviceWorker" in navigator) {
-              await navigator.serviceWorker.register("/service-worker.js");
+            try {
+              // 이미 등록된 서비스워커가 있으면 재등록하지 않음
+              let registration = null;
+              if ("serviceWorker" in navigator) {
+                registration = await navigator.serviceWorker.getRegistration("/service-worker.js");
+                if (!registration) {
+                  registration = await navigator.serviceWorker.register("/service-worker.js");
+                }
+                // 서버에서 VAPID 공개키(JWT 암호화)를 받아옴
+                const publicKeyRes = (await window.iphonePublicKeyGetApi?.()) || false;
+                if (!publicKeyRes) {
+                  throw new Error("VAPID 공개키를 받아오지 못했습니다.");
+                }
+                // 푸시 구독 요청
+                const readyReg = await navigator.serviceWorker.ready;
+                const subscription = await readyReg.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: publicKeyRes, // 서버의 APPLE_WEB_PUSH_VAPID_PUBLIC_KEY (base64로 변환)
+                });
+                await iphoneDevicePost(subscription);
+              }
+              return nav("/signup/8");
+            } catch (err) {
+              alert("푸시 구독 또는 서비스워커 등록에 실패했습니다.\n잠시 후 다시 시도해 주세요.");
+              console.error("ServiceWorker or PushManager error:", err);
+              return nav("/signup/8");
             }
-            // 푸시 구독 요청
-            const registration = await navigator.serviceWorker.ready;
-            const subscription = await registration.pushManager.subscribe({
-              userVisibleOnly: true,
-              applicationServerKey: "VAPID_PUBLIC_KEY_BASE64", // 서버의 APPLE_WEB_PUSH_VAPID_PUBLIC_KEY (base64로 변환)
-            });
-            await iphoneDevicePost(subscription);
-            return nav("/signup/8");
           }
           return nav("/signup/8");
         }
