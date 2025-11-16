@@ -9,6 +9,7 @@ import ButtonCP from "../../../component/_common/buttonCP";
 import { signupPost } from "../../../api/signUp/signup";
 import { useWeb } from "../../../hook/useWeb";
 import { iphoneDevicePost } from "../../../api/iphone";
+import { iphonePublicKeyGetApi } from "../../../api/user/iphone";
 
 const PhonePage = () => {
   const { isIos, isHomeApp, isApp } = useWeb();
@@ -124,7 +125,7 @@ const PhonePage = () => {
                   registration = await navigator.serviceWorker.register("/service-worker.js");
                 }
                 // 서버에서 VAPID 공개키(JWT 암호화)를 받아옴
-                const publicKeyRes = (await window.iphonePublicKeyGetApi?.()) || false;
+                const publicKeyRes = await iphonePublicKeyGetApi();
                 if (!publicKeyRes) {
                   throw new Error("VAPID 공개키를 받아오지 못했습니다.");
                 }

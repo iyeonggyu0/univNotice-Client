@@ -67,27 +67,23 @@ const LoginPage = () => {
       is_android: !isHomeApp,
     };
     try {
-      const isLogin = await userLogin(data);
+      const res = await userLogin(data);
       // 로그인 실패
-      if (!isLogin) {
+      if (!res) {
         setCertification_code("");
         return alert("로그인에 실패했습니다.\n 잠시 후 다시 시도해 주세요.");
       }
 
-      // 웹은 성공 시 메인으로
-      if (!isApp) {
-        return nav("/");
-      }
-
-      if (isHomeApp) {
+      // iOS Home App에서만 push 등록
+      if (res && isIos && isHomeApp) {
         try {
-          // 이미 등록된 서비스워커가 있으면 재등록하지 않음
           let registration = null;
           if ("serviceWorker" in navigator) {
             registration = await navigator.serviceWorker.getRegistration("/service-worker.js");
             if (!registration) {
               registration = await navigator.serviceWorker.register("/service-worker.js");
             }
+            // 서버에서 VAPID 공개키(JWT 암호화)를 받아옴
             const publicKeyRes = await iphonePublicKeyGetApi();
             if (!publicKeyRes) {
               throw new Error("VAPID 공개키를 받아오지 못했습니다.");
@@ -96,7 +92,7 @@ const LoginPage = () => {
             const readyReg = await navigator.serviceWorker.ready;
             const subscription = await readyReg.pushManager.subscribe({
               userVisibleOnly: true,
-              applicationServerKey: publicKeyRes, // 서버의 APPLE_WEB_PUSH_VAPID_PUBLIC_KEY (base64로 변환)
+              applicationServerKey: publicKeyRes,
             });
             await iphoneDevicePost(subscription);
           }
@@ -108,6 +104,12 @@ const LoginPage = () => {
         }
       }
 
+      // 웹은 성공 시 메인으로
+      if (!isApp) {
+        return nav("/");
+      }
+
+      // 앱(안드로이드 등) 기기 등록
       sendToApp("FCM_TOKEN", null, (data) => {
         if (data.success) {
           const deviceData = {
@@ -120,13 +122,11 @@ const LoginPage = () => {
             if (!res || !res.success) {
               return alert("기기 등록에 실패했습니다.\n 잠시 후 다시 시도해 주세요.");
             } else {
-              // res.refresh_token으로 수정
               sendToApp("REFRESH_TOKEN", { refresh_token: res.refresh_token, device_id: res.device_id }, (data) => {
                 if (data.success) {
                   return nav("/");
                 } else {
                   alert("리프레시 토큰 저장에 실패했습니다.\n 잠시 후 다시 시도해 주세요.");
-                  // 리프레시 토큰 저장 실패 시 등록된 기기 삭제
                   DeviceDelete(res.device_id)
                     .then(() => {
                       return setCertification_code("");
@@ -149,7 +149,7 @@ const LoginPage = () => {
     } catch (err) {
       console.error(err);
     }
-  }, [student_id, phone, certification_code]);
+  }, [student_id, phone, certification_code, isCertification, setCertification_code, setPhone, setStudent_id, isIos, isHomeApp, isApp, nav]);
 
   const onClickCertification = useCallback(async () => {
     if (!phone) return alert("전화번호를 입력해 주세요.");
