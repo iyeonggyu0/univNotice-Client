@@ -37,7 +37,9 @@ import * as XLSX from "xlsx";
 
 const EXCEL_HEADERS = [
   "학교",
+  "학교 ID",
   "학과",
+  "학과 ID",
   "URL",
   "카테고리",
   "목록 셀렉터",
@@ -50,7 +52,7 @@ const EXCEL_HEADERS = [
   "기타사항 셀렉터",
 ];
 
-const REQUIRED_EXCEL_FIELDS = ["학교", "URL", "목록 셀렉터", "행 셀렉터", "제목 셀렉터", "작성일 셀렉터", "작성일 포맷"];
+const REQUIRED_EXCEL_FIELDS = ["학교 또는 학교 ID", "URL", "목록 셀렉터", "행 셀렉터", "제목 셀렉터", "작성일 셀렉터", "작성일 포맷"];
 
 const trimCellValue = (value) => (value === undefined || value === null ? "" : String(value).trim());
 
@@ -462,7 +464,14 @@ const SchoolCP = () => {
           throw new Error("데이터가 비어 있습니다.");
         }
         const availableHeaders = Object.keys(rows[0]);
-        const missingHeaders = REQUIRED_EXCEL_FIELDS.filter((header) => !availableHeaders.includes(header));
+        const requiredHeaders = ["URL", "목록 셀렉터", "행 셀렉터", "제목 셀렉터", "작성일 셀렉터", "작성일 포맷"];
+        const missingHeaders = requiredHeaders.filter((header) => !availableHeaders.includes(header));
+
+        const hasSchoolNameHeader = availableHeaders.includes("학교");
+        const hasSchoolIdHeader = availableHeaders.includes("학교 ID");
+        if (!hasSchoolNameHeader && !hasSchoolIdHeader) {
+          missingHeaders.push("학교 또는 학교 ID");
+        }
         if (missingHeaders.length > 0) {
           throw new Error(`필수 컬럼이 없습니다: ${missingHeaders.join(", ")}`);
         }
@@ -509,11 +518,28 @@ const SchoolCP = () => {
         const rowNumber = i + 2; // 1행은 헤더
 
         try {
-          const schoolName = trimCellValue(row["학교"]);
-          if (!schoolName) throw new Error("학교 값이 비어 있습니다.");
+          const schoolNameValue = trimCellValue(row["학교"]);
+          const schoolIdValue = trimCellValue(row["학교 ID"]);
+          let school = null;
 
-          const school = schoolList.find((item) => item.name === schoolName);
-          if (!school) throw new Error(`학교(${schoolName})를 찾을 수 없습니다.`);
+          if (schoolIdValue) {
+            const parsedId = Number(schoolIdValue);
+            if (Number.isNaN(parsedId)) {
+              throw new Error(`학교 ID(${schoolIdValue})는 숫자여야 합니다.`);
+            }
+            school = schoolList.find((item) => item.id === parsedId);
+            if (!school) {
+              throw new Error(`ID(${parsedId})에 해당하는 학교를 찾을 수 없습니다.`);
+            }
+          } else if (schoolNameValue) {
+            school = schoolList.find((item) => item.name === schoolNameValue);
+            if (!school) {
+              throw new Error(`학교(${schoolNameValue})를 찾을 수 없습니다.`);
+            }
+          } else {
+            throw new Error("학교 또는 학교 ID 값이 비어 있습니다.");
+          }
+          const schoolName = school?.name || schoolNameValue;
 
           const urlValue = trimCellValue(row.URL || row.Url || row.url);
           if (!urlValue) throw new Error("URL 값이 비어 있습니다.");
@@ -529,10 +555,23 @@ const SchoolCP = () => {
           }
 
           const departmentName = trimCellValue(row["학과"]);
+          const departmentIdValue = trimCellValue(row["학과 ID"]);
           let departmentId = null;
           let resolvedDepartmentName = departmentName;
 
-          if (departmentName) {
+          if (departmentIdValue) {
+            const parsedDeptId = Number(departmentIdValue);
+            if (Number.isNaN(parsedDeptId)) {
+              throw new Error(`학과 ID(${departmentIdValue})는 숫자여야 합니다.`);
+            }
+            const departments = await getDepartmentsForSchool(school.id);
+            const department = departments.find((item) => item.id === parsedDeptId);
+            if (!department) {
+              throw new Error(`학교(${schoolName})에서 ID(${parsedDeptId}) 학과를 찾을 수 없습니다.`);
+            }
+            departmentId = department.id;
+            resolvedDepartmentName = department.name;
+          } else if (departmentName) {
             const departments = await getDepartmentsForSchool(school.id);
             const department = departments.find((item) => item.name === departmentName);
             if (!department) {
