@@ -12,6 +12,7 @@ import { DeviceAdd, DeviceDelete } from "../../api/user/device";
 import { loginCheck } from "../../api/user/loginCheck";
 import { iphoneDevicePost } from "../../api/iphone";
 import { iphonePublicKeyGetApi } from "../../api/user/iphone";
+import { urlBase64ToUint8Array } from "../../util/webPush";
 
 const LoginPage = () => {
   const nav = useNavigate();
@@ -92,7 +93,7 @@ const LoginPage = () => {
             const readyReg = await navigator.serviceWorker.ready;
             const subscription = await readyReg.pushManager.subscribe({
               userVisibleOnly: true,
-              applicationServerKey: publicKeyRes,
+              applicationServerKey: urlBase64ToUint8Array(publicKeyRes),
             });
             const subscriptionPayload = typeof subscription.toJSON === "function" ? subscription.toJSON() : subscription;
             await iphoneDevicePost(subscriptionPayload);

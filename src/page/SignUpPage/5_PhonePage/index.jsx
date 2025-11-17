@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import LogoLayout from "../../../layout/LogoLayout";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { signupPost } from "../../../api/signUp/signup";
 import { useWeb } from "../../../hook/useWeb";
 import { iphoneDevicePost } from "../../../api/iphone";
 import { iphonePublicKeyGetApi } from "../../../api/user/iphone";
+import { urlBase64ToUint8Array } from "../../../util/webPush";
 
 const PhonePage = () => {
   const { isIos, isHomeApp, isApp } = useWeb();
@@ -29,15 +30,21 @@ const PhonePage = () => {
     }
   }, [isPhone, nav]);
 
-  const signupInfo = JSON.parse(localStorage.getItem("signupInfo"));
-  const signupKeyword = JSON.parse(localStorage.getItem("signupKeyword"));
+  const signupInfo = useMemo(() => {
+    const stored = localStorage.getItem("signupInfo");
+    return stored ? JSON.parse(stored) : null;
+  }, []);
+  const signupKeyword = useMemo(() => {
+    const stored = localStorage.getItem("signupKeyword");
+    return stored ? JSON.parse(stored) : null;
+  }, []);
 
   useEffect(() => {
     if (!signupInfo || !signupKeyword) {
       alert("잘못된 접근입니다.\n회원가입 첫 페이지로 이동합니다.");
       nav("/signup/1");
     }
-  }, []);
+  }, [signupInfo, signupKeyword, nav]);
 
   const [name, onChangeName, setName] = useInput("");
   const [student_id, onChangeStudent_id, setStudent_id] = useInput("");
@@ -67,7 +74,7 @@ const PhonePage = () => {
       setIsCert(data);
       setIsLoading(false);
     },
-    [phone]
+    [phone, isLoading]
   );
   console.log(name, student_id, phone, certification);
 
@@ -133,7 +140,7 @@ const PhonePage = () => {
                 const readyReg = await navigator.serviceWorker.ready;
                 const subscription = await readyReg.pushManager.subscribe({
                   userVisibleOnly: true,
-                  applicationServerKey: publicKeyRes, // 서버의 APPLE_WEB_PUSH_VAPID_PUBLIC_KEY (base64로 변환)
+                  applicationServerKey: urlBase64ToUint8Array(publicKeyRes),
                 });
                 const subscriptionPayload = typeof subscription.toJSON === "function" ? subscription.toJSON() : subscription;
                 await iphoneDevicePost(subscriptionPayload);
