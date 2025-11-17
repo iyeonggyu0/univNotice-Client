@@ -54,6 +54,20 @@ const EXCEL_HEADERS = [
 
 const REQUIRED_EXCEL_FIELDS = ["학교 또는 학교 ID", "URL", "목록 셀렉터", "행 셀렉터", "제목 셀렉터", "작성일 셀렉터", "작성일 포맷"];
 
+const SCHOOL_NAME_HEADERS = ["학교", "학교명", "school", "School"];
+const SCHOOL_ID_HEADERS = ["학교 ID", "학교ID", "School ID", "school_id", "SchoolId"];
+const DEPARTMENT_NAME_HEADERS = ["학과", "학과명", "department", "Department"];
+const DEPARTMENT_ID_HEADERS = ["학과 ID", "학과ID", "Department ID", "department_id", "DepartmentId"];
+
+const getCellValue = (row, headerCandidates = []) => {
+  for (const header of headerCandidates) {
+    if (Object.prototype.hasOwnProperty.call(row, header)) {
+      return trimCellValue(row[header]);
+    }
+  }
+  return "";
+};
+
 const trimCellValue = (value) => (value === undefined || value === null ? "" : String(value).trim());
 
 const SchoolCP = () => {
@@ -467,8 +481,8 @@ const SchoolCP = () => {
         const requiredHeaders = ["URL", "목록 셀렉터", "행 셀렉터", "제목 셀렉터", "작성일 셀렉터", "작성일 포맷"];
         const missingHeaders = requiredHeaders.filter((header) => !availableHeaders.includes(header));
 
-        const hasSchoolNameHeader = availableHeaders.includes("학교");
-        const hasSchoolIdHeader = availableHeaders.includes("학교 ID");
+        const hasSchoolNameHeader = SCHOOL_NAME_HEADERS.some((header) => availableHeaders.includes(header));
+        const hasSchoolIdHeader = SCHOOL_ID_HEADERS.some((header) => availableHeaders.includes(header));
         if (!hasSchoolNameHeader && !hasSchoolIdHeader) {
           missingHeaders.push("학교 또는 학교 ID");
         }
@@ -518,8 +532,8 @@ const SchoolCP = () => {
         const rowNumber = i + 2; // 1행은 헤더
 
         try {
-          const schoolNameValue = trimCellValue(row["학교"]);
-          const schoolIdValue = trimCellValue(row["학교 ID"]);
+          const schoolNameValue = getCellValue(row, SCHOOL_NAME_HEADERS);
+          const schoolIdValue = getCellValue(row, SCHOOL_ID_HEADERS);
           let school = null;
 
           if (schoolIdValue) {
@@ -554,8 +568,8 @@ const SchoolCP = () => {
             throw new Error("필수 셀렉터 값이 비어 있습니다.");
           }
 
-          const departmentName = trimCellValue(row["학과"]);
-          const departmentIdValue = trimCellValue(row["학과 ID"]);
+          const departmentName = getCellValue(row, DEPARTMENT_NAME_HEADERS);
+          const departmentIdValue = getCellValue(row, DEPARTMENT_ID_HEADERS);
           let departmentId = null;
           let resolvedDepartmentName = departmentName;
 
