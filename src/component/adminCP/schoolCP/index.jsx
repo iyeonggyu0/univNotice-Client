@@ -1,6 +1,6 @@
 import { Refresh } from "@mui/icons-material";
 import "./style.css";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import { adminUserLoad, adminUserUpdate, adminUserDelete } from "../../../api/admin/school";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -33,6 +33,26 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ToggleCP from "../../_common/toggleCP";
 import ClearIcon from "@mui/icons-material/Clear";
 import { adminCrawlingLoad } from "../../../api/admin/crawling";
+import * as XLSX from "xlsx";
+
+const EXCEL_HEADERS = [
+  "학교",
+  "학과",
+  "URL",
+  "카테고리",
+  "목록 셀렉터",
+  "행 셀렉터",
+  "제목 셀렉터",
+  "작성자 셀렉터",
+  "작성일 셀렉터",
+  "작성일 포맷",
+  "첨부파일 셀렉터",
+  "기타사항 셀렉터",
+];
+
+const REQUIRED_EXCEL_FIELDS = ["학교", "URL", "목록 셀렉터", "행 셀렉터", "제목 셀렉터", "작성일 셀렉터", "작성일 포맷"];
+
+const trimCellValue = (value) => (value === undefined || value === null ? "" : String(value).trim());
 
 const SchoolCP = () => {
   // ===== 선택된 항목 상태 =====
@@ -55,6 +75,13 @@ const SchoolCP = () => {
   const [pushLink, onChangePushLink, setPushLink] = useInput("");
   const [pushTarget, setPushTarget] = useState("all");
   const [isNotificationSending, setIsNotificationSending] = useState(false);
+  const [excelRows, setExcelRows] = useState([]);
+  const [excelFileName, setExcelFileName] = useState("");
+  const [isExcelParsing, setIsExcelParsing] = useState(false);
+  const [isExcelImporting, setIsExcelImporting] = useState(false);
+  const [excelSummary, setExcelSummary] = useState(null);
+  const excelFileInputRef = useRef(null);
+  const departmentCacheRef = useRef({});
 
   // 사용자 데이터 로드
   const loadUserData = useCallback(async () => {
@@ -188,8 +215,10 @@ const SchoolCP = () => {
     const bodyValue = pushBody.trim();
     const linkValue = pushLink.trim();
 
-    if (!titleValue) return alert("푸시 제목을 입력해주세요.");
-    if (!bodyValue) return alert("푸시 내용을 입력해주세요.");
+    if (!titleValue || !bodyValue) {
+      alert("푸시 제목과 내용을 모두 입력해주세요.");
+      return;
+    }
 
     const payload = {
       targetType: pushTarget,
@@ -202,101 +231,40 @@ const SchoolCP = () => {
     }
 
     if (pushTarget === "school") {
-      if (!selectedSchool) return alert("먼저 학교를 선택해주세요.");
+      if (!selectedSchool) {
+        alert("발송할 학교를 먼저 선택해주세요.");
+        return;
+      }
       payload.schoolId = selectedSchool.id;
     } else if (pushTarget === "department") {
-      if (!selectedSchool || !selectedDepartment) return alert("학교와 학과를 모두 선택해주세요.");
+      if (!selectedSchool || !selectedDepartment) {
+        alert("발송할 학교와 학과를 모두 선택해주세요.");
+        return;
+      }
       payload.schoolId = selectedSchool.id;
       payload.departmentId = selectedDepartment.id;
     } else if (pushTarget === "user") {
-      if (!selectedUser) return alert("발송할 사용자를 선택해주세요.");
+      if (!selectedUser) {
+        alert("발송할 사용자를 먼저 선택해주세요.");
+        return;
+      }
       payload.userIds = [selectedUser.id];
-    }
-
-    const targetLabelMap = {
-      all: "전체 사용자",
-      school: selectedSchool ? `${selectedSchool?.name ?? "학교 미선택"} 전체` : "(학교 미선택)",
-      department: selectedDepartment ? `${selectedSchool?.name ?? "학교 미선택"} / ${selectedDepartment?.name ?? "학과 미선택"}` : "(학과 미선택)",
-      user: selectedUser ? `${selectedUser.name} (${selectedUser.student_id || "학번 미상"})` : "(사용자 미선택)",
-    };
-
-    let estimatedCountLabel = "-";
-    if (pushTarget === "all") {
-      estimatedCountLabel = userList.length > 0 ? `${userList.length}명 (현재 로드된 표 기준)` : "전체 사용자 (인원 수 미집계)";
-    } else if (pushTarget === "school") {
-      estimatedCountLabel = userList.length > 0 ? `${userList.length}명` : "0명 (목록 갱신 필요)";
-    } else if (pushTarget === "department") {
-      estimatedCountLabel = userList.length > 0 ? `${userList.length}명` : "0명 (목록 갱신 필요)";
-    } else if (pushTarget === "user") {
-      estimatedCountLabel = selectedUser ? "1명" : "0명";
-    }
-
-    const confirmationPayload = {
-      대상: targetLabelMap[pushTarget] ?? "알 수 없음",
-      예상인원: estimatedCountLabel,
-      제목: titleValue,
-      내용: bodyValue,
-      링크: linkValue || "(없음)",
-    };
-
-    console.group("[Push] 발송 전 최종 확인");
-    console.table([confirmationPayload]);
-    console.groupEnd();
-
-    const confirmMessageLines = [
-      "다음 내용으로 푸시 알림을 발송할까요?",
-      "",
-      `대상: ${confirmationPayload["대상"]}`,
-      `예상 인원: ${confirmationPayload["예상인원"]}`,
-      "",
-      `제목: ${confirmationPayload["제목"]}`,
-      `내용: ${confirmationPayload["내용"]}`,
-    ];
-    if (linkValue) {
-      confirmMessageLines.push(`링크: ${confirmationPayload["링크"]}`);
-    }
-
-    if (!window.confirm(confirmMessageLines.join("\n"))) {
-      console.info("[Push] 발송이 사용자에 의해 취소되었습니다.");
-      return;
     }
 
     setIsNotificationSending(true);
     try {
       const result = await adminNotificationSend(payload);
-      if (!result || result.isAxiosError || result instanceof Error) {
-        return;
+      if (!result || result instanceof Error || result.success !== true) {
+        throw new Error("푸시 발송 요청에 실패했습니다.");
       }
 
-      if (result.success) {
-        const summary = result.summary || {};
-        const counts = summary.counts || {};
-        const androidInfo = counts.android || {};
-        const iosInfo = counts.ios || {};
-        const notes = Array.isArray(summary.notes) ? summary.notes : [];
-
-        let message = "푸시 알림 발송이 완료되었습니다.";
-        message += `\n- Android: ${androidInfo.success || 0} / ${androidInfo.targeted || 0}`;
-        message += `\n- iOS: ${iosInfo.success || 0} / ${iosInfo.targeted || 0}`;
-        if (counts.decryptFail) {
-          message += `\n- 복호화 실패: ${counts.decryptFail}`;
-        }
-        if (notes.length > 0) {
-          message += `\n\n참고 사항:\n${notes.join("\n")}`;
-        }
-
-        alert(message);
-        setPushTitle("");
-        setPushBody("");
-        setPushLink("");
-      } else if (result.error) {
-        alert(result.error);
-      } else {
-        alert("푸시 알림 발송 결과를 확인할 수 없습니다.");
-      }
+      alert("푸시 알림 발송을 요청했습니다.");
+      setPushTitle("");
+      setPushBody("");
+      setPushLink("");
     } catch (error) {
       console.error("푸시 알림 발송 오류", error);
-      alert("푸시 알림 발송 중 오류가 발생했습니다.");
+      alert(error?.message || "푸시 알림 발송 중 오류가 발생했습니다.");
     } finally {
       setIsNotificationSending(false);
     }
@@ -309,7 +277,6 @@ const SchoolCP = () => {
     selectedDepartment,
     selectedSchool,
     selectedUser,
-    userList,
     setPushBody,
     setPushLink,
     setPushTitle,
@@ -418,7 +385,9 @@ const SchoolCP = () => {
     setIsDepartmentLoading(true);
     try {
       const data = await adminSchoolDepartmentLoad(school_id);
-      setDepartmentList(Array.isArray(data) ? data : []);
+      const list = Array.isArray(data) ? data : [];
+      setDepartmentList(list);
+      departmentCacheRef.current[school_id] = list;
     } catch (error) {
       console.error("학과 데이터 로드 오류:", error);
     }
@@ -451,6 +420,172 @@ const SchoolCP = () => {
     }
     setIsCategoryLoading(false);
   }, []);
+
+  const getDepartmentsForSchool = useCallback(async (schoolId) => {
+    if (!schoolId) return [];
+    if (!departmentCacheRef.current[schoolId]) {
+      try {
+        const data = await adminSchoolDepartmentLoad(schoolId);
+        departmentCacheRef.current[schoolId] = Array.isArray(data) ? data : [];
+      } catch (error) {
+        console.error("학과 캐시 로드 오류:", error);
+        departmentCacheRef.current[schoolId] = [];
+      }
+    }
+    return departmentCacheRef.current[schoolId];
+  }, []);
+
+  const handleExcelUploadClick = useCallback(() => {
+    if (isExcelParsing || isExcelImporting) {
+      alert("엑셀 파일 처리가 진행 중입니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+    setExcelSummary(null);
+    excelFileInputRef.current?.click();
+  }, [isExcelImporting, isExcelParsing]);
+
+  const handleExcelFileChange = useCallback(
+    async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      setIsExcelParsing(true);
+      try {
+        const buffer = await file.arrayBuffer();
+        const workbook = XLSX.read(buffer, { type: "array" });
+        const firstSheetName = workbook.SheetNames?.[0];
+        if (!firstSheetName) {
+          throw new Error("시트를 찾을 수 없습니다.");
+        }
+        const worksheet = workbook.Sheets[firstSheetName];
+        const rows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+        if (!rows.length) {
+          throw new Error("데이터가 비어 있습니다.");
+        }
+        const availableHeaders = Object.keys(rows[0]);
+        const missingHeaders = REQUIRED_EXCEL_FIELDS.filter((header) => !availableHeaders.includes(header));
+        if (missingHeaders.length > 0) {
+          throw new Error(`필수 컬럼이 없습니다: ${missingHeaders.join(", ")}`);
+        }
+
+        setExcelRows(rows);
+        setExcelFileName(file.name);
+        setExcelSummary(null);
+        alert(`${file.name} 파일에서 ${rows.length}건을 불러왔습니다.`);
+      } catch (error) {
+        console.error("엑셀 파싱 오류", error);
+        alert(error?.message || "엑셀 파일을 읽는 중 오류가 발생했습니다.");
+        setExcelRows([]);
+        setExcelFileName("");
+        setExcelSummary(null);
+      } finally {
+        setIsExcelParsing(false);
+        event.target.value = "";
+      }
+    },
+    [setExcelFileName, setExcelRows]
+  );
+
+  const handleExcelImport = useCallback(async () => {
+    if (isExcelParsing || isExcelImporting) {
+      alert("엑셀 파일 처리가 진행 중입니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+    if (!excelRows.length) {
+      alert("먼저 엑셀 파일을 업로드해주세요.");
+      return;
+    }
+    if (!schoolList.length) {
+      alert("학교 목록을 불러온 뒤 다시 시도해주세요.");
+      return;
+    }
+
+    setIsExcelImporting(true);
+    const successes = [];
+    const failures = [];
+
+    try {
+      for (let i = 0; i < excelRows.length; i += 1) {
+        const row = excelRows[i];
+        const rowNumber = i + 2; // 1행은 헤더
+
+        try {
+          const schoolName = trimCellValue(row["학교"]);
+          if (!schoolName) throw new Error("학교 값이 비어 있습니다.");
+
+          const school = schoolList.find((item) => item.name === schoolName);
+          if (!school) throw new Error(`학교(${schoolName})를 찾을 수 없습니다.`);
+
+          const urlValue = trimCellValue(row.URL || row.Url || row.url);
+          if (!urlValue) throw new Error("URL 값이 비어 있습니다.");
+
+          const listSelectorValue = trimCellValue(row["목록 셀렉터"]);
+          const rowSelectorValue = trimCellValue(row["행 셀렉터"]);
+          const titleSelectorValue = trimCellValue(row["제목 셀렉터"]);
+          const dateSelectorValue = trimCellValue(row["작성일 셀렉터"]);
+          const dateFormatValue = trimCellValue(row["작성일 포맷"]);
+
+          if (!listSelectorValue || !rowSelectorValue || !titleSelectorValue || !dateSelectorValue || !dateFormatValue) {
+            throw new Error("필수 셀렉터 값이 비어 있습니다.");
+          }
+
+          const departmentName = trimCellValue(row["학과"]);
+          let departmentId = null;
+          let resolvedDepartmentName = departmentName;
+
+          if (departmentName) {
+            const departments = await getDepartmentsForSchool(school.id);
+            const department = departments.find((item) => item.name === departmentName);
+            if (!department) {
+              throw new Error(`학교(${schoolName})에서 학과(${departmentName})를 찾을 수 없습니다.`);
+            }
+            departmentId = department.id;
+            resolvedDepartmentName = department.name;
+          }
+
+          const payload = {
+            school_id: school.id,
+            department_id: departmentId,
+            url: urlValue,
+            category: trimCellValue(row["카테고리"]) || resolvedDepartmentName || `${schoolName} 공지`,
+            list_selector: listSelectorValue,
+            row_selector: rowSelectorValue,
+            title_selector: titleSelectorValue,
+            author_selector: trimCellValue(row["작성자 셀렉터"]),
+            date_selector: dateSelectorValue,
+            date_format: dateFormatValue,
+            attachment_selector: trimCellValue(row["첨부파일 셀렉터"]),
+            other_selector: trimCellValue(row["기타사항 셀렉터"]),
+            is_active: true,
+          };
+
+          const result = await adminCategoryAdd(payload);
+          if (!result || result instanceof Error) {
+            throw new Error("카테고리 등록에 실패했습니다.");
+          }
+
+          successes.push({ rowNumber, schoolName, departmentName: resolvedDepartmentName, url: urlValue });
+        } catch (error) {
+          failures.push({ rowNumber, message: error?.message || "알 수 없는 오류" });
+        }
+      }
+
+      setExcelSummary({ total: excelRows.length, successes, failures });
+      if (selectedSchool) {
+        await loadCategoryData(selectedSchool.id, selectedDepartment?.id);
+      }
+
+      if (failures.length > 0) {
+        alert(`엑셀 처리 완료: 성공 ${successes.length}건 / 실패 ${failures.length}건`);
+      } else {
+        alert(`엑셀 처리 완료: ${successes.length}건 등록 성공`);
+      }
+    } catch (error) {
+      console.error("엑셀 등록 오류", error);
+      alert(error?.message || "엑셀 데이터를 등록하는 중 오류가 발생했습니다.");
+    } finally {
+      setIsExcelImporting(false);
+    }
+  }, [excelRows, getDepartmentsForSchool, isExcelImporting, isExcelParsing, loadCategoryData, schoolList, selectedDepartment, selectedSchool]);
 
   // ===== 데이터 로드 Effect =====
   useEffect(() => {
@@ -1317,6 +1452,55 @@ const SchoolCP = () => {
                 <div style={{ height: "60px", flex: 1 }} onClick={handleTestCrawling}>
                   <ButtonCP height="3.625rem">크롤링 테스트</ButtonCP>
                 </div>
+              </div>
+            )}
+          </div>
+
+          <div style={{ marginTop: "2rem", padding: "1.5rem", border: "1px solid var(--line-color)", borderRadius: "12px" }}>
+            <h4 style={{ marginBottom: "0.75rem" }}>엑셀 일괄 등록</h4>
+            <p style={{ marginBottom: "0.75rem", color: "var(--gray-600)", lineHeight: 1.5 }}>
+              엑셀 파일의 각 행을 학과 카테고리로 등록합니다. 학교명, URL, 필수 셀렉터 값이 모두 포함되어야 하며 학과명이 있는 경우 해당 학교에 존재해야 합니다.
+            </p>
+            <input type="file" accept=".xlsx,.xls" ref={excelFileInputRef} style={{ display: "none" }} onChange={handleExcelFileChange} />
+            <div className="flexBetween" style={{ gap: "1rem", marginBottom: "0.75rem" }}>
+              <div style={{ height: "60px", flex: 1 }} onClick={handleExcelUploadClick}>
+                <ButtonCP activate={!isExcelParsing && !isExcelImporting} height="3.625rem">
+                  {isExcelParsing ? "파일 분석 중..." : "엑셀 파일 선택"}
+                </ButtonCP>
+              </div>
+              <div style={{ height: "60px", flex: 1 }} onClick={handleExcelImport}>
+                <ButtonCP activate={excelRows.length > 0 && !isExcelParsing && !isExcelImporting} height="3.625rem">
+                  {isExcelImporting ? "등록 중..." : `엑셀 데이터 등록${excelRows.length ? ` (${excelRows.length}건)` : ""}`}
+                </ButtonCP>
+              </div>
+            </div>
+            <div style={{ marginBottom: "0.5rem", fontSize: "0.95rem" }}>
+              <strong>선택된 파일:</strong> {excelFileName ? `${excelFileName} (${excelRows.length}건)` : "없음"}
+            </div>
+            <div style={{ marginBottom: "0.5rem", fontSize: "0.9rem", color: "var(--gray-600)" }}>
+              <strong>필수 컬럼:</strong> {REQUIRED_EXCEL_FIELDS.join(", ")}
+            </div>
+            <div style={{ marginBottom: "0.75rem", fontSize: "0.9rem", color: "var(--gray-600)" }}>
+              <strong>지원 컬럼:</strong> {EXCEL_HEADERS.join(", ")}
+            </div>
+            {excelSummary && (
+              <div style={{ background: "var(--black-50)", borderRadius: "10px", padding: "1rem" }}>
+                <strong style={{ display: "block", marginBottom: "0.5rem" }}>최근 등록 결과</strong>
+                <p style={{ marginBottom: "0.5rem", fontSize: "0.95rem" }}>
+                  총 {excelSummary.total}건 중 성공 {excelSummary.successes.length}건 / 실패 {excelSummary.failures.length}건
+                </p>
+                {excelSummary.failures.length > 0 && (
+                  <div>
+                    <p style={{ fontSize: "0.85rem", color: "var(--danger-color)", marginBottom: "0.25rem" }}>실패 행 (최대 5건 표시)</p>
+                    <ul style={{ margin: 0, paddingLeft: "1.25rem", fontSize: "0.85rem" }}>
+                      {excelSummary.failures.slice(0, 5).map((item) => (
+                        <li key={`excel-fail-${item.rowNumber}`}>
+                          {item.rowNumber}행 - {item.message}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
           </div>
