@@ -35,7 +35,7 @@ const LoginPage = () => {
       }
     }
     fetchLoginCheck();
-  }, []);
+  }, [nav]);
 
   const [student_id, onChangeStudent_id, setStudent_id] = useInput("");
   const [phone, onChangePhone, setPhone] = useInput("");
@@ -94,7 +94,8 @@ const LoginPage = () => {
               userVisibleOnly: true,
               applicationServerKey: publicKeyRes,
             });
-            await iphoneDevicePost(subscription);
+            const subscriptionPayload = typeof subscription.toJSON === "function" ? subscription.toJSON() : subscription;
+            await iphoneDevicePost(subscriptionPayload);
           }
           return nav("/");
         } catch (err) {
@@ -131,7 +132,7 @@ const LoginPage = () => {
                     .then(() => {
                       return setCertification_code("");
                     })
-                    .catch((err) => {
+                    .catch(() => {
                       return setCertification_code("");
                     });
                 }

@@ -135,7 +135,8 @@ const PhonePage = () => {
                   userVisibleOnly: true,
                   applicationServerKey: publicKeyRes, // 서버의 APPLE_WEB_PUSH_VAPID_PUBLIC_KEY (base64로 변환)
                 });
-                await iphoneDevicePost(subscription);
+                const subscriptionPayload = typeof subscription.toJSON === "function" ? subscription.toJSON() : subscription;
+                await iphoneDevicePost(subscriptionPayload);
               }
               return nav("/signup/8");
             } catch (err) {
@@ -167,7 +168,23 @@ const PhonePage = () => {
         alert("회원가입에 실패했습니다.\n잠시 후 다시 시도해주세요.");
       }
     },
-    [name, student_id, phone, certification, signupInfo, isIos, isHomeApp, signupKeyword, nav, setName, setStudent_id, setPhone, setCertification]
+    [
+      name,
+      student_id,
+      phone,
+      certification,
+      signupInfo,
+      isIos,
+      isHomeApp,
+      signupKeyword,
+      nav,
+      setName,
+      setStudent_id,
+      setPhone,
+      setCertification,
+      isApp,
+      isPhone,
+    ]
   );
 
   return (
