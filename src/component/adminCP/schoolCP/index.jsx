@@ -59,6 +59,43 @@ const DEPARTMENT_ID_HEADERS = ["학과 ID", "학과ID", "Department ID", "depart
 
 const REQUIRED_EXCEL_FIELDS = ["학교 또는 학교 ID", "URL", "목록 셀렉터", "행 셀렉터", "제목 셀렉터", "작성일 셀렉터", "작성일 포맷"];
 
+const URL_HEADERS = ["URL", "Url", "url"];
+const CATEGORY_HEADERS = ["카테고리", "카테고리명", "Category", "category"];
+const LIST_SELECTOR_HEADERS = ["목록 셀렉터", "목록셀렉터", "List Selector", "list selector"];
+const ROW_SELECTOR_HEADERS = ["행 셀렉터", "행셀렉터", "Row Selector", "row selector"];
+const TITLE_SELECTOR_HEADERS = ["제목 셀렉터", "제목셀렉터", "Title Selector", "title selector"];
+const AUTHOR_SELECTOR_HEADERS = ["작성자 셀렉터", "작성자셀렉터", "Author Selector", "author selector"];
+const DATE_SELECTOR_HEADERS = ["작성일 셀렉터", "작성일셀렉터", "Date Selector", "date selector"];
+const DATE_FORMAT_HEADERS = ["작성일 포맷", "작성일포맷", "Date Format", "date format"];
+const ATTACHMENT_SELECTOR_HEADERS = ["첨부파일 셀렉터", "첨부파일셀렉터", "Attachment Selector", "attachment selector"];
+const OTHER_SELECTOR_HEADERS = ["기타사항 셀렉터", "기타 셀렉터", "Other Selector", "other selector"];
+
+const REQUIRED_HEADER_GROUPS = [
+  { label: "URL", headers: URL_HEADERS },
+  { label: "목록 셀렉터", headers: LIST_SELECTOR_HEADERS },
+  { label: "행 셀렉터", headers: ROW_SELECTOR_HEADERS },
+  { label: "제목 셀렉터", headers: TITLE_SELECTOR_HEADERS },
+  { label: "작성일 셀렉터", headers: DATE_SELECTOR_HEADERS },
+  { label: "작성일 포맷", headers: DATE_FORMAT_HEADERS },
+];
+
+const JSON_SAMPLE_TEMPLATE = `[
+  {
+    "School ID": 0,
+    "Department ID": 0,
+    "URL": "https://...",
+    "Category": "기타공지",
+    "List Selector": "tbody",
+    "Row Selector": "tr",
+    "Title Selector": "td.tal > a",
+    "Author Selector": "",
+    "Date Selector": "td:last-child",
+    "Date Format": "YYYY-MM-DD",
+    "Attachment Selector": "td.file img, td.file a",
+    "Other Selector": "td.tal a span.txtBox01"
+  }
+]`;
+
 const trimCellValue = (value) => (value === undefined || value === null ? "" : String(value).trim());
 const getCellValue = (row, headerCandidates) => {
   for (const header of headerCandidates) {
@@ -95,6 +132,9 @@ const SchoolCP = () => {
   const [isExcelParsing, setIsExcelParsing] = useState(false);
   const [isExcelImporting, setIsExcelImporting] = useState(false);
   const [excelSummary, setExcelSummary] = useState(null);
+  const [jsonInput, setJsonInput] = useState(JSON_SAMPLE_TEMPLATE);
+  const [isJsonImporting, setIsJsonImporting] = useState(false);
+  const [jsonSummary, setJsonSummary] = useState(null);
   const excelFileInputRef = useRef(null);
   const departmentCacheRef = useRef({});
 
@@ -477,8 +517,9 @@ const SchoolCP = () => {
           throw new Error("데이터가 비어 있습니다.");
         }
         const availableHeaders = Object.keys(rows[0]);
-        const requiredHeaders = ["URL", "목록 셀렉터", "행 셀렉터", "제목 셀렉터", "작성일 셀렉터", "작성일 포맷"];
-        const missingHeaders = requiredHeaders.filter((header) => !availableHeaders.includes(header));
+        const missingHeaders = REQUIRED_HEADER_GROUPS.filter((group) => !group.headers.some((header) => availableHeaders.includes(header))).map(
+          (group) => group.label
+        );
 
         const hasSchoolNameHeader = SCHOOL_NAME_HEADERS.some((header) => availableHeaders.includes(header));
         const hasSchoolIdHeader = SCHOOL_ID_HEADERS.some((header) => availableHeaders.includes(header));
@@ -507,6 +548,114 @@ const SchoolCP = () => {
     [setExcelFileName, setExcelRows]
   );
 
+  const buildCategoryPayload = useCallback(
+    async (row) => {
+      const schoolNameValue = getCellValue(row, SCHOOL_NAME_HEADERS);
+      const schoolIdValue = getCellValue(row, SCHOOL_ID_HEADERS);
+      let schoolId = null;
+      let resolvedSchoolName = schoolNameValue;
+
+      if (schoolIdValue) {
+        const parsedId = Number(schoolIdValue);
+        if (Number.isNaN(parsedId)) {
+          throw new Error(`학교 ID(${schoolIdValue})는 숫자여야 합니다.`);
+        }
+        schoolId = parsedId;
+        if (!resolvedSchoolName) {
+          const cachedSchool = schoolList.find((item) => item.id === parsedId);
+          resolvedSchoolName = cachedSchool?.name || `ID ${parsedId}`;
+        }
+      } else if (schoolNameValue) {
+        const parsedId = Number(schoolNameValue);
+        if (!Number.isNaN(parsedId)) {
+          schoolId = parsedId;
+          const cachedSchool = schoolList.find((item) => item.id === parsedId);
+          resolvedSchoolName = cachedSchool?.name || `ID ${parsedId}`;
+        } else {
+          const school = schoolList.find((item) => item.name === schoolNameValue);
+          if (!school) {
+            throw new Error(`학교(${schoolNameValue})를 찾을 수 없습니다.`);
+          }
+          schoolId = school.id;
+          resolvedSchoolName = school.name;
+        }
+      } else {
+        throw new Error("학교 또는 학교 ID 값이 비어 있습니다.");
+      }
+
+      const urlValue = getCellValue(row, URL_HEADERS);
+      if (!urlValue) throw new Error("URL 값이 비어 있습니다.");
+
+      const listSelectorValue = getCellValue(row, LIST_SELECTOR_HEADERS);
+      const rowSelectorValue = getCellValue(row, ROW_SELECTOR_HEADERS);
+      const titleSelectorValue = getCellValue(row, TITLE_SELECTOR_HEADERS);
+      const dateSelectorValue = getCellValue(row, DATE_SELECTOR_HEADERS);
+      const dateFormatValue = getCellValue(row, DATE_FORMAT_HEADERS);
+
+      if (!listSelectorValue || !rowSelectorValue || !titleSelectorValue || !dateSelectorValue || !dateFormatValue) {
+        throw new Error("필수 셀렉터 값이 비어 있습니다.");
+      }
+
+      const departmentName = getCellValue(row, DEPARTMENT_NAME_HEADERS);
+      const departmentIdValue = getCellValue(row, DEPARTMENT_ID_HEADERS);
+      let departmentId = null;
+      let resolvedDepartmentName = departmentName;
+
+      if (departmentIdValue) {
+        const parsedDeptId = Number(departmentIdValue);
+        if (Number.isNaN(parsedDeptId)) {
+          throw new Error(`학과 ID(${departmentIdValue})는 숫자여야 합니다.`);
+        }
+        departmentId = parsedDeptId;
+        if (!resolvedDepartmentName) {
+          const departments = await getDepartmentsForSchool(schoolId);
+          const department = departments.find((item) => item.id === parsedDeptId);
+          resolvedDepartmentName = department?.name || `ID ${parsedDeptId}`;
+        }
+      } else if (departmentName) {
+        const parsedDeptId = Number(departmentName);
+        if (!Number.isNaN(parsedDeptId)) {
+          departmentId = parsedDeptId;
+          const departments = await getDepartmentsForSchool(schoolId);
+          const department = departments.find((item) => item.id === parsedDeptId);
+          resolvedDepartmentName = department?.name || `ID ${parsedDeptId}`;
+        } else {
+          const departments = await getDepartmentsForSchool(schoolId);
+          const department = departments.find((item) => item.name === departmentName);
+          if (!department) {
+            throw new Error(`학교(${resolvedSchoolName})에서 학과(${departmentName})를 찾을 수 없습니다.`);
+          }
+          departmentId = department.id;
+          resolvedDepartmentName = department.name;
+        }
+      }
+
+      const payload = {
+        school_id: schoolId,
+        department_id: departmentId,
+        url: urlValue,
+        category: getCellValue(row, CATEGORY_HEADERS) || resolvedDepartmentName || (resolvedSchoolName ? `${resolvedSchoolName} 공지` : "학교 공지"),
+        list_selector: listSelectorValue,
+        row_selector: rowSelectorValue,
+        title_selector: titleSelectorValue,
+        author_selector: getCellValue(row, AUTHOR_SELECTOR_HEADERS),
+        date_selector: dateSelectorValue,
+        date_format: dateFormatValue,
+        attachment_selector: getCellValue(row, ATTACHMENT_SELECTOR_HEADERS),
+        other_selector: getCellValue(row, OTHER_SELECTOR_HEADERS),
+        is_active: true,
+      };
+
+      return {
+        payload,
+        resolvedSchoolName: resolvedSchoolName || `ID ${schoolId}`,
+        resolvedDepartmentName,
+        url: urlValue,
+      };
+    },
+    [getDepartmentsForSchool, schoolList]
+  );
+
   const handleExcelImport = useCallback(async () => {
     if (isExcelParsing || isExcelImporting) {
       alert("엑셀 파일 처리가 진행 중입니다. 잠시 후 다시 시도해주세요.");
@@ -526,108 +675,14 @@ const SchoolCP = () => {
         const rowNumber = i + 2; // 1행은 헤더
 
         try {
-          const schoolNameValue = getCellValue(row, SCHOOL_NAME_HEADERS);
-          const schoolIdValue = getCellValue(row, SCHOOL_ID_HEADERS);
-          let schoolId = null;
-          let resolvedSchoolName = schoolNameValue;
-
-          if (schoolIdValue) {
-            const parsedId = Number(schoolIdValue);
-            if (Number.isNaN(parsedId)) {
-              throw new Error(`학교 ID(${schoolIdValue})는 숫자여야 합니다.`);
-            }
-            schoolId = parsedId;
-            if (!resolvedSchoolName) {
-              const cachedSchool = schoolList.find((item) => item.id === parsedId);
-              resolvedSchoolName = cachedSchool?.name || `ID ${parsedId}`;
-            }
-          } else if (schoolNameValue) {
-            const parsedId = Number(schoolNameValue);
-            if (!Number.isNaN(parsedId)) {
-              schoolId = parsedId;
-              const cachedSchool = schoolList.find((item) => item.id === parsedId);
-              resolvedSchoolName = cachedSchool?.name || `ID ${parsedId}`;
-            } else {
-              const school = schoolList.find((item) => item.name === schoolNameValue);
-              if (!school) {
-                throw new Error(`학교(${schoolNameValue})를 찾을 수 없습니다.`);
-              }
-              schoolId = school.id;
-              resolvedSchoolName = school.name;
-            }
-          } else {
-            throw new Error("학교 또는 학교 ID 값이 비어 있습니다.");
-          }
-
-          const urlValue = trimCellValue(row.URL || row.Url || row.url);
-          if (!urlValue) throw new Error("URL 값이 비어 있습니다.");
-
-          const listSelectorValue = trimCellValue(row["목록 셀렉터"]);
-          const rowSelectorValue = trimCellValue(row["행 셀렉터"]);
-          const titleSelectorValue = trimCellValue(row["제목 셀렉터"]);
-          const dateSelectorValue = trimCellValue(row["작성일 셀렉터"]);
-          const dateFormatValue = trimCellValue(row["작성일 포맷"]);
-
-          if (!listSelectorValue || !rowSelectorValue || !titleSelectorValue || !dateSelectorValue || !dateFormatValue) {
-            throw new Error("필수 셀렉터 값이 비어 있습니다.");
-          }
-
-          const departmentName = getCellValue(row, DEPARTMENT_NAME_HEADERS);
-          const departmentIdValue = getCellValue(row, DEPARTMENT_ID_HEADERS);
-          let departmentId = null;
-          let resolvedDepartmentName = departmentName;
-
-          if (departmentIdValue) {
-            const parsedDeptId = Number(departmentIdValue);
-            if (Number.isNaN(parsedDeptId)) {
-              throw new Error(`학과 ID(${departmentIdValue})는 숫자여야 합니다.`);
-            }
-            departmentId = parsedDeptId;
-            if (!resolvedDepartmentName) {
-              const departments = await getDepartmentsForSchool(schoolId);
-              const department = departments.find((item) => item.id === parsedDeptId);
-              resolvedDepartmentName = department?.name || `ID ${parsedDeptId}`;
-            }
-          } else if (departmentName) {
-            const parsedDeptId = Number(departmentName);
-            if (!Number.isNaN(parsedDeptId)) {
-              departmentId = parsedDeptId;
-              const departments = await getDepartmentsForSchool(schoolId);
-              const department = departments.find((item) => item.id === parsedDeptId);
-              resolvedDepartmentName = department?.name || `ID ${parsedDeptId}`;
-            } else {
-              const departments = await getDepartmentsForSchool(schoolId);
-              const department = departments.find((item) => item.name === departmentName);
-              if (!department) {
-                throw new Error(`학교(${resolvedSchoolName})에서 학과(${departmentName})를 찾을 수 없습니다.`);
-              }
-              departmentId = department.id;
-              resolvedDepartmentName = department.name;
-            }
-          }
-
-          const payload = {
-            school_id: schoolId,
-            department_id: departmentId,
-            url: urlValue,
-            category: trimCellValue(row["카테고리"]) || resolvedDepartmentName || (resolvedSchoolName ? `${resolvedSchoolName} 공지` : "학교 공지"),
-            list_selector: listSelectorValue,
-            row_selector: rowSelectorValue,
-            title_selector: titleSelectorValue,
-            author_selector: trimCellValue(row["작성자 셀렉터"]),
-            date_selector: dateSelectorValue,
-            date_format: dateFormatValue,
-            attachment_selector: trimCellValue(row["첨부파일 셀렉터"]),
-            other_selector: trimCellValue(row["기타사항 셀렉터"]),
-            is_active: true,
-          };
+          const { payload, resolvedSchoolName, resolvedDepartmentName, url } = await buildCategoryPayload(row);
 
           const result = await adminCategoryAdd(payload);
           if (!result || result instanceof Error) {
             throw new Error("카테고리 등록에 실패했습니다.");
           }
 
-          successes.push({ rowNumber, schoolName: resolvedSchoolName || `ID ${schoolId}`, departmentName: resolvedDepartmentName, url: urlValue });
+          successes.push({ rowNumber, schoolName: resolvedSchoolName, departmentName: resolvedDepartmentName, url });
         } catch (error) {
           failures.push({ rowNumber, message: error?.message || "알 수 없는 오류" });
         }
@@ -649,7 +704,95 @@ const SchoolCP = () => {
     } finally {
       setIsExcelImporting(false);
     }
-  }, [excelRows, getDepartmentsForSchool, isExcelImporting, isExcelParsing, loadCategoryData, schoolList, selectedDepartment, selectedSchool]);
+  }, [buildCategoryPayload, excelRows, isExcelImporting, isExcelParsing, loadCategoryData, selectedDepartment, selectedSchool]);
+
+  const handleJsonSampleInsert = useCallback(() => {
+    setJsonInput(JSON_SAMPLE_TEMPLATE);
+  }, [setJsonInput]);
+
+  const handleJsonFormat = useCallback(() => {
+    if (!jsonInput.trim()) {
+      alert("JSON 내용을 입력해주세요.");
+      return;
+    }
+    try {
+      const parsed = JSON.parse(jsonInput);
+      setJsonInput(JSON.stringify(parsed, null, 2));
+      alert("JSON을 포맷팅했습니다.");
+    } catch (error) {
+      console.error("JSON 포맷팅 오류", error);
+      alert("유효한 JSON 형식이 아닙니다.");
+    }
+  }, [jsonInput, setJsonInput]);
+
+  const handleJsonImport = useCallback(async () => {
+    if (isJsonImporting) {
+      alert("JSON 데이터 처리가 진행 중입니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+    if (!jsonInput.trim()) {
+      alert("JSON 데이터를 먼저 입력해주세요.");
+      return;
+    }
+
+    let parsedRows;
+    try {
+      parsedRows = JSON.parse(jsonInput);
+    } catch (error) {
+      console.error("JSON 파싱 오류", error);
+      alert("JSON 형식이 잘못되었습니다. 배열 형태로 입력해주세요.");
+      return;
+    }
+
+    if (!Array.isArray(parsedRows) || parsedRows.length === 0) {
+      alert("최소 1개 이상의 객체가 포함된 JSON 배열을 입력해주세요.");
+      return;
+    }
+
+    setIsJsonImporting(true);
+    setJsonSummary(null);
+    const successes = [];
+    const failures = [];
+
+    try {
+      for (let i = 0; i < parsedRows.length; i += 1) {
+        const row = parsedRows[i];
+        const rowNumber = i + 1;
+
+        if (!row || typeof row !== "object") {
+          failures.push({ rowNumber, message: "각 항목은 객체 형태여야 합니다." });
+          continue;
+        }
+
+        try {
+          const { payload, resolvedSchoolName, resolvedDepartmentName, url } = await buildCategoryPayload(row);
+          const result = await adminCategoryAdd(payload);
+          if (!result || result instanceof Error) {
+            throw new Error("카테고리 등록에 실패했습니다.");
+          }
+          successes.push({ rowNumber, schoolName: resolvedSchoolName, departmentName: resolvedDepartmentName, url });
+        } catch (error) {
+          failures.push({ rowNumber, message: error?.message || "알 수 없는 오류" });
+        }
+      }
+
+      setJsonSummary({ total: parsedRows.length, successes, failures });
+      if (selectedSchool) {
+        await loadCategoryData(selectedSchool.id, selectedDepartment?.id);
+      }
+
+      if (failures.length > 0) {
+        alert(`JSON 처리 완료: 성공 ${successes.length}건 / 실패 ${failures.length}건`);
+      } else {
+        alert(`JSON 처리 완료: ${successes.length}건 등록 성공`);
+      }
+    } catch (error) {
+      console.error("JSON 등록 오류", error);
+      alert(error?.message || "JSON 데이터를 등록하는 중 오류가 발생했습니다.");
+    } finally {
+      setIsJsonImporting(false);
+    }
+  }, [buildCategoryPayload, jsonInput, isJsonImporting, loadCategoryData, selectedDepartment, selectedSchool]);
 
   // ===== 데이터 로드 Effect =====
   useEffect(() => {
@@ -1560,6 +1703,66 @@ const SchoolCP = () => {
                       {excelSummary.failures.slice(0, 5).map((item) => (
                         <li key={`excel-fail-${item.rowNumber}`}>
                           {item.rowNumber}행 - {item.message}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div style={{ marginTop: "1.5rem", padding: "1.5rem", border: "1px solid var(--line-color)", borderRadius: "12px" }}>
+            <h4 style={{ marginBottom: "0.75rem" }}>JSON 일괄 등록</h4>
+            <p style={{ marginBottom: "0.75rem", color: "var(--gray-600)", lineHeight: 1.5 }}>
+              JSON 배열을 그대로 붙여넣어 카테고리를 빠르게 등록할 수 있습니다. 아래 샘플과 동일하게 <code>School ID</code>, <code>URL</code>, 필수 셀렉터
+              필드를 포함해주세요.
+            </p>
+            <textarea
+              style={{
+                width: "100%",
+                minHeight: "220px",
+                borderRadius: "10px",
+                padding: "1rem",
+                border: "1px solid var(--line-color)",
+                fontFamily: "monospace",
+              }}
+              value={jsonInput}
+              onChange={(e) => setJsonInput(e.target.value)}
+              placeholder={JSON_SAMPLE_TEMPLATE}
+            />
+            <div className="flexBetween" style={{ gap: "1rem", margin: "0.75rem 0" }}>
+              <div style={{ height: "60px", flex: 1 }} onClick={handleJsonSampleInsert}>
+                <ButtonCP height="3.625rem">샘플 불러오기</ButtonCP>
+              </div>
+              <div style={{ height: "60px", flex: 1 }} onClick={handleJsonFormat}>
+                <ButtonCP height="3.625rem">JSON 포맷팅</ButtonCP>
+              </div>
+              <div style={{ height: "60px", flex: 1 }} onClick={handleJsonImport}>
+                <ButtonCP activate={!isJsonImporting} height="3.625rem">
+                  {isJsonImporting ? "등록 중..." : "JSON 데이터 등록"}
+                </ButtonCP>
+              </div>
+            </div>
+            <div style={{ marginBottom: "0.5rem", fontSize: "0.9rem", color: "var(--gray-600)" }}>
+              <strong>필수 키:</strong> School ID, URL, List Selector, Row Selector, Title Selector, Date Selector, Date Format
+            </div>
+            <div style={{ marginBottom: "0.75rem", fontSize: "0.9rem", color: "var(--gray-600)" }}>
+              <strong>선택 키:</strong> Department ID, Category, Author Selector, Attachment Selector, Other Selector
+            </div>
+            {jsonSummary && (
+              <div style={{ background: "var(--black-50)", borderRadius: "10px", padding: "1rem" }}>
+                <strong style={{ display: "block", marginBottom: "0.5rem" }}>최근 JSON 등록 결과</strong>
+                <p style={{ marginBottom: "0.5rem", fontSize: "0.95rem" }}>
+                  총 {jsonSummary.total}건 중 성공 {jsonSummary.successes.length}건 / 실패 {jsonSummary.failures.length}건
+                </p>
+                {jsonSummary.failures.length > 0 && (
+                  <div>
+                    <p style={{ fontSize: "0.85rem", color: "var(--danger-color)", marginBottom: "0.25rem" }}>실패 항목 (최대 5건 표시)</p>
+                    <ul style={{ margin: 0, paddingLeft: "1.25rem", fontSize: "0.85rem" }}>
+                      {jsonSummary.failures.slice(0, 5).map((item) => (
+                        <li key={`json-fail-${item.rowNumber}`}>
+                          항목 {item.rowNumber} - {item.message}
                         </li>
                       ))}
                     </ul>
