@@ -12,6 +12,7 @@ const MyPageHeader = () => {
   const isPc = useMedia().isPc;
   const nav = useNavigate();
   const location = useLocation();
+  const { isIos, isHomeApp } = useWeb();
 
   // 현재 경로가 /mypage/info인지 확인
   const myPageType = location.pathname;
@@ -32,11 +33,11 @@ const MyPageHeader = () => {
       <LogoCP />
       <div className="MyPageHeader-content flexBetween">
         {!isPc && myPageType !== "/mypage/info" && <p onClick={() => nav("/mypage/info")}>내 정보</p>}
-        {!isPc && myPageType !== "/mypage/device" && <p onClick={() => nav("/mypage/device")}>기기 관리</p>}
+        {!isIos && !isHomeApp && !isPc && myPageType !== "/mypage/device" && <p onClick={() => nav("/mypage/device")}>기기 관리</p>}
         {!isPc && myPageType !== "/mypage/setting" && <p onClick={() => nav("/mypage/setting")}>공지 설정</p>}
 
         {isPc && <p onClick={() => nav("/mypage/info")}>내 정보</p>}
-        {isPc && <p onClick={() => nav("/mypage/device")}>기기 관리</p>}
+        {!isIos && !isHomeApp && isPc && <p onClick={() => nav("/mypage/device")}>기기 관리</p>}
         {isPc && <p onClick={() => nav("/mypage/setting")}>공지 설정</p>}
       </div>
     </header>
