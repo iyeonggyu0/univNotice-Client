@@ -38,7 +38,7 @@ const PhoneSelectPage = () => {
             <div
               className="phonePage-button"
               onClick={() => {
-                if (isIos && !isHomeApp) return nav("/home-app");
+                if (!isHomeApp) return nav("/home-app");
                 localStorage.setItem("phoneType", "iphone");
                 return nav("/signup/2");
               }}>
