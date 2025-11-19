@@ -20,6 +20,11 @@ const NoticePage = () => {
 
   const isPc = useMedia().isPc;
   const isApp = useWeb().isApp;
+  const now = new Date();
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+
+  const isSameDay = (a, b) => a.getDate() === b.getDate() && a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear();
 
   // 초기 데이터 로드
   useEffect(() => {
@@ -42,7 +47,7 @@ const NoticePage = () => {
       }
     }
     fetchLoginCheck();
-  }, []);
+  }, [nav]);
 
   // alarmOnly/paging/noticeData 변경 시 목록 재계산
   useEffect(() => {
@@ -80,23 +85,35 @@ const NoticePage = () => {
             </div>
             <div className="noticeNav">
               {noticeData.map((data, index) => {
-                // 어제~오늘 공지 포함 여부 계산
+                // 어제/오늘 공지 유무 + 알림 발송 여부 계산
                 let hasRecent = false;
+                let hasRecentAlarm = false;
+
                 if (Array.isArray(data.Notices)) {
-                  const now = new Date();
-                  const yesterday = new Date(now);
-                  yesterday.setDate(now.getDate() - 1);
-                  hasRecent = data.Notices.some((notice) => {
-                    if (!notice.published_at) return false;
+                  for (const notice of data.Notices) {
+                    if (!notice.published_at) continue;
                     const pubDate = new Date(notice.published_at);
-                    const isToday = pubDate.getDate() === now.getDate() && pubDate.getMonth() === now.getMonth() && pubDate.getFullYear() === now.getFullYear();
-                    const isYesterday =
-                      pubDate.getDate() === yesterday.getDate() &&
-                      pubDate.getMonth() === yesterday.getMonth() &&
-                      pubDate.getFullYear() === yesterday.getFullYear();
-                    return isToday || isYesterday;
-                  });
+                    const isRecent = isSameDay(pubDate, now) || isSameDay(pubDate, yesterday);
+
+                    if (!isRecent) continue;
+                    hasRecent = true;
+
+                    if ((notice.NoticeKeywordMatches?.length || 0) > 0) {
+                      hasRecentAlarm = true;
+                      break;
+                    }
+                  }
                 }
+
+                let indicator = null;
+                if (index === paging) {
+                  indicator = <div className="point"></div>;
+                } else if (hasRecentAlarm) {
+                  indicator = <div className="point" style={{ backgroundColor: "var(--orange)" }}></div>;
+                } else if (hasRecent) {
+                  indicator = <div className="point" style={{ backgroundColor: "var(--light-orange)" }}></div>;
+                }
+
                 return (
                   <div
                     onClick={() => {
@@ -111,8 +128,7 @@ const NoticePage = () => {
                     }}>
                     <div className="text">
                       {data.category}
-                      {index === paging && <div className="point"></div>}
-                      {index !== paging && hasRecent && <div className="point" style={{ backgroundColor: "var(--orange)" }}></div>}
+                      {indicator}
                     </div>
                     <div className="line"></div>
                   </div>
