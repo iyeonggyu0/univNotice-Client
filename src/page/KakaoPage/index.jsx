@@ -11,7 +11,7 @@ const KakaoPage = () => {
         <div className="kakaoPage-content">
           <div>{/* 이미지 */}</div>
           <p onClick={gotoKakao} className="flexBetween">
-            <span>카카오톡 문의 바로가기</span>
+            <span>카카오톡 문의 바로 가기</span>
             <span>{">"}</span>
           </p>
         </div>

@@ -31,7 +31,7 @@ const AdminPage = () => {
     (e) => {
       e.preventDefault();
 
-      if (!window.confirm("정말 로그아웃 하시겠습니까?")) return;
+      if (!window.confirm("정말 로그아웃하시겠습니까?")) return;
 
       // 로그아웃 처리
       const res = adminLogout();

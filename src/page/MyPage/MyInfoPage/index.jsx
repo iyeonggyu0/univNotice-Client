@@ -79,7 +79,7 @@ const MyInfoPage = () => {
             <h2 className="title">
               <span className="bold">내 정보</span>
             </h2>
-            <h4 className="subTitle">가입할 때 입력하신 정보 입니다.</h4>
+            <h4 className="subTitle">가입할 때 입력하신 정보입니다.</h4>
           </div>
           {/* 인풋요소 */}
           <div className="flexCol">
@@ -98,7 +98,7 @@ const MyInfoPage = () => {
             </p>
           </div>
         </div>
-        <p className="caption">핸드폰 번호 변경은 고객센터로 문의 해 주세요</p>
+        <p className="caption">핸드폰 번호 변경은 고객센터로 문의해 주세요</p>
       </section>
     </MyPageLayout>
   );

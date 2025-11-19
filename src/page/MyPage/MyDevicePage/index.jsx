@@ -56,7 +56,7 @@ const MyDevicePage = () => {
       try {
         const device = await myPageDeviceToggleActive(id, value);
         if (!device) {
-          return alert("기기 활성화 상태 변경에 실패 했습니다\n나중에 다시 시도해주세요");
+          return alert("기기 활성화 상태 변경에 실패했습니다\n나중에 다시 시도해 주세요");
         }
         setDeviceData(device);
       } catch (err) {
@@ -74,7 +74,7 @@ const MyDevicePage = () => {
     try {
       const device = await myPageDeviceDelete(id);
       if (!device) {
-        return alert("기기삭제에 실패 했습니다\n나중에 다시 시도해주세요");
+        return alert("기기 삭제에 실패 했습니다\n나중에 다시 시도해 주세요");
       }
       alert("기기가 삭제되었습니다,\n30 분 내외로 로그아웃이 진행됩니다.");
       setDeviceData(device);
@@ -97,7 +97,7 @@ const MyDevicePage = () => {
             <h2 className="title">
               <span className="bold">기기 정보</span>
             </h2>
-            <h4 className="subTitle">현재 로그인 된 기기 목록 입니다.</h4>
+            <h4 className="subTitle">현재 로그인 된 기기 목록입니다.</h4>
           </div>
           {/* 인풋요소 */}
           <div className="flexCol">
@@ -111,7 +111,7 @@ const MyDevicePage = () => {
                 등록된 기기가 없습니다
                 <br />
                 <a href={`${import.meta.env.VITE_GOOGLE_URL}`} target="_blank" style={{ color: "var(--point-color-1)" }}>
-                  어플 설치 바로가기
+                  앱 설치 바로가기
                 </a>
               </div>
             )}

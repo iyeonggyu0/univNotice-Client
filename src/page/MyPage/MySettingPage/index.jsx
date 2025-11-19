@@ -54,7 +54,7 @@ const MySettingPage = () => {
     try {
       const categoryDataRes = await myPageCategoryEnabled(id, value);
       if (!categoryDataRes) {
-        return alert("기기삭제에 실패 했습니다\n나중에 다시 시도해주세요");
+        return alert("기기 삭제에 실패했습니다\n나중에 다시 시도해 주세요");
       }
       setCategoryData(categoryDataRes);
     } catch (err) {
@@ -70,7 +70,7 @@ const MySettingPage = () => {
     try {
       const categoryDataRes = await myPageKeywordDelete(id);
       if (!categoryDataRes) {
-        return alert("키워드 실패 했습니다\n나중에 다시 시도해주세요");
+        return alert("키워드 실패했습니다\n나중에 다시 시도해 주세요");
       }
       setCategoryData(categoryDataRes);
     } catch (err) {
@@ -82,7 +82,7 @@ const MySettingPage = () => {
     try {
       const categoryDataRes = await myPageKeywordPost({ category_id, keyword });
       if (!categoryDataRes) {
-        return alert("키워드 추가에 실패 했습니다\n나중에 다시 시도해주세요");
+        return alert("키워드 추가에 실패했습니다\n나중에 다시 시도해 주세요");
       }
       setCategoryData(categoryDataRes);
     } catch (err) {
@@ -102,7 +102,7 @@ const MySettingPage = () => {
             </h2>
             <h4 className="subTitle">공지별 On/Off 및 키워드를 설정</h4>
           </div>
-          {/* 인풋요소 */}
+          {/* 인풋 요소 */}
           <div className="flexCol">
             {categoryData
               ?.sort((a, b) => a.id - b.id)

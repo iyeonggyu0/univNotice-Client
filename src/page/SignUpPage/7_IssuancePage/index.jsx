@@ -75,7 +75,7 @@ const IssuancePage = () => {
           <div>
             {isPc && <div className="pc-title-image">{/* 이미지 */}</div>}
             <p className="title">
-              어플 상단 <span className="bold">기기등록</span>을 눌러
+              어플 상단 <span className="bold">기기 등록</span>을 눌러
               <br />
               <span className="bold">
                 코드 <span className="code">{code}</span>를 입력
