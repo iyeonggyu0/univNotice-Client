@@ -8,13 +8,13 @@ import { useWeb } from "../../../hook/useWeb";
 
 const GooglePage = () => {
   const { isIos, isHomeApp } = useWeb();
+  const nav = useNavigate();
   useEffect(() => {
     if (isIos && isHomeApp) return nav("/");
     if (isIos && !isHomeApp) return nav("/home-app");
   }, [isIos, isHomeApp, nav]);
 
   const isPc = useMedia().isPc;
-  const nav = useNavigate();
 
   const onClickDownload = () => {
     // 구글 플레이스토어 이동
