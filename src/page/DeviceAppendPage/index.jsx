@@ -95,7 +95,7 @@ const DeviceAppendPage = () => {
         <div className="deviceAppendPage-content">
           <div>{/* 이미지 */}</div>
           <p>
-            <span>웹사이트</span>에서 설정하던
+            <span>웹 사이트</span>에서 설정하던
             <br />
             내용을 <span>모바일 앱</span>에 불러옵니다
           </p>
@@ -104,10 +104,10 @@ const DeviceAppendPage = () => {
           </div>
           <div>
             <div onClick={(e) => onClickRegister(e)}>
-              <ButtonCP bgColor="--point-color-1">로그인 및 기기등록</ButtonCP>
+              <ButtonCP bgColor="--point-color-1">로그인 및 기기 등록</ButtonCP>
             </div>
             <p className="terms" onClick={() => nav("/terms")}>
-              <span>넘어갈 시 개인정보 처리 방침과 이용약관에 동의함으로 간주합니다.</span>
+              <span>넘어갈 시 개인정보 처리 방침과 이용 약관에 동의함으로 간주합니다.</span>
             </p>
           </div>
         </div>

@@ -100,7 +100,7 @@ const LoginPage = () => {
           }
           return nav("/");
         } catch (err) {
-          alert("푸시 구독 또는 서비스워커 등록에 실패했습니다.\n잠시 후 다시 시도해 주세요.");
+          alert("푸시 구독 또는 서비스 워커 등록에 실패했습니다.\n잠시 후 다시 시도해 주세요.");
           console.error("ServiceWorker or PushManager error:", err);
           return nav("/");
         }

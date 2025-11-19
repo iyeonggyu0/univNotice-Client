@@ -35,7 +35,7 @@ const GooglePage = () => {
             <p className="title">
               완료까지 얼마 남지 않았어요
               <br />
-              아래에서 <span className="bold">어플을 설치</span>해 주세요
+              아래에서 <span className="bold">앱을 설치</span>해 주세요
             </p>
             <p className="subTitle">설치를 완료한 후 다음 단계에서{!isPc && <br />}기기 등록을 진행해 주세요</p>
           </div>

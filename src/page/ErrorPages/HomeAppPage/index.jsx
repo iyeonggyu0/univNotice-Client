@@ -39,7 +39,7 @@ const HomeAppPage = () => {
               <div className="homeAppPage-image-div4">{/* 이미지 */}</div>
               <div className="flexHeightCenter">
                 <span>4</span>
-                <span>추가된 바로가기를 클릭하여 사이트에 접속</span>
+                <span>추가된 바로 가기를 클릭하여 사이트에 접속</span>
               </div>
             </div>
           </div>

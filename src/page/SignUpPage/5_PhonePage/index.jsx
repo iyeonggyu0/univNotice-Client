@@ -91,12 +91,12 @@ const PhonePage = () => {
         return alert("휴대폰 인증을 진행해 주세요.");
       }
       if (name.trim().length < 2) {
-        alert("이름을 올바르게 입력해주세요");
+        alert("이름을 올바르게 입력해 주세요");
         return;
       }
 
       if (student_id.trim().length < 6) {
-        alert("학번은 6자리 이상 입력해주세요");
+        alert("학번은 6자리 이상 입력해 주세요");
         return;
       }
       // 010으로 시작하는 11자리 번호인지 체크
@@ -147,7 +147,7 @@ const PhonePage = () => {
               }
               return nav("/signup/8");
             } catch (err) {
-              alert("푸시 구독 또는 서비스워커 등록에 실패했습니다.\n잠시 후 다시 시도해 주세요.");
+              alert("푸시 구독 또는 서비스 워커 등록에 실패했습니다.\n잠시 후 다시 시도해 주세요.");
               console.error("ServiceWorker or PushManager error:", err);
               return nav("/signup/8");
             }
@@ -169,10 +169,10 @@ const PhonePage = () => {
           setCertification("");
           nav("/signup/6");
         } else {
-          alert("회원가입에 실패했습니다.\n잠시 후 다시 시도해주세요.");
+          alert("회원가입에 실패했습니다.\n잠시 후 다시 시도해 주세요.");
         }
       } catch {
-        alert("회원가입에 실패했습니다.\n잠시 후 다시 시도해주세요.");
+        alert("회원가입에 실패했습니다.\n잠시 후 다시 시도해 주세요.");
       }
     },
     [
@@ -205,7 +205,7 @@ const PhonePage = () => {
             <h4 className="subTitle">
               학교ㆍ학번이 중복되면 가입이 제한될 수 있어요
               <br />
-              가입한 적이 없다면 카카오톡으로 문의 주세요
+              가입한 적이 없다면 카카오톡으로 문의해 주세요
             </h4>
           </div>
           <div className="flexCol">
@@ -233,7 +233,7 @@ const PhonePage = () => {
               <ButtonCP>가입하기</ButtonCP>
             </div>
             <p className="terms">
-              <span onClick={onClickTerms}>넘어갈 시 개인정보 처리 방침과 이용약관에 동의함으로 간주합니다.</span>
+              <span onClick={onClickTerms}>넘어갈 시 개인정보 처리 방침과 이용 약관에 동의함으로 간주합니다.</span>
             </p>
           </div>
           {/* )} */}
