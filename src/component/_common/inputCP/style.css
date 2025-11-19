@@ -1,0 +1,28 @@
+.inputCP > p {
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.inputCP > p > span {
+  color: orange;
+  margin-left: 0.25rem;
+  font-weight: 700;
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+  top: -0.25rem;
+  position: relative;
+}
+
+.inputCP > input {
+  width: 100%;
+  /* box-shadow: inset 0px 0px 5px #6ba2ff; */
+  border: 1px solid var(--black-3);
+  border-radius: 0.75rem;
+  padding: 0 1.5rem;
+  transition: all 0.2s;
+}
+
+.inputCP > input:focus {
+  outline: none;
+  box-shadow: inset 0px 0px 5px rgba(13, 13, 14, 0.15);
+}

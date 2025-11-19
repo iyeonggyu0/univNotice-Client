@@ -1,0 +1,35 @@
+.logCp {
+  width: 100%;
+  padding: 6rem;
+  text-align: start;
+}
+
+.logCp h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.logCp h4 {
+  font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.logCp .refreshBtn {
+  position: relative;
+  top: 0.2rem;
+  left: 1rem;
+  cursor: pointer;
+}
+
+.logCp-content > div > div {
+  margin-bottom: 10vh;
+}
+
+.logCp-content table tr,
+.logCp-content table td,
+.logCp-content table th {
+  min-height: 3rem !important;
+  height: 3rem !important;
+}

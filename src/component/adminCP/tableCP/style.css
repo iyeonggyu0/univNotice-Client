@@ -1,0 +1,114 @@
+/* 테이블 컴포넌트 스타일 */
+.tableCp {
+  width: 100%;
+  padding: 6rem;
+  text-align: start;
+}
+
+.tableCp h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--main-color);
+}
+
+.tableCp-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* 테이블 그룹 스타일 */
+.table-group {
+  border: 1px solid var(--black-3);
+  border-radius: 12px;
+  padding: 20px;
+  background-color: var(--white);
+  margin-bottom: 10vh;
+}
+
+.group-title {
+  margin: 0 0 20px 0;
+  padding: 10px 15px;
+  background: linear-gradient(135deg, var(--main-color), var(--sub-color));
+  border-radius: 8px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: start;
+}
+
+/* 개별 테이블 섹션 */
+.table-group > div {
+  margin-bottom: 30px;
+  padding: 15px;
+  border: 1px solid var(--black-2);
+  border-radius: 8px;
+  background-color: var(--black-1);
+}
+
+.table-group > div:last-child {
+  margin-bottom: 0;
+}
+
+.tableCp h4 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 15px 0;
+  padding: 8px 12px;
+  background-color: var(--white);
+  border-left: 4px solid var(--main-color);
+  border-radius: 4px;
+  font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+  font-weight: 500;
+  color: var(--black-5);
+}
+
+.tableCp .refreshBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.tableCp .refreshBtn:hover {
+  background-color: var(--black-2);
+  transform: rotate(180deg);
+}
+
+/* 테이블 컨테이너 스타일 */
+.table-group > div > div[style*="maxHeight"] {
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tableCp-content table tr,
+.tableCp-content table td,
+.tableCp-content table th {
+  min-height: 3rem !important;
+  height: 3rem !important;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .tableCp {
+    padding: 10px;
+  }
+
+  .group-title {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  .table-group {
+    padding: 15px;
+  }
+
+  .table-group > div {
+    padding: 10px;
+  }
+}

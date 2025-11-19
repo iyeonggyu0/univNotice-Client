@@ -1,0 +1,164 @@
+.termsPage {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.termsHeader {
+  background-color: white;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+}
+
+.backButton:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.termsHeader h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.termsContent {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  background-color: white;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.termsSection,
+.privacySection {
+  margin-bottom: 3rem;
+}
+
+.termsSection:last-child,
+.privacySection:last-child {
+  margin-bottom: 0;
+}
+
+.termsContent h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #007bff;
+}
+
+.termsContent h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #495057;
+  margin: 2rem 0 1.5rem 0;
+  padding-left: 0.5rem;
+  border-left: 4px solid #007bff;
+}
+
+.termsContent h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #343a40;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.termsContent p {
+  line-height: 1.6;
+  color: #495057;
+  margin-bottom: 1rem;
+}
+
+.termsContent ol,
+.termsContent ul {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+
+.termsContent ol li,
+.termsContent ul li {
+  line-height: 1.6;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.termsContent ol li ol,
+.termsContent ul li ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.termsContent strong {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .termsContent {
+    margin: 0;
+    border-radius: 0;
+    padding: 1rem;
+  }
+
+  .termsHeader {
+    padding: 1rem;
+  }
+
+  .termsContent h1 {
+    font-size: 1.5rem;
+  }
+
+  .termsContent h2 {
+    font-size: 1.3rem;
+  }
+
+  .termsContent h3 {
+    font-size: 1.1rem;
+  }
+
+  .termsContent ol,
+  .termsContent ul {
+    padding-left: 1.5rem;
+  }
+}
+
+/* 프린트 스타일 */
+@media print {
+  .backButton {
+    display: none;
+  }
+
+  .termsPage {
+    background-color: white;
+  }
+
+  .termsHeader {
+    box-shadow: none;
+    border-bottom: 1px solid #000;
+  }
+
+  .termsContent {
+    box-shadow: none;
+    margin: 0;
+  }
+}

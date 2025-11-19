@@ -1,0 +1,109 @@
+.homeAppPage {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.homeAppPage .homeAppPage-content {
+  width: 100%;
+  height: 70vh;
+  padding: 0 10vh;
+  display: flex;
+  /* justify-content: space-around; */
+  /* align-items: center; */
+  flex-direction: column;
+  gap: 5vh 24px;
+}
+
+.homeAppPage .homeAppPage-content .title {
+  font-size: clamp(1.2rem, 4vw, 1.4rem);
+  font-weight: 600;
+  text-align: start;
+  margin-bottom: 6px;
+}
+
+.homeAppPage .homeAppPage-content .title + p {
+  margin-bottom: 16px;
+}
+
+.homeAppPage .homeAppPage-content a {
+  font-size: clamp(0.8rem, 4vw, 1rem);
+  color: var(--point-color-1);
+}
+
+.homeAppPage .homeAppPage-images {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  gap: 10vh 5vw;
+}
+
+.homeAppPage .homeAppPage-imgage-div {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.homeAppPage .homeAppPage-imgage-div > div:nth-child(2) {
+  gap: 12px;
+}
+.homeAppPage .homeAppPage-imgage-div > div:nth-child(2) > span:nth-child(1) {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  min-height: 24px;
+
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: var(--point-color-1);
+  color: white;
+  font-size: clamp(0.75rem, 4vw, 0.9rem);
+}
+
+.homeAppPage-imgage-div > div:nth-child(1) {
+  min-width: 30vh;
+  width: 100%;
+  height: 50vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.homeAppPage .homeAppPage-image-div1 {
+  background-image: url("../../../assets/iphone/iphone_1.png");
+}
+.homeAppPage .homeAppPage-image-div2 {
+  background-image: url("../../../assets/iphone/iphone_2.png");
+}
+.homeAppPage .homeAppPage-image-div3 {
+  background-image: url("../../../assets/iphone/iphone_3.png");
+}
+.homeAppPage .homeAppPage-image-div4 {
+  background-image: url("../../../assets/iphone/iphone_4.png");
+}
+
+@media screen and (max-width: 768px) {
+  .homeAppPage .homeAppPage-content {
+    height: 100%;
+    padding: 82px 48px;
+  }
+
+  .homeAppPage .homeAppPage-images {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.homeAppPage-imgage-div {
+  overflow-wrap: break-word;
+  word-break: keep-all;
+}
+
+.homeAppPage .mobile-box {
+  min-height: 48px;
+}

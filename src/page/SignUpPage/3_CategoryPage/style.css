@@ -1,0 +1,50 @@
+.categoryPage {
+  height: 100%;
+  background-color: white;
+}
+.categoryPage .buttonBox {
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+/* Firefox 전용: 표준 속성 */
+@supports (scrollbar-width: thin) and (not (selector(::-webkit-scrollbar))) {
+  .categoryPage .buttonBox {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  }
+}
+
+/* Blink/WebKit 전용: 화살표 제거 */
+@supports selector(::-webkit-scrollbar) {
+  .categoryPage .buttonBox::-webkit-scrollbar {
+    width: 4px;
+    background: transparent;
+  }
+  .categoryPage .buttonBox::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+  .categoryPage .buttonBox::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* 화살표 버튼 숨김 */
+  .categoryPage .buttonBox::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  .categoryPage .buttonBox::-webkit-scrollbar-button:single-button {
+    display: none;
+  }
+  .categoryPage .buttonBox::-webkit-scrollbar-button:double-button {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .categoryPage .centerBox {
+    width: 80vw;
+  }
+}

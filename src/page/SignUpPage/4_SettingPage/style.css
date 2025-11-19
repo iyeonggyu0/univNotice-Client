@@ -1,0 +1,10 @@
+.settingPage {
+  height: 100%;
+  background-color: white;
+}
+
+@media screen and (max-width: 768px) {
+  .settingPage .centerBox {
+    min-width: 80vw;
+  }
+}

@@ -1,0 +1,43 @@
+.toggleCP {
+  min-width: 60px;
+}
+
+.toggleCP p {
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.toggleCP > div {
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toggleCP .toggleCp-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  height: 36px;
+  box-shadow: inset 0px 0px 5px rgba(13, 13, 14, 0.3);
+  border-radius: 999px;
+  background-color: var(--red);
+  padding: 6px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.toggleCP .toggleCp-container.active {
+  justify-content: start;
+  background-color: var(--green);
+}
+
+.toggleCP .toggleCp-container .toggleCp-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background-color: white;
+  transition: all 0.3s;
+}

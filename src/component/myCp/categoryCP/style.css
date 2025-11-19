@@ -1,0 +1,25 @@
+.categoryCP {
+  width: 100%;
+}
+
+.categoryCP > div:nth-child(1) {
+  height: 3.625rem;
+  align-items: center;
+}
+
+.categoryCP .toggleCP p {
+  display: none;
+}
+
+.categoryCP .title {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+}
+
+.categoryCP .keyword {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}

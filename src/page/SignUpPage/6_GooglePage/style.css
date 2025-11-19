@@ -1,0 +1,76 @@
+.googlePage {
+  height: 100%;
+  width: 100%;
+  background-color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6vw;
+}
+
+.googlePage * {
+  text-align: start;
+}
+
+@media screen and (max-width: 768px) {
+  .googlePage {
+    flex-direction: column;
+    gap: 4vh;
+    padding: 4vh 0;
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .googlePage * {
+    text-align: center;
+  }
+}
+
+.googlePage .pc-image {
+  width: 50vh;
+  height: 50vh;
+
+  background-image: url("../../../assets/image/google.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.googlePage .mobile-image {
+  width: 55vw;
+  height: 55vw;
+  margin: 0 auto;
+
+  background-image: url("../../../assets/image/google.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.googlePage .buttonBox {
+  margin-top: 5vh;
+}
+
+.googlePage .pc-title-image {
+  width: 100%;
+  height: 25vh;
+  background-image: url("../../../assets/logo.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+@media screen and (min-width: 769px) {
+  .googlePage .buttonBox {
+    gap: 1rem;
+  }
+
+  .googlePage .buttonBox > div {
+    flex: 1;
+  }
+
+  .googlePage .content {
+    width: 30%;
+  }
+}

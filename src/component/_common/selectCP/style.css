@@ -1,0 +1,22 @@
+.selectCP > div {
+  margin: 0 !important;
+}
+
+.selectCP .css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+.selectCP > p {
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.selectCP .css-18jp67o-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 0 1.5rem !important;
+  height: 3rem !important;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--black-3) !important;
+  border-radius: 0.75rem !important;
+}

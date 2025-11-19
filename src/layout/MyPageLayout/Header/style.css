@@ -1,0 +1,26 @@
+.MyPageHeader {
+  width: 100%;
+  height: 64px;
+  align-items: center;
+  padding: 0 2rem;
+  position: fixed;
+  background-color: white;
+}
+
+@media screen and (max-width: 768px) {
+  .MyPageHeader {
+    padding: 0 1rem;
+  }
+
+  .MyPageHeader-content {
+    font-size: 0.8rem;
+  }
+}
+
+.MyPageHeader .MyPageHeader-content {
+  gap: 1rem;
+}
+
+.MyPageHeader .MyPageHeader-content > p {
+  cursor: pointer;
+}

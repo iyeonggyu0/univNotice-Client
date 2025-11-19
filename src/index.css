@@ -1,0 +1,225 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gothic+A1&family=Noto+Sans+KR:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+:root {
+  font-family: "Inter", "Noto Sans KR", "Gothic A1", system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  /* 색상 팔레트 var()로 사용 */
+  --main-color: #474a50;
+  --main-color-2: rgb(92, 93, 95);
+  --point-color-1: #6ba2ff;
+  --point-color-2: #fbe464;
+
+  --red: #ff7676;
+  --red-2: #a32a2a;
+  --green: #77f085;
+  --orange: #ffb36f;
+  --light-orange: #ffc796;
+
+  --text-color: #2c2f33;
+
+  --black-0: #ffffff;
+  --black-1: #eff0f5;
+  --black-2: #dddfe9;
+  --black-3: #b7bbcf;
+  --black-4: #6e738c;
+  --black-5: #414456;
+  --black-6: #252732;
+  --black: #000000;
+}
+
+/* css초기화 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  vertical-align: baseline;
+}
+header {
+  z-index: 9999;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+  color: var(--text-color);
+  font-family: "Inter", "Noto Sans KR", "Gothic A1", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #202123;
+  text-decoration: none;
+}
+
+.flexWidthCenter {
+  display: flex;
+  justify-content: center;
+}
+
+.flexHeightCenter {
+  display: flex;
+  align-items: center;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flexBetween {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flexBetweenCol {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.flexCol {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* 공통 스타일2 */
+.centerBox {
+  width: 100%;
+  min-height: 50vh;
+  max-width: 400px;
+  position: relative;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+
+  gap: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .centerBox {
+    width: 90%;
+    margin: 0 auto;
+    gap: 1rem;
+  }
+
+  .centerBox > .bottomItem {
+    margin-top: 2rem !important;
+  }
+}
+
+.centerBox > .bottomItem {
+  margin-top: auto;
+}
+
+.centerBox > * {
+  width: 100%;
+}
+
+.titleBox {
+  width: 100%;
+}
+
+.title {
+  font-size: clamp(28px, 2.5vw, 1.875rem);
+  line-height: 1.4;
+  font-weight: 500;
+  text-align: center;
+}
+
+.title > span.bold {
+  font-weight: 800;
+}
+
+.subTitle {
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+  font-weight: 400;
+  line-height: 1.3;
+  margin-top: 0.75rem;
+  color: var(--black-4);
+  text-align: center;
+}
+
+.centerBox > .titleBox + .flexCol {
+  max-height: 48vh;
+  overflow-y: auto;
+  padding-right: 4px; /* 스크롤바 공간 확보 */
+}
+
+/* Firefox 전용: 표준 속성 */
+@supports (scrollbar-width: thin) and (not (selector(::-webkit-scrollbar))) {
+  .centerBox > .titleBox + .flexCol {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  }
+}
+
+/* Blink/WebKit 전용: 화살표 제거 */
+@supports selector(::-webkit-scrollbar) {
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar {
+    width: 4px;
+    background: transparent;
+  }
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* 화살표 버튼 숨김 */
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-button:single-button {
+    display: none;
+  }
+  .centerBox > .titleBox + .flexCol::-webkit-scrollbar-button:double-button {
+    display: none;
+  }
+}
