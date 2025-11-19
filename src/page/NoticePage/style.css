@@ -44,6 +44,38 @@
   margin-bottom: clamp(1.4rem, 2.5vw, 3rem);
 }
 
+/* Firefox thin scrollbar */
+@supports (scrollbar-width: thin) and (not (selector(::-webkit-scrollbar))) {
+  .noticePage .noticeNav {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  }
+}
+
+/* Blink/WebKit custom scrollbar */
+@supports selector(::-webkit-scrollbar) {
+  .noticePage .noticeNav::-webkit-scrollbar {
+    height: 4px;
+    background: transparent;
+  }
+  .noticePage .noticeNav::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+  .noticePage .noticeNav::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .noticePage .noticeNav::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  .noticePage .noticeNav::-webkit-scrollbar-button:single-button,
+  .noticePage .noticeNav::-webkit-scrollbar-button:double-button {
+    display: none;
+  }
+}
+
 .noticePage .noticeNav > div {
   display: flex;
   flex-direction: row;
