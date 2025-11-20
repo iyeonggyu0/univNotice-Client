@@ -8,6 +8,7 @@ import { useMedia } from "../../hook/useMedia";
 import { useWeb } from "../../hook/useWeb";
 import NoticeListLiCP from "../../component/noticeCP/noticeListLiCP";
 import NoticeListLiMobileCP from "../../component/noticeCP/noticeListLiMobileCP";
+import { demoData } from "../../demoData/demoData";
 
 const NoticePage = () => {
   const nav = useNavigate();
@@ -30,6 +31,14 @@ const NoticePage = () => {
   useEffect(() => {
     async function fetchLoginCheck() {
       try {
+        if (!!import.meta.env.VITE_TEST_MODE == true) {
+          setLogin(true);
+          setNoticeData(demoData || []);
+          setTitle(demoData?.[0]?.category || "");
+          setPaging(0);
+          return;
+        }
+
         const notice = await noticeLoad();
         const isLogin = await loginCheck();
 
