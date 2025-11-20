@@ -118,9 +118,9 @@ const NoticePage = () => {
                 if (index === paging) {
                   indicator = <div className="point"></div>;
                 } else if (hasRecentAlarm) {
-                  indicator = <div className="point" style={{ backgroundColor: "var(--orange)" }}></div>;
-                } else if (hasRecent) {
                   indicator = <div className="point" style={{ backgroundColor: "var(--light-orange)" }}></div>;
+                } else if (hasRecent) {
+                  indicator = <div className="point" style={{ backgroundColor: "var(--point-color-3)" }}></div>;
                 }
 
                 return (
