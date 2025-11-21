@@ -39,6 +39,9 @@ const NoticeListLiCP = ({ data, url }) => {
           <span
             style={{
               color: "var(--black-3)",
+              whiteSpace: "nowrap", // 줄바꿈 방지
+              wordBreak: "normal", // 단어 중간 강제 줄바꿈 방지
+              overflowWrap: "normal",
             }}>
             {data.other_info}
           </span>
