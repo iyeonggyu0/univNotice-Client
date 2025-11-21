@@ -33,7 +33,7 @@ const NoticeListLiCP = ({ data, url }) => {
   }
   return (
     <div className="noticeListLiCP" style={{ cursor: "pointer" }} onClick={onClickDiv}>
-      <div className="noticeListLiCP-title flexHeightCenter" style={{ gap: "6px" }}>
+      <div className="noticeListLiCP-title flexHeightCenter" style={{ gap: "6px", wordBreak: "break-all", overflowWrap: "anywhere" }}>
         {data.title}
         {data.other_info && (
           <span
